@@ -1,4 +1,10 @@
 package klaza.klaza_server.configurations
 
-class KlazaConfiguration {
+import org.springframework.boot.context.properties.ConfigurationProperties
+
+@ConfigurationProperties("klaza")
+open class KlazaConfiguration {
+
+
+
 }
