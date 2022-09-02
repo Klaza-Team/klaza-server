@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - ContextRepository.kt
+// Plugin Klaza para Moodle - Server - EventDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -14,10 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package klaza.klaza_server.repositories;
+package klaza.klaza_server.dtos
 
-import klaza.klaza_server.models.Context
-import org.springframework.data.jpa.repository.JpaRepository
+class EventDTO {
 
-interface ContextRepository : JpaRepository<Context, Long> {
+    lateinit var eventname: String
+    lateinit var objectid: String
+    lateinit var crud: String
+    var contextlevel: Long? = null
+    var contextid: Long? = null
+    var userid: Long? = null
+    var courseid: Long? = null
+    var relateduserid: Long? = null
+    lateinit var action: String
+    lateinit var target: String
+    lateinit var other: Any
+
 }
