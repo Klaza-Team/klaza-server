@@ -4,8 +4,7 @@ import klaza.klaza_server.configurations.KlazaConfiguration
 import klaza.klaza_server.libs.Colors
 import klaza.klaza_server.models.Quiz
 import klaza.klaza_server.models.UserInfoData
-import klaza.klaza_server.repositories.UserInfoDataRepository
-import klaza.klaza_server.repositories.UserRepository
+import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -18,20 +17,25 @@ class TestComponent {
         private val LOGGER = LoggerFactory.getLogger(TestComponent::class.java)
     }
 
-    @Autowired
-    lateinit var userRepository: UserRepository
+    @Autowired lateinit var userRepository: UserRepository
+    @Autowired lateinit var userInfoDataRepository: UserInfoDataRepository
+    @Autowired lateinit var courseRepository: CourseRepository
+    @Autowired lateinit var klazaAlertRepository: KlazaAlertRepository
+    @Autowired lateinit var configPluginsRepository: ConfigPluginsRepository
 
-    @Autowired
-    lateinit var userInfoDataRepository: UserInfoDataRepository
-
-    @Autowired
-    lateinit var KlazaConfiguration: KlazaConfiguration
+    @Autowired lateinit var KlazaConfiguration: KlazaConfiguration
 
     @PostConstruct
     fun start() {
 
-        LOGGER.info(Colors.GREEN_BOLD + userRepository.findById(2).toString() + Colors.RESET)
-        LOGGER.info(Colors.GREEN_BOLD + userInfoDataRepository.findById(4).toString() + Colors.RESET)
+//        LOGGER.info(Colors.GREEN_BOLD + userRepository.findAllByCourseID(3).toString() + Colors.RESET)
+//        LOGGER.info(Colors.GREEN_BOLD + courseRepository.findAllByUserId(2) + Colors.RESET)
+
+//        LOGGER.info(Colors.GREEN_BOLD + klazaAlertRepository.findAllByCourse_Id(3) + Colors.RESET)
+
+//        LOGGER.info(Colors.GREEN_BOLD + configPluginsRepository.findKlazaConfigByName("version") + Colors.RESET)
+//        LOGGER.info(Colors.GREEN_BOLD + configPluginsRepository.findAllKlazaConfig() + Colors.RESET)
+
 
     }
 

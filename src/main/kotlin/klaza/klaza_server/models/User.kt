@@ -6,6 +6,8 @@ import javax.persistence.*
 @Table(name = "mdl_user")
 class User {
 
+    // Properties
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,6 +24,14 @@ class User {
 
     @Column(name = "lang", length = 100, nullable = false)
     private var lang: String? = null
+
+    // Methods
+
+    fun getFullName(): String {
+        return "$firstname $lastname"
+    }
+
+    // Getters and Setters
 
     fun getId(): Long? {
         return id
@@ -62,6 +72,8 @@ class User {
     fun setLang(lang: String?) {
         this.lang = lang
     }
+
+    // Override
 
     override fun toString(): String {
         return "User(id=$id, firstname='$firstname', lastname='$lastname', email='$email', lang='$lang')"

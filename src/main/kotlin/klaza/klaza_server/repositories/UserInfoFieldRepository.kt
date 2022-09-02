@@ -4,4 +4,7 @@ import klaza.klaza_server.models.UserInfoField
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserInfoFieldRepository : JpaRepository<UserInfoField, Long> {
+
+    fun findOneByShortname(shortname: String): UserInfoField
+
 }
