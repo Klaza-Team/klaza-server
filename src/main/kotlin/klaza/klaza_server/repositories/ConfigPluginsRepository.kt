@@ -22,4 +22,9 @@ interface ConfigPluginsRepository : JpaRepository<ConfigPlugins, Long> {
             "WHERE c.plugin = 'local_klaza'")
     fun findAllKlazaConfig(): List<ConfigPlugins>
 
+    @Query( "SELECT c " +
+            "FROM ConfigPlugins c " +
+            "WHERE c.plugin = 'local_klaza' AND c.name = 'server_auth'")
+    fun findKlazaConfigAuth(): ConfigPlugins
+
 }
