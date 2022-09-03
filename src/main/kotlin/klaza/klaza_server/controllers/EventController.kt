@@ -28,39 +28,77 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/event")
 open class EventController {
 
-    // \core\event\course_module_created
-    // \core\event\course_module_updated
-    // \core\event\course_module_deleted
-
-    // \mod_chat\event\message_sent
-
-    // \assignsubmission_file\event\submission_updated
-    // \assignsubmission_onlinetext\event\assessable_uploaded
-
-    // \mod_quiz\event\attempt_submitted
-
-    // \core\event\comment_created
-    // \core\event\comment_deleted
-
     companion object {
         private val LOGGER = LoggerFactory.getLogger(EventController::class.java)
     }
 
+    // \core\event\course_module_created
     @PostMapping("/course_module_created")
     fun courseModuleCreated(@RequestBody body: EventDTO) {
-        LOGGER.info(Colors.GREEN + "course_module_created -> ${body.toString()}" + Colors.RESET)
+        LOGGER.info(Colors.GREEN + "course_module_created -> $body" + Colors.RESET)
     }
 
+    // \core\event\course_module_updated
     @PostMapping("/course_module_updated")
     fun courseModuleUpdated(@RequestBody body: EventDTO) {
-        LOGGER.info(Colors.GREEN + "course_module_updated -> ${body.toString()}" + Colors.RESET)
+        LOGGER.info(Colors.GREEN + "course_module_updated -> $body" + Colors.RESET)
     }
+
+    // \core\event\course_module_deleted
+    @PostMapping("/course_module_deleted")
+    fun courseModuleDeleted(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "course_module_deleted -> $body" + Colors.RESET)
+    }
+
+
+
+    // \mod_chat\event\message_sent
+    @PostMapping("/message_sent")
+    fun messageSent(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "message_sent -> $body" + Colors.RESET)
+    }
+
+
+
+    // \assignsubmission_file\event\submission_updated
+    @PostMapping("/submission_updated")
+    fun submissionUpdated(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "submission_updated -> $body" + Colors.RESET)
+    }
+
+    // \assignsubmission_onlinetext\event\assessable_uploaded
+    @PostMapping("/assessable_uploaded")
+    fun assessableUploaded(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "assessable_uploaded -> $body" + Colors.RESET)
+    }
+
+
+
+    // \mod_quiz\event\attempt_submitted
+    @PostMapping("/attempt_submitted")
+    fun attemptSubmitted(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "attempt_submitted -> $body" + Colors.RESET)
+    }
+
+
+
+    // \core\event\comment_created
+    @PostMapping("/comment_created")
+    fun commentCreated(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "comment_created -> $body" + Colors.RESET)
+    }
+
+    // \core\event\comment_deleted
+    @PostMapping("/comment_deleted")
+    fun commentDeleted(@RequestBody body: EventDTO) {
+        LOGGER.info(Colors.GREEN + "comment_deleted -> $body" + Colors.RESET)
+    }
+
+
 
     @PostMapping("/test")
     fun test(@RequestBody body: Any) {
-
-        LOGGER.info(Colors.GREEN_BOLD + "Ta testado -> ${body.toString()}" + Colors.RESET)
-
+        LOGGER.info(Colors.GREEN_BOLD + "Ta testado -> $body" + Colors.RESET)
     }
 
 }

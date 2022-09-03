@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest
 open class ApiKeyAuthFilter: AbstractPreAuthenticatedProcessingFilter() {
 
     override fun getPreAuthenticatedPrincipal(request: HttpServletRequest): Any {
-        return request.getHeader("x-api-key") ?: ""
+        return request.getHeader("KlazaKey") ?: ""
     }
 
     override fun getPreAuthenticatedCredentials(request: HttpServletRequest): Any? {

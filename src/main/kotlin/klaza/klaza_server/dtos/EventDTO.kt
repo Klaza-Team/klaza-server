@@ -30,4 +30,8 @@ class EventDTO {
     lateinit var target: String
     lateinit var other: Any
 
+    override fun toString(): String {
+        return "EventDTO(eventname=${eventname}, objectid=${objectid}, crud=${crud}, contextlevel=${contextlevel}, contextid=${contextid}, userid=${userid}, courseid=${courseid}, relateduserid=${relateduserid}, action=${action}, target=${target}, other=${other}"
+    }
+
 }
