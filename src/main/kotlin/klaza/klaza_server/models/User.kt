@@ -53,7 +53,7 @@ class User {
         return id
     }
 
-    fun setId(id: Long?) {
+    fun setId(id: Long) {
         this.id = id
     }
 

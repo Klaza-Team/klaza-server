@@ -16,19 +16,41 @@
 
 package klaza.klaza_server.dtos
 
-class EventDTO {
+import klaza.klaza_server.data.EventData
+import klaza.klaza_server.data.EventOtherData
+import klaza.klaza_server.repositories.CourseRepository
+import klaza.klaza_server.repositories.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 
-    lateinit var eventname: String
-    lateinit var objectid: String
-    lateinit var crud: String
-    var contextlevel: Long? = null
-    var contextid: Long? = null
-    var userid: Long? = null
-    var courseid: Long? = null
-    var relateduserid: Long? = null
-    lateinit var action: String
-    lateinit var target: String
-    lateinit var other: Any
+
+class EventDTO(
+    var eventname: String,
+    var objectid: String,
+    var crud: String,
+    var contextlevel: Long,
+    var contextid: Long,
+    var userid: Long,
+    var courseid: Long,
+    var relateduserid: Long,
+    var action: String,
+    var target: String,
+    var other: EventOtherData) {
+
+    fun convertToData(userRepository: UserRepository, courseRepository: CourseRepository): EventData {
+        return EventData(
+            eventname = eventname,
+            objectid = objectid,
+            crud = crud,
+            contextlevel = contextlevel,
+            contextid = contextid,
+            user = if (userid != 0L) userRepository.findById(userid).get() else null,
+            course = if (courseid != 0L) courseRepository.findById(courseid).get() else null,
+            relateduser = if (relateduserid != 0L) userRepository.findById(relateduserid).get() else null,
+            action = action,
+            target = target,
+            other = other
+        )
+    }
 
     override fun toString(): String {
         return "EventDTO(eventname=${eventname}, objectid=${objectid}, crud=${crud}, contextlevel=${contextlevel}, contextid=${contextid}, userid=${userid}, courseid=${courseid}, relateduserid=${relateduserid}, action=${action}, target=${target}, other=${other}"

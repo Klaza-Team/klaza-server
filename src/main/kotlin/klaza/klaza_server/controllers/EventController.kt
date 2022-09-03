@@ -18,7 +18,11 @@ package klaza.klaza_server.controllers
 
 import klaza.klaza_server.dtos.EventDTO
 import klaza.klaza_server.libs.Colors
+import klaza.klaza_server.repositories.CourseRepository
+import klaza.klaza_server.repositories.UserRepository
+import klaza.klaza_server.services.CourseModuleService
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,28 +30,36 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/event")
-open class EventController {
+class EventController {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(EventController::class.java)
     }
 
+    @Autowired lateinit var courseModuleService: CourseModuleService
+
+    @Autowired lateinit var userRepository: UserRepository
+    @Autowired lateinit var courseRepository: CourseRepository
+
     // \core\event\course_module_created
     @PostMapping("/course_module_created")
     fun courseModuleCreated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_created -> $body" + Colors.RESET)
+        courseModuleService.created(body.convertToData(userRepository, courseRepository))
     }
 
     // \core\event\course_module_updated
     @PostMapping("/course_module_updated")
     fun courseModuleUpdated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_updated -> $body" + Colors.RESET)
+        courseModuleService.updated(body.convertToData(userRepository, courseRepository))
     }
 
     // \core\event\course_module_deleted
     @PostMapping("/course_module_deleted")
     fun courseModuleDeleted(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_deleted -> $body" + Colors.RESET)
+        courseModuleService.deleted(body.convertToData(userRepository, courseRepository))
     }
 
 
