@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - ContextRepository.kt
+// Plugin Klaza para Moodle - Server - ApiKeyAuthFilter.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -14,10 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package klaza.klaza_server.repositories;
+package klaza.klaza_server.security
 
-import klaza.klaza_server.models.Context
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter
+import javax.servlet.http.HttpServletRequest
 
-interface ContextRepository : JpaRepository<Context, Long> {
+open class ApiKeyAuthFilter: AbstractPreAuthenticatedProcessingFilter() {
+
+    override fun getPreAuthenticatedPrincipal(request: HttpServletRequest): Any {
+        return request.getHeader("KlazaKey") ?: ""
+    }
+
+    override fun getPreAuthenticatedCredentials(request: HttpServletRequest): Any? {
+        return "N/A"
+    }
+
 }
