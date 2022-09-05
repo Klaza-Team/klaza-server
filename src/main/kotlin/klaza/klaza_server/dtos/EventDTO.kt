@@ -18,10 +18,10 @@ package klaza.klaza_server.dtos
 
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.data.EventOtherData
+import klaza.klaza_server.repositories.AssignRepository
 import klaza.klaza_server.repositories.CourseRepository
+import klaza.klaza_server.repositories.QuizRepository
 import klaza.klaza_server.repositories.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
-
 
 class EventDTO(
     var eventname: String,
@@ -36,7 +36,7 @@ class EventDTO(
     var target: String,
     var other: EventOtherData) {
 
-    fun convertToData(userRepository: UserRepository, courseRepository: CourseRepository): EventData {
+    fun convertToData(userRepository: UserRepository, courseRepository: CourseRepository, assignRepository: AssignRepository, quizRepository: QuizRepository): EventData {
         return EventData(
             eventname = eventname,
             objectid = objectid,
@@ -48,7 +48,9 @@ class EventDTO(
             relateduser = if (relateduserid != 0L) userRepository.findById(relateduserid).get() else null,
             action = action,
             target = target,
-            other = other
+            other = other,
+            relatedassign = if (other.modulename == "assign") assignRepository.findById(other.instanceid).get() else null,
+            relatedquiz = if (other.modulename == "quiz") quizRepository.findById(other.instanceid).get() else null
         )
     }
 
