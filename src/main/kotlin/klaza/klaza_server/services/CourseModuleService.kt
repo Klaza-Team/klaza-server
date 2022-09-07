@@ -1,7 +1,24 @@
+// Plugin Klaza para Moodle - Server - CourseModuleService.kt
+// Copyright (C) 2022 Klaza Team
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 package klaza.klaza_server.services
 
 import klaza.klaza_server.data.EventData
-import klaza.klaza_server.libs.Colors
+import klaza.klaza_server.classes.Colors
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -14,7 +31,7 @@ class CourseModuleService {
     }
 
     @Autowired lateinit var notificationService: NotificationService
-
+    @Autowired lateinit var cronService: CronService
 
     fun created(eventData: EventData) {
         LOGGER.info(Colors.GREEN + "CourseModuleService created -> $eventData" + Colors.RESET)
@@ -25,7 +42,7 @@ class CourseModuleService {
         LOGGER.info(Colors.GREEN + "CourseModuleService updated -> $eventData" + Colors.RESET)
 
         if (needCron(eventData)) {
-            // TODO: Adicionar service/componente para gerar cron
+            cronService.createCronJob(eventData)
         }
 
         notificationService.sendNotification(eventData)

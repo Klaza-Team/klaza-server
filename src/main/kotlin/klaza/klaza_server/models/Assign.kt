@@ -40,6 +40,9 @@ class Assign {
     @JoinColumn(name = "course", nullable = false)
     private var course: Course? = null
 
+    @Column(name = "allowsubmissionsfromdate", nullable = false)
+    private var allowsubmissionsfromdate: Long? = null
+
     fun getId(): Long? {
         return id
     }
@@ -78,6 +81,14 @@ class Assign {
 
     fun setCourse(course: Course?) {
         this.course = course
+    }
+
+    fun getAllowsubmissionsfromdate(): Long? {
+        return allowsubmissionsfromdate
+    }
+
+    fun setAllowsubmissionsfromdate(allowsubmissionsfromdate: Long) {
+        this.allowsubmissionsfromdate = allowsubmissionsfromdate
     }
 
     override fun toString(): String {

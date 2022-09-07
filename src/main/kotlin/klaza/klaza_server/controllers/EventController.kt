@@ -17,7 +17,7 @@
 package klaza.klaza_server.controllers
 
 import klaza.klaza_server.dtos.EventDTO
-import klaza.klaza_server.libs.Colors
+import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.repositories.AssignRepository
 import klaza.klaza_server.repositories.CourseRepository
 import klaza.klaza_server.repositories.QuizRepository

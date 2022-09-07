@@ -39,6 +39,12 @@ class Quiz {
     @Column(name="timecreated", nullable = false)
     private var timeCreated: Long? = null
 
+    @Column(name="timeopen", nullable = false)
+    private var timeOpen: Long? = null
+
+    @Column(name="timeclose", nullable = false)
+    private var timeClose: Long? = null
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course", nullable = false)
     private var course: Course? = null
@@ -81,6 +87,22 @@ class Quiz {
 
     fun setTimeCreated(timeCreated: Long?) {
         this.timeCreated = timeCreated
+    }
+
+    fun getTimeOpen(): Long? {
+        return timeOpen
+    }
+
+    fun setTimeOpen(timeOpen: Long) {
+        this.timeOpen = timeOpen
+    }
+
+    fun getTimeClose(): Long? {
+        return timeClose
+    }
+
+    fun setTimeClose(timeClose: Long) {
+        this.timeClose = timeClose
     }
 
     fun getCourse(): Course? {
