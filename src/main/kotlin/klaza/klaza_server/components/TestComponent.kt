@@ -17,9 +17,6 @@
 package klaza.klaza_server.components
 
 import klaza.klaza_server.configurations.KlazaConfiguration
-import klaza.klaza_server.libs.Colors
-import klaza.klaza_server.models.Quiz
-import klaza.klaza_server.models.UserInfoData
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

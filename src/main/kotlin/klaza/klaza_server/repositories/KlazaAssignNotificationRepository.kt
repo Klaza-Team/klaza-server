@@ -17,10 +17,13 @@
 package klaza.klaza_server.repositories;
 
 import klaza.klaza_server.models.KlazaAssignNotification
+import klaza.klaza_server.models.KlazaQuizNotification
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface KlazaAssignNotificationRepository : JpaRepository<KlazaAssignNotification, Long> {
 
     fun findAllByAssign_Id(assignId: Long): List<KlazaAssignNotification>
+
+    fun findByAssign_IdAndEventname(assignId: Long, eventname: String): KlazaAssignNotification?
 
 }

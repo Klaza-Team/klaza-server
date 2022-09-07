@@ -23,4 +23,6 @@ interface KlazaQuizNotificationRepository : JpaRepository<KlazaQuizNotification,
 
     fun findAllByQuiz_Id(quizId: Long): List<KlazaQuizNotification>
 
+    fun findByQuiz_IdAndEventname(quizId: Long, eventname: String): KlazaQuizNotification?
+
 }

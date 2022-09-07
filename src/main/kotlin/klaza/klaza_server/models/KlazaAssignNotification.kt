@@ -20,16 +20,30 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "mdl_klaza_assign_notification")
-class KlazaAssignNotification {
+class KlazaAssignNotification() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private var id: Long? = null
 
+    @Column(name = "eventname", nullable = false)
+    private var eventname: String? = null
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assign_id", nullable = false)
     private var assign: Assign? = null
+
+    constructor(assign: Assign, eventName: String) : this() {
+        this.assign = assign
+        this.eventname = eventName
+    }
+
+    constructor(id: Long, assign: Assign, eventName: String) : this() {
+        this.id = id
+        this.assign = assign
+        this.eventname = eventName
+    }
 
     fun getId(): Long? {
         return id
@@ -45,6 +59,14 @@ class KlazaAssignNotification {
 
     fun setAssign(assign: Assign?) {
         this.assign = assign
+    }
+
+    fun getEventname(): String? {
+        return eventname
+    }
+
+    fun setEventname(eventname: String) {
+        this.eventname = eventname
     }
 
     override fun toString(): String {

@@ -28,7 +28,7 @@ interface KlazaTelegramInstanceRepository : JpaRepository<KlazaTelegramInstance,
 
     fun findAllByGuildAndChannel(guild: String, channel: String): List<KlazaDiscordInstance>
 
-    fun findAllByCourse_Id(courseId: String): List<KlazaDiscordInstance>
+    fun findAllByCourse_Id(courseId: Long): List<KlazaDiscordInstance>
 
 
 }
