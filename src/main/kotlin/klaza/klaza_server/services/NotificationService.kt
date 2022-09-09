@@ -17,6 +17,7 @@
 
 package klaza.klaza_server.services
 
+import klaza.klaza_server.components.DiscordComponent
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.models.User
 import klaza.klaza_server.repositories.*
@@ -37,6 +38,7 @@ class NotificationService {
     @Autowired lateinit var klazaTelegramInstanceRepository: KlazaTelegramInstanceRepository
     @Autowired lateinit var klazaUserInstanceRepository: KlazaUserInstanceRepository
     @Autowired lateinit var userInfoDataRepository: UserInfoDataRepository
+    @Autowired lateinit var discordComponent: DiscordComponent
 
     fun sendNotification(eventData: EventData) {
 
@@ -47,7 +49,18 @@ class NotificationService {
 
         val userInstances = sortUserInstancesByPriority(eventData.course!!.getId()!!, users)
 
-        // TODO: Redirecionar para o serviço de notificação do bot específico
+        // DISCORD
+        discordComponent.sendServerNotifications(eventData, discordInstances)
+        sendNotificationToUsers(eventData, userInstances)
+
+        // TELEGRAM
+
+        // WHATSAPP
+
+        // EMAIL
+
+        // TODO: Redirecionar para o serviço de notificação do TELEGRAM
+        // TODO: Redirecionar para o serviço de notificação do WHATSAPP
 
     }
 
@@ -106,6 +119,34 @@ class NotificationService {
 //        LOGGER.info(Colors.GREEN + "User instances: $map" + Colors.RESET)
 
         return map
+
+    }
+
+    fun sendNotificationToUsers(eventData: EventData, instances: MutableMap<User, List<Map<String, String>>>) {
+
+        for (u in instances.keys) {
+
+           val userInstances = instances[u]!!
+
+              for (instance in userInstances) {
+
+                  val i = userInstances.indexOf(instance)
+
+                  when (instance["type"]) {
+                      "DISCORD" -> {
+                          if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
+                      }
+                      "TELEGRAM" -> {
+                          if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
+                      }
+                      "WHATSAPP" -> {
+                          if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
+                      }
+                  }
+
+              }
+
+        }
 
     }
 
