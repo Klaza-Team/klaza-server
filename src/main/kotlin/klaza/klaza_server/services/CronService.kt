@@ -162,11 +162,11 @@ class CronService {
     fun getCloseFromEvent(eventData: EventData): Date? {
 
         if (eventData.isQuiz()) {
-            return Date(eventData.relatedquiz!!.getTimeClose()!!)
+            return Date(eventData.relatedquiz!!.getTimeClose()!! * 1000)
         }
 
         if (eventData.isAssign()) {
-            return Date(eventData.relatedassign!!.getDueDate()!!)
+            return Date(eventData.relatedassign!!.getDueDate()!! * 1000)
         }
 
         return null
@@ -202,11 +202,11 @@ class CronService {
     fun getOpenFromEvent(eventData: EventData): Date? {
 
         if (eventData.isQuiz()) {
-            return Date(eventData.relatedquiz!!.getTimeOpen()!!)
+            return Date(eventData.relatedquiz!!.getTimeOpen()!! * 1000)
         }
 
         if (eventData.isAssign()) {
-            return Date(eventData.relatedassign!!.getAllowsubmissionsfromdate()!!)
+            return Date(eventData.relatedassign!!.getAllowsubmissionsfromdate()!! * 1000)
         }
 
         return null
