@@ -18,6 +18,7 @@
 package klaza.klaza_server.services
 
 import klaza.klaza_server.components.DiscordComponent
+import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.models.User
 import klaza.klaza_server.repositories.*
@@ -39,6 +40,8 @@ class NotificationService {
     @Autowired lateinit var klazaUserInstanceRepository: KlazaUserInstanceRepository
     @Autowired lateinit var userInfoDataRepository: UserInfoDataRepository
     @Autowired lateinit var discordComponent: DiscordComponent
+    @Autowired lateinit var whatsAppComponent: WhatsAppComponent
+//    @Autowired lateinit var telegramComponent: TelegramComponent
 
     fun sendNotification(eventData: EventData) {
 
@@ -51,13 +54,14 @@ class NotificationService {
 
         // DISCORD
         discordComponent.sendServerNotifications(eventData, discordInstances)
-        sendNotificationToUsers(eventData, userInstances)
 
         // TELEGRAM
 
         // WHATSAPP
 
         // EMAIL
+
+        sendNotificationToUsers(eventData, userInstances)
 
         // TODO: Redirecionar para o serviço de notificação do TELEGRAM
         // TODO: Redirecionar para o serviço de notificação do WHATSAPP
@@ -124,6 +128,8 @@ class NotificationService {
 
     fun sendNotificationToUsers(eventData: EventData, instances: MutableMap<User, List<Map<String, String>>>) {
 
+//        LOGGER.info(instances.toString())
+
         for (u in instances.keys) {
 
            val userInstances = instances[u]!!
@@ -140,7 +146,7 @@ class NotificationService {
                           if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
                       }
                       "WHATSAPP" -> {
-                          if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
+                          if (whatsAppComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
                       }
                   }
 
