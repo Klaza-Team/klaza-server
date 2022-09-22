@@ -22,7 +22,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 open class KlazaConfiguration {
 
     var discordToken: String = ""
+    
     var whatsappToken: String = ""
     var whatsappNumberID: String = ""
+
+    var telegramToken: String = ""
 
 }

@@ -22,13 +22,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface KlazaTelegramInstanceRepository : JpaRepository<KlazaTelegramInstance, Long> {
 
-    fun findAllByGuild(guild: String): List<KlazaDiscordInstance>
+    fun findAllByChannel(channel: String): List<KlazaTelegramInstance>
 
-    fun findAllByChannel(channel: String): List<KlazaDiscordInstance>
-
-    fun findAllByGuildAndChannel(guild: String, channel: String): List<KlazaDiscordInstance>
-
-    fun findAllByCourse_Id(courseId: Long): List<KlazaDiscordInstance>
-
+    fun findAllByCourse_Id(courseId: Long): List<KlazaTelegramInstance>
 
 }

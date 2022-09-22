@@ -27,11 +27,8 @@ class KlazaTelegramInstance {
     @Column(name = "id", nullable = false)
     private var id: Long? = null
 
-    @Column(name = "guild", length = 100, nullable = false)
-    private var guild: String? = null // verificar se realmente é isso
-
     @Column(name = "channel", length = 100, nullable = false)
-    private var channel: String? = null // Verificar se realmente é isso
+    private var channel: String? = null
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", nullable = false)
@@ -43,14 +40,6 @@ class KlazaTelegramInstance {
 
     fun setId(id: Long?) {
         this.id = id
-    }
-
-    fun getGuild(): String? {
-        return guild
-    }
-
-    fun setGuild(guild: String?) {
-        this.guild = guild
     }
 
     fun getChannel(): String? {
@@ -70,7 +59,7 @@ class KlazaTelegramInstance {
     }
 
     override fun toString(): String {
-        return "KlazaTelegramInstance(id=$id, guild=$guild, channel=$channel, course=$course)"
+        return "KlazaTelegramInstance(id=$id, channel=$channel, course=$course)"
     }
 
 }

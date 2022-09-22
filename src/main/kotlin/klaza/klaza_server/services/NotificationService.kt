@@ -18,6 +18,7 @@
 package klaza.klaza_server.services
 
 import klaza.klaza_server.components.DiscordComponent
+import klaza.klaza_server.components.TelegramComponent
 import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.models.User
@@ -41,7 +42,7 @@ class NotificationService {
     @Autowired lateinit var userInfoDataRepository: UserInfoDataRepository
     @Autowired lateinit var discordComponent: DiscordComponent
     @Autowired lateinit var whatsAppComponent: WhatsAppComponent
-//    @Autowired lateinit var telegramComponent: TelegramComponent
+    @Autowired lateinit var telegramComponent: TelegramComponent
 
     fun sendNotification(eventData: EventData) {
 
@@ -56,15 +57,12 @@ class NotificationService {
         discordComponent.sendServerNotifications(eventData, discordInstances)
 
         // TELEGRAM
+        telegramComponent.sendServerNotifications(eventData, telegramInstances)
 
-        // WHATSAPP
-
-        // EMAIL
-
+        // USERS
         sendNotificationToUsers(eventData, userInstances)
 
         // TODO: Redirecionar para o serviço de notificação do TELEGRAM
-        // TODO: Redirecionar para o serviço de notificação do WHATSAPP
 
     }
 
@@ -143,7 +141,7 @@ class NotificationService {
                           if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
                       }
                       "TELEGRAM" -> {
-                          if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
+                          if (telegramComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
                       }
                       "WHATSAPP" -> {
                           if (whatsAppComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
