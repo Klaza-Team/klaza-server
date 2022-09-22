@@ -16,14 +16,16 @@
 
 package klaza.klaza_server
 
-import klaza.klaza_server.configurations.KlazaConfiguration
-import org.springframework.beans.factory.annotation.Autowired
+import klaza.klaza_server.configurations.DiscordConfiguration
+import klaza.klaza_server.configurations.EmailConfiguration
+import klaza.klaza_server.configurations.TelegramConfiguration
+import klaza.klaza_server.configurations.WhatsappConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-@EnableConfigurationProperties(KlazaConfiguration::class)
+@EnableConfigurationProperties(DiscordConfiguration::class, TelegramConfiguration::class, WhatsappConfiguration::class, EmailConfiguration::class)
 class KlazaServerApplication
 
 fun main(args: Array<String>) {

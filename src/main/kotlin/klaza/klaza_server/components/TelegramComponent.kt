@@ -19,7 +19,7 @@ package klaza.klaza_server.components
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.request.SendMessage
 import klaza.klaza_server.classes.Colors
-import klaza.klaza_server.configurations.KlazaConfiguration
+import klaza.klaza_server.configurations.TelegramConfiguration
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.models.KlazaTelegramInstance
 import org.slf4j.LoggerFactory
@@ -39,14 +39,14 @@ class TelegramComponent {
 
     }
 
-    @Autowired lateinit var configuration: KlazaConfiguration
+    @Autowired lateinit var telegramConfiguration: TelegramConfiguration
 
     @PostConstruct
     fun start() {
 
         LOGGER.info(Colors.PURPLE + "Starting Telegram client..." + Colors.RESET)
 
-        bot = TelegramBot(configuration.telegramToken)
+        bot = TelegramBot(telegramConfiguration.token)
 
         LOGGER.info(Colors.PURPLE + "Telegram client started!" + Colors.RESET)
 

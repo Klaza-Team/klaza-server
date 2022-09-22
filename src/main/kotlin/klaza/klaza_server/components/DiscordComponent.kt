@@ -22,9 +22,8 @@ import discord4j.core.GatewayDiscordClient
 import discord4j.core.spec.EmbedCreateSpec
 import discord4j.discordjson.json.EmbedData
 import discord4j.discordjson.json.EmbedFieldData
-import discord4j.rest.entity.RestChannel
 import klaza.klaza_server.classes.Colors
-import klaza.klaza_server.configurations.KlazaConfiguration
+import klaza.klaza_server.configurations.DiscordConfiguration
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.models.KlazaDiscordInstance
 import org.slf4j.LoggerFactory
@@ -45,14 +44,14 @@ class DiscordComponent {
 
     }
 
-    @Autowired lateinit var configuration: KlazaConfiguration
+    @Autowired lateinit var discordConfiguration: DiscordConfiguration
 
     @PostConstruct
     fun start() {
 
         LOGGER.info(Colors.PURPLE + "Starting Discord client..." + Colors.RESET)
 
-        client = DiscordClient.create(configuration.discordToken)
+        client = DiscordClient.create(discordConfiguration.token)
         gateway = client.login().block()!!
 
         LOGGER.info(Colors.PURPLE + "Discord client started!" + Colors.RESET)

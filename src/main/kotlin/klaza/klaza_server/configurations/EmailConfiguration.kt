@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - KlazaConfiguration.kt
+// Plugin Klaza para Moodle - Server - DiscordConfiguration.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -18,14 +18,16 @@ package klaza.klaza_server.configurations
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-@ConfigurationProperties("klaza")
-open class KlazaConfiguration {
+@ConfigurationProperties("klaza.email")
+open class EmailConfiguration {
 
-    var discordToken: String = ""
-    
-    var whatsappToken: String = ""
-    var whatsappNumberID: String = ""
+    var host: String = ""
+    var port: Int = 0
+    var protocol: String = ""
+    var starttls: Boolean = false
+    var auth: Boolean = false
 
-    var telegramToken: String = ""
+    var useremail: String = ""
+    var password: String = ""
 
 }

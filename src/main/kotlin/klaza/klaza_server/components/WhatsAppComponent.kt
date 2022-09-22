@@ -18,7 +18,7 @@ package klaza.klaza_server.components
 
 import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.classes.Requests
-import klaza.klaza_server.configurations.KlazaConfiguration
+import klaza.klaza_server.configurations.WhatsappConfiguration
 import klaza.klaza_server.data.EventData
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,7 +36,7 @@ class WhatsAppComponent {
     }
 
     @Autowired
-    lateinit var configuration: KlazaConfiguration
+    lateinit var whatsappConfiguration: WhatsappConfiguration
 
     @PostConstruct
     fun start() {
@@ -74,7 +74,7 @@ class WhatsAppComponent {
             }
             """
 
-           Requests("https://graph.facebook.com/v14.0/${configuration.whatsappNumberID}", configuration.whatsappToken).post("/messages", body)
+           Requests("https://graph.facebook.com/v14.0/${whatsappConfiguration.numberID}", whatsappConfiguration.token).post("/messages", body)
 
            return true
 

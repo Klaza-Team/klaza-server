@@ -17,7 +17,9 @@
 
 package klaza.klaza_server.services
 
+import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.components.DiscordComponent
+import klaza.klaza_server.components.EmailComponent
 import klaza.klaza_server.components.TelegramComponent
 import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
@@ -43,6 +45,7 @@ class NotificationService {
     @Autowired lateinit var discordComponent: DiscordComponent
     @Autowired lateinit var whatsAppComponent: WhatsAppComponent
     @Autowired lateinit var telegramComponent: TelegramComponent
+    @Autowired lateinit var emailComponent: EmailComponent
 
     fun sendNotification(eventData: EventData) {
 
@@ -62,8 +65,6 @@ class NotificationService {
         // USERS
         sendNotificationToUsers(eventData, userInstances)
 
-        // TODO: Redirecionar para o serviço de notificação do TELEGRAM
-
     }
 
     fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<Map<String, String>>> {
@@ -73,6 +74,7 @@ class NotificationService {
         for (u in users) {
 
             val userInfo = mutableMapOf<String, String>()
+            val emailMap = mapOf("type" to "EMAIL", "value" to u.getEmail()!!, "priority" to "0") as Map<String, String>
 
            userInfoDataRepository.findAllKlazaUserInfoDataByUserId(u.getId()!!).forEach { it ->
                userInfo[it.getField()!!.getShortname()!!] = it.getData()!!
@@ -111,9 +113,17 @@ class NotificationService {
             }
 
             if (map.containsKey(u)) {
+
                 val userList = map[u]!!.toMutableList()
+
                 userList.sortBy { it["priority"] }
+                userList.add(emailMap)
+
                 map[u] = userList
+
+            }
+            else {
+                map[u] = listOf(emailMap)
             }
 
         }
@@ -130,28 +140,42 @@ class NotificationService {
 
         for (u in instances.keys) {
 
-           val userInstances = instances[u]!!
+            val userInstances = instances[u]!!
 
-              for (instance in userInstances) {
+            for (instance in userInstances) {
 
-                  val i = userInstances.indexOf(instance)
+                val i = userInstances.indexOf(instance)
 
-                  when (instance["type"]) {
-                      "DISCORD" -> {
-                          if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
-                      }
-                      "TELEGRAM" -> {
-                          if (telegramComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
-                      }
-                      "WHATSAPP" -> {
-                          if (whatsAppComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) { break } else { continue }
-                      }
-                  }
-
-              }
+                when (instance["type"]) {
+                    "DISCORD" -> {
+                        if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                            break
+                        } else {
+                            continue
+                        }
+                    }
+                    "TELEGRAM" -> {
+                        if (telegramComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                            break
+                        } else {
+                            continue
+                        }
+                    }
+                    "WHATSAPP" -> {
+                        if (whatsAppComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                            break
+                        } else {
+                            continue
+                        }
+                    }
+                    "EMAIL" -> {
+                        emailComponent.sendUserNotification(eventData, u.getEmail()!!)
+                        break
+                    }
+                }
+            }
 
         }
-
     }
 
 }
