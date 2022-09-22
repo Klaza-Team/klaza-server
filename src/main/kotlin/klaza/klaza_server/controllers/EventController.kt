@@ -25,6 +25,7 @@ import klaza.klaza_server.repositories.UserRepository
 import klaza.klaza_server.services.CourseModuleService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -47,6 +48,7 @@ class EventController {
 
     // \core\event\course_module_created
     @PostMapping("/course_module_created")
+    @Async("asyncExecutor")
     fun courseModuleCreated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_created -> $body" + Colors.RESET)
         courseModuleService.created(body.convertToData(userRepository, courseRepository, assignRepository, quizRepository))
@@ -54,6 +56,7 @@ class EventController {
 
     // \core\event\course_module_updated
     @PostMapping("/course_module_updated")
+    @Async("asyncExecutor")
     fun courseModuleUpdated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_updated -> $body" + Colors.RESET)
         courseModuleService.updated(body.convertToData(userRepository, courseRepository, assignRepository, quizRepository))
@@ -61,6 +64,7 @@ class EventController {
 
     // \core\event\course_module_deleted
     @PostMapping("/course_module_deleted")
+    @Async("asyncExecutor")
     fun courseModuleDeleted(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_deleted -> $body" + Colors.RESET)
         courseModuleService.deleted(body.convertToData(userRepository, courseRepository, assignRepository, quizRepository))
@@ -70,6 +74,7 @@ class EventController {
 
     // \mod_chat\event\message_sent
     @PostMapping("/message_sent")
+    @Async("asyncExecutor")
     fun messageSent(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "message_sent -> $body" + Colors.RESET)
     }
@@ -78,12 +83,14 @@ class EventController {
 
     // \assignsubmission_file\event\submission_updated
     @PostMapping("/submission_updated")
+    @Async("asyncExecutor")
     fun submissionUpdated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "submission_updated -> $body" + Colors.RESET)
     }
 
     // \assignsubmission_onlinetext\event\assessable_uploaded
     @PostMapping("/assessable_uploaded")
+    @Async("asyncExecutor")
     fun assessableUploaded(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "assessable_uploaded -> $body" + Colors.RESET)
     }
@@ -92,6 +99,7 @@ class EventController {
 
     // \mod_quiz\event\attempt_submitted
     @PostMapping("/attempt_submitted")
+    @Async("asyncExecutor")
     fun attemptSubmitted(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "attempt_submitted -> $body" + Colors.RESET)
     }
@@ -100,12 +108,14 @@ class EventController {
 
     // \core\event\comment_created
     @PostMapping("/comment_created")
+    @Async("asyncExecutor")
     fun commentCreated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "comment_created -> $body" + Colors.RESET)
     }
 
     // \core\event\comment_deleted
     @PostMapping("/comment_deleted")
+    @Async("asyncExecutor")
     fun commentDeleted(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "comment_deleted -> $body" + Colors.RESET)
     }
