@@ -50,7 +50,10 @@ class CourseModuleService {
         LOGGER.info(Colors.GREEN + "CourseModuleService updated -> $eventData" + Colors.RESET)
 
         if (needCron(eventData)) {
+
+            cronService.deleteCronsByEventData(eventData)
             cronService.createCronJob(eventData)
+
         }
 
         notificationService.sendNotification(eventData)

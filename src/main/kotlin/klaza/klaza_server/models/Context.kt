@@ -27,39 +27,13 @@ class Context {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(name = "contextlevel", nullable = false)
-    private var contextlevel: Long? = null
+    var contextlevel: Long? = null
 
     @Column(name = "instanceid", nullable = false)
-    private var instanceid: Long? = null
-
-    // Getters and Setters
-
-    fun getId(): Long? {
-        return id
-    }
-
-    fun setId(id: Long?) {
-        this.id = id
-    }
-
-    fun getContextlevel(): Long? {
-        return contextlevel
-    }
-
-    fun setContextlevel(contextlevel: Long?) {
-        this.contextlevel = contextlevel
-    }
-
-    fun getInstanceid(): Long? {
-        return instanceid
-    }
-
-    fun setInstanceid(instanceid: Long?) {
-        this.instanceid = instanceid
-    }
+    var instanceid: Long? = null
 
     // Override
 

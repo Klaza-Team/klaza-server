@@ -31,7 +31,7 @@ open class ApiKeyAuthManager(configPluginsRepository: ConfigPluginsRepository): 
 
         val apiKey: String = authentication.principal.toString()
 
-        if (apiKey == this.configPluginsRepository.findKlazaConfigAuth().getValue()) {
+        if (apiKey == this.configPluginsRepository.findKlazaConfigAuth().value) {
             authentication.isAuthenticated = true
         }
         else {

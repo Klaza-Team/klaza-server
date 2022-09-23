@@ -22,6 +22,7 @@ import klaza.klaza_server.repositories.AssignRepository
 import klaza.klaza_server.repositories.CourseRepository
 import klaza.klaza_server.repositories.QuizRepository
 import klaza.klaza_server.repositories.UserRepository
+import klaza.klaza_server.services.ChatService
 import klaza.klaza_server.services.CourseModuleService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,6 +41,7 @@ class EventController {
     }
 
     @Autowired lateinit var courseModuleService: CourseModuleService
+    @Autowired lateinit var chatService: ChatService
 
     @Autowired lateinit var userRepository: UserRepository
     @Autowired lateinit var courseRepository: CourseRepository
@@ -73,11 +75,12 @@ class EventController {
 
 
 
-    // \mod_chat\event\message_sent
+    // \core\event\message_sent
     @PostMapping("/message_sent")
     @Async("asyncExecutor")
     fun messageSent(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "message_sent -> $body" + Colors.RESET)
+        chatService.messageSent(body.convertToData(userRepository, courseRepository, assignRepository, quizRepository))
     }
 
 

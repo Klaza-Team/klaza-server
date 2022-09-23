@@ -21,7 +21,6 @@ import klaza.klaza_server.data.EventData
 import klaza.klaza_server.services.CronService
 import klaza.klaza_server.services.NotificationService
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import java.util.Date
 import java.util.Timer
 import java.util.TimerTask

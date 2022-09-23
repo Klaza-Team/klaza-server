@@ -49,9 +49,19 @@ class CronService {
 
             val type = if (event.isQuiz()) "Quiz" else "Assign"
             val days = if (lastDays == 0) "Close" else if (lastDays == 1) "LastDay" else if (lastDays > 1) "Last${lastDays}Days" else "Open"
-            val id = if (event.isQuiz()) event.relatedquiz!!.getID()!! else event.relatedassign!!.getId()!!
+            val id = if (event.isQuiz()) event.relatedquiz!!.id!! else event.relatedassign!!.id!!
 
             return "${type}_${days}_${id}"
+
+        }
+
+        fun getCronNamePattern(type: String? = null, middle: String? = null, id: String? = null): Regex {
+
+            val typePattern = type ?: "Quiz|Assign"
+            val middlePattern = middle ?: "Close|LastDay|Last\\d+Days|Open"
+            val idPattern = id ?: "\\d+"
+
+            return Regex("(${typePattern})_(${middlePattern})_(${idPattern})")
 
         }
 
@@ -61,14 +71,14 @@ class CronService {
 
         val map = mapOf(
             "quiz" to mapOf(
-                "id" to { evt: EventData -> evt.relatedquiz!!.getID() },
+                "id" to { evt: EventData -> evt.relatedquiz!!.id },
                 "related" to { evt: EventData -> evt.relatedquiz!! },
                 "find" to { id: Long, name: String -> quizNotificationRepository.findByQuiz_IdAndEventname(id, name) },
                 "delete" to { nt: KlazaQuizNotification -> quizNotificationRepository.delete(nt) },
                 "save" to { related: Quiz, name: String -> quizNotificationRepository.save(KlazaQuizNotification(related, name)) }
             ),
             "assign" to mapOf(
-                "id" to { evt: EventData -> evt.relatedassign!!.getId() },
+                "id" to { evt: EventData -> evt.relatedassign!!.id },
                 "related" to { evt: EventData -> evt.relatedassign!! },
                 "find" to { id: Long, name: String -> assignNotificationRepository.findByAssign_IdAndEventname(id, name) },
                 "delete" to { nt: KlazaAssignNotification -> assignNotificationRepository.delete(nt) },
@@ -151,11 +161,11 @@ class CronService {
     fun getCloseFromEvent(eventData: EventData): Date? {
 
         if (eventData.isQuiz()) {
-            return Date(eventData.relatedquiz!!.getTimeClose()!! * 1000)
+            return Date(eventData.relatedquiz!!.timeClose!! * 1000)
         }
 
         if (eventData.isAssign()) {
-            return Date(eventData.relatedassign!!.getDueDate()!! * 1000)
+            return Date(eventData.relatedassign!!.dueDate!! * 1000)
         }
 
         return null
@@ -191,11 +201,11 @@ class CronService {
     fun getOpenFromEvent(eventData: EventData): Date? {
 
         if (eventData.isQuiz()) {
-            return Date(eventData.relatedquiz!!.getTimeOpen()!! * 1000)
+            return Date(eventData.relatedquiz!!.timeOpen!! * 1000)
         }
 
         if (eventData.isAssign()) {
-            return Date(eventData.relatedassign!!.getAllowsubmissionsfromdate()!! * 1000)
+            return Date(eventData.relatedassign!!.allowsubmissionsfromdate!! * 1000)
         }
 
         return null
@@ -221,9 +231,9 @@ class CronService {
         val list = mutableListOf<String>()
 
         val type = if (eventData.isQuiz()) "Quiz" else "Assign"
-        val id = if (eventData.isQuiz()) eventData.relatedquiz?.getID()!! else eventData.relatedassign?.getId()!!
+        val id = if (eventData.isQuiz()) eventData.relatedquiz?.id!! else eventData.relatedassign?.id!!
 
-        val regex = Regex("(${type})_(\\w+)_(${id})")
+        val regex = getCronNamePattern(type = type, id = id.toString())
 
         CRONS.forEach { (key) ->
 
@@ -247,13 +257,13 @@ class CronService {
 
         if (eventData.isQuiz()) {
 
-            val entity = quizNotificationRepository.findByQuiz_IdAndEventname(eventData.relatedquiz!!.getID()!!, eventname)
+            val entity = quizNotificationRepository.findByQuiz_IdAndEventname(eventData.relatedquiz!!.id!!, eventname)
             if (entity != null) { quizNotificationRepository.delete(entity) }
 
         }
         else {
 
-            val entity = assignNotificationRepository.findByAssign_IdAndEventname(eventData.relatedassign!!.getId()!!, eventname)
+            val entity = assignNotificationRepository.findByAssign_IdAndEventname(eventData.relatedassign!!.id!!, eventname)
             if (entity != null) { assignNotificationRepository.delete(entity) }
 
         }
