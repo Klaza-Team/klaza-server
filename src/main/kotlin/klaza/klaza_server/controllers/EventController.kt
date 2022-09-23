@@ -51,6 +51,7 @@ class EventController {
     @Async("asyncExecutor")
     fun courseModuleCreated(@RequestBody body: EventDTO) {
         LOGGER.info(Colors.GREEN + "course_module_created -> $body" + Colors.RESET)
+        Thread.sleep(1_000) // GAMBIARRA
         courseModuleService.created(body.convertToData(userRepository, courseRepository, assignRepository, quizRepository))
     }
 

@@ -34,7 +34,15 @@ class CourseModuleService {
     @Autowired lateinit var cronService: CronService
 
     fun created(eventData: EventData) {
+
         LOGGER.info(Colors.GREEN + "CourseModuleService created -> $eventData" + Colors.RESET)
+
+        if (needCron(eventData)) {
+            cronService.createCronJob(eventData)
+        }
+
+        notificationService.sendNotification(eventData)
+
     }
 
     fun updated(eventData: EventData) {
@@ -50,7 +58,19 @@ class CourseModuleService {
     }
 
     fun deleted(eventData: EventData) {
+
         LOGGER.info(Colors.GREEN + "CourseModuleService deleted -> $eventData" + Colors.RESET)
+
+        println(cronService.getCronNamesByEventData(eventData))
+
+        if (needCron(eventData)) {
+            cronService.deleteCronsByEventData(eventData)
+        }
+
+        println(cronService.getCronNamesByEventData(eventData))
+
+        notificationService.sendNotification(eventData)
+
     }
 
 
