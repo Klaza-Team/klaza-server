@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - ChatService.kt
+// Plugin Klaza para Moodle - Server - CommentService.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -23,17 +23,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ChatService {
+class CommentService {
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(ChatService::class.java)
+        private val LOGGER = LoggerFactory.getLogger(CommentService::class.java)
     }
 
     @Autowired lateinit var notificationService: NotificationService
 
-    fun messageSent(eventData: EventData) {
+    fun commentCreated(eventData: EventData) {
 
-        LOGGER.info(Colors.GREEN + "messageSent -> $eventData" + Colors.RESET)
+        LOGGER.info(Colors.GREEN + "commentCreated -> $eventData" + Colors.RESET)
 
         notificationService.sendNotification(eventData)
 

@@ -28,8 +28,17 @@ interface UserRepository : JpaRepository<User, Long> {
             "JOIN RoleAssignments ra ON ra.context.id = ct.id\n" +
             "JOIN User u ON u.id = ra.user.id\n" +
             "JOIN Role r ON r.id = ra.role.id\n" +
-            "WHERE r.id = 5 AND c.id = ?1")
+            "WHERE r.id <= 5 AND c.id = ?1")
     fun findAllByCourseID(courseID: Long): List<User>
+
+    @Query( "SELECT u\n" +
+            "FROM Course c\n" +
+            "JOIN Context ct ON c.id = ct.instanceid\n" +
+            "JOIN RoleAssignments ra ON ra.context.id = ct.id\n" +
+            "JOIN User u ON u.id = ra.user.id\n" +
+            "JOIN Role r ON r.id = ra.role.id\n" +
+            "WHERE r.id <= 4 AND c.id = ?1")
+    fun findAllTeachersByCourseID(courseID: Long): List<User>
 
     fun findByEmail(email: String): User
 

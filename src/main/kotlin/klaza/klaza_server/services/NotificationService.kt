@@ -60,9 +60,9 @@ class NotificationService {
 
                 "\\core\\event\\course_module_created", "\\core\\event\\course_module_updated", "\\core\\event\\course_module_deleted" -> { sendCourseNotification(eventData) }
                 "\\core\\event\\message_sent" -> { sendMessageNotification(eventData) }
-                "\\assignsubmission_file\\event\\submission_updated" -> {}
-                "\\mod_quiz\\event\\attempt_submitted" -> {}
-                "\\core\\event\\comment_created", "\\core\\event\\comment_deleted" -> {}
+                "\\assignsubmission_file\\event\\submission_updated" -> { sendSubmissionNotification(eventData) }
+                "\\mod_quiz\\event\\attempt_submitted" -> { sendAttemptNotification(eventData) }
+                "\\assignsubmission_comments\\event\\comment_created", "\\assignsubmission_comments\\event\\comment_deleted" -> { sendCommentNotification(eventData) }
                 else -> { return }
 
             }
@@ -212,6 +212,30 @@ class NotificationService {
         LOGGER.info(Colors.GREEN + "sendMessageNotification -> $eventData" + Colors.RESET)
 
         sendNotificationToUsers(eventData, listOf(eventData.relateduser!!))
+
+    }
+
+    fun sendSubmissionNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendMessageNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
+
+    }
+
+    fun sendAttemptNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendAttemptNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
+
+    }
+
+    fun sendCommentNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendCommentNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
 
     }
 
