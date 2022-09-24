@@ -25,14 +25,14 @@ class KlazaQuizNotification() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(name = "eventname", nullable = false)
-    private var eventname: String? = null
+    var eventname: String? = null
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "quiz_id", nullable = false)
-    private var quiz: Quiz? = null
+    var quiz: Quiz? = null
 
     constructor(quiz: Quiz, eventName: String) : this() {
         this.quiz = quiz
@@ -43,30 +43,6 @@ class KlazaQuizNotification() {
         this.id = id
         this.quiz = quiz
         this.eventname = eventName
-    }
-
-    fun getId(): Long? {
-        return id
-    }
-
-    fun setId(id: Long) {
-        this.id = id
-    }
-
-    fun getQuiz(): Quiz? {
-        return quiz
-    }
-
-    fun setQuiz(quiz: Quiz) {
-        this.quiz = quiz
-    }
-
-    fun getEventName(): String? {
-        return eventname
-    }
-
-    fun setEventName(eventname: String) {
-        this.eventname = eventname
     }
 
     override fun toString(): String {

@@ -56,11 +56,11 @@ class TelegramComponent {
 
         for (i in instances) {
 
-            val resp = bot.execute(SendMessage(i.getChannel(), event.toString()))
+            val resp = bot.execute(SendMessage(i.channel, event.toString()))
 
             if (!resp.isOk) {
 
-                LOGGER.error(Colors.RED + "Error sending server notification to Channel: ${i.getChannel()}, Event: ${event.eventname}" + Colors.RESET)
+                LOGGER.error(Colors.RED + "Error sending server notification to Channel: ${i.channel}, Event: ${event.eventname}" + Colors.RESET)
                 LOGGER.error(Colors.RED + resp.message() + Colors.RESET)
 
             }

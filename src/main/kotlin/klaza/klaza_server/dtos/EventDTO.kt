@@ -22,6 +22,7 @@ import klaza.klaza_server.repositories.AssignRepository
 import klaza.klaza_server.repositories.CourseRepository
 import klaza.klaza_server.repositories.QuizRepository
 import klaza.klaza_server.repositories.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 
 class EventDTO(
     var eventname: String,
@@ -49,8 +50,8 @@ class EventDTO(
             action = action,
             target = target,
             other = other,
-            relatedassign = if (other.modulename == "assign") assignRepository.findById(other.instanceid).get() else null,
-            relatedquiz = if (other.modulename == "quiz") quizRepository.findById(other.instanceid).get() else null
+            relatedassign = if (other.modulename == "assign") assignRepository.findById(other.instanceid!!).get() else null,
+            relatedquiz = if (other.modulename == "quiz") quizRepository.findById(other.instanceid!!).get() else null
         )
     }
 

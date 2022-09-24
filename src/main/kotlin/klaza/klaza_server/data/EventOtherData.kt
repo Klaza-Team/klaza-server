@@ -18,12 +18,22 @@
 package klaza.klaza_server.data
 
 class EventOtherData(
-    var modulename: String,
-    var instanceid: Long,
-    var name: String) {
+    var modulename: String? = null,
+    var instanceid: Long? = null,
+    var name: String? = null,
+    var courseid: Long? = null,
+    var submissionid: Long? = null,
+    var submissionattempt: Int? = null,
+    var submissionstatus: String? = null,
+    var filesubmissioncount: Int? = null,
+    var groupid: Long? = null,
+    var groupname: String? = null,
+    var pathnamehashes: List<String> = listOf(),
+    var content: String? = null,
+    var format: String? = null) {
 
     override fun toString(): String {
-        return "EventOtherData(modulename='$modulename', instanceid=$instanceid, name='$name')"
+        return "EventOtherData(modulename='$modulename', instanceid=$instanceid, name='$name', courseid=$courseid), submissionid=$submissionid, submissionattempt=$submissionattempt, submissionstatus=$submissionstatus, filesubmissioncount=$filesubmissioncount, groupid=$groupid, groupname=$groupname, pathnamehashes=$pathnamehashes, content=$content, format=$format)"
     }
 
 }

@@ -25,93 +25,29 @@ class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(name = "name", length = 100, nullable = false)
-    private var name: String? = null
+    var name: String? = null
 
     @Column(name="timelimit", nullable = false)
-    private var timeLimit: Long? = null
+    var timeLimit: Long? = null
 
     @Column(name="attempts", nullable = false)
-    private var attempts: Int? = null
+    var attempts: Int? = null
 
     @Column(name="timecreated", nullable = false)
-    private var timeCreated: Long? = null
+    var timeCreated: Long? = null
 
     @Column(name="timeopen", nullable = false)
-    private var timeOpen: Long? = null
+    var timeOpen: Long? = null
 
     @Column(name="timeclose", nullable = false)
-    private var timeClose: Long? = null
+    var timeClose: Long? = null
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course", nullable = false)
-    private var course: Course? = null
-
-    fun getID(): Long? {
-        return id
-    }
-
-    fun setID(id: Long?) {
-        this.id = id
-    }
-
-    fun getName(): String? {
-        return name
-    }
-
-    fun setName(name: String?) {
-        this.name = name
-    }
-
-    fun getTimeLimit(): Long? {
-        return timeLimit
-    }
-
-    fun setTimeLimit(timeLimit: Long?) {
-        this.timeLimit = timeLimit
-    }
-
-    fun getAttempts(): Int? {
-        return attempts
-    }
-
-    fun setAttempts(attempts: Int?) {
-        this.attempts = attempts
-    }
-
-    fun getTimeCreated(): Long? {
-        return timeCreated
-    }
-
-    fun setTimeCreated(timeCreated: Long?) {
-        this.timeCreated = timeCreated
-    }
-
-    fun getTimeOpen(): Long? {
-        return timeOpen
-    }
-
-    fun setTimeOpen(timeOpen: Long) {
-        this.timeOpen = timeOpen
-    }
-
-    fun getTimeClose(): Long? {
-        return timeClose
-    }
-
-    fun setTimeClose(timeClose: Long) {
-        this.timeClose = timeClose
-    }
-
-    fun getCourse(): Course? {
-        return course
-    }
-
-    fun setCourse(course: Course?) {
-        this.course = course
-    }
+    var course: Course? = null
 
     override fun toString(): String {
         return "Quiz(id=$id, name=$name, timeLimit=$timeLimit, attempts=$attempts, timeCreated=$timeCreated, course=$course)"

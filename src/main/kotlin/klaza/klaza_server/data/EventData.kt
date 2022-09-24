@@ -45,9 +45,9 @@ class EventData(
             crud = crud,
             contextlevel = contextlevel,
             contextid = contextid,
-            userid = if (user != null) user!!.getId()!! else 0,
-            courseid = if (course != null) course!!.getId()!! else 0,
-            relateduserid = if (relateduser != null) relateduser!!.getId()!! else 0,
+            userid = if (user != null) user!!.id!! else 0,
+            courseid = if (course != null) course!!.id!! else 0,
+            relateduserid = if (relateduser != null) relateduser!!.id!! else 0,
             action = action,
             target = target,
             other = other

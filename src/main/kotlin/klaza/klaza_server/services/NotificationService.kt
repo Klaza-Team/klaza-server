@@ -23,6 +23,7 @@ import klaza.klaza_server.components.EmailComponent
 import klaza.klaza_server.components.TelegramComponent
 import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
+import klaza.klaza_server.dtos.UserNotificationContactDTO
 import klaza.klaza_server.models.User
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
@@ -46,65 +47,57 @@ class NotificationService {
     @Autowired lateinit var whatsAppComponent: WhatsAppComponent
     @Autowired lateinit var telegramComponent: TelegramComponent
     @Autowired lateinit var emailComponent: EmailComponent
+    @Autowired lateinit var userService: UserService
 
     fun sendNotification(eventData: EventData) {
 
-        val discordInstances = klazaDiscordInstanceRepository.findAllByCourse_Id(eventData.course!!.getId()!!)
-        val telegramInstances = klazaTelegramInstanceRepository.findAllByCourse_Id(eventData.course!!.getId()!!)
+        if (CronService.getCronNamePattern().matches(eventData.eventname)) {
+            sendCourseNotification(eventData)
+        }
+        else {
 
-        val users = userRepository.findAllByCourseID(eventData.course!!.getId()!!)
+            when (eventData.eventname) {
 
-        val userInstances = sortUserInstancesByPriority(eventData.course!!.getId()!!, users)
+                "\\core\\event\\course_module_created", "\\core\\event\\course_module_updated", "\\core\\event\\course_module_deleted" -> { sendCourseNotification(eventData) }
+                "\\core\\event\\message_sent" -> { sendMessageNotification(eventData) }
+                "\\assignsubmission_file\\event\\submission_updated" -> { sendSubmissionNotification(eventData) }
+                "\\mod_quiz\\event\\attempt_submitted" -> { sendAttemptNotification(eventData) }
+                "\\assignsubmission_comments\\event\\comment_created", "\\assignsubmission_comments\\event\\comment_deleted" -> { sendCommentNotification(eventData) }
+                else -> { return }
 
-        // DISCORD
-        discordComponent.sendServerNotifications(eventData, discordInstances)
+            }
 
-        // TELEGRAM
-        telegramComponent.sendServerNotifications(eventData, telegramInstances)
-
-        // USERS
-        sendNotificationToUsers(eventData, userInstances)
+        }
 
     }
 
-    fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<Map<String, String>>> {
+    fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<UserNotificationContactDTO>> {
 
-        val map = mutableMapOf<User, List<Map<String, String>>>()
+        val map = mutableMapOf<User, List<UserNotificationContactDTO>>()
 
         for (u in users) {
 
-            val userInfo = mutableMapOf<String, String>()
-            val emailMap = mapOf("type" to "EMAIL", "value" to u.getEmail()!!, "priority" to "0") as Map<String, String>
+            val emailContact = UserNotificationContactDTO("EMAIL", u.email!!, 0)
 
-           userInfoDataRepository.findAllKlazaUserInfoDataByUserId(u.getId()!!).forEach { it ->
-               userInfo[it.getField()!!.getShortname()!!] = it.getData()!!
-           }
-
-            val userDiscordInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.getId()!!, courseID, "DISCORD")
-            val userTelegramInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.getId()!!, courseID, "TELEGRAM")
-            val userWhatsappInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.getId()!!, courseID, "WHATSAPP")
+            val userDiscordInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "DISCORD")
+            val userTelegramInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "TELEGRAM")
+            val userWhatsappInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "WHATSAPP")
 
             val loopInstance = listOf(userDiscordInstance, userTelegramInstance, userWhatsappInstance)
-            val loopInstanceMap = listOf(
-                mapOf("type" to "DISCORD", "var" to "klaza_discord", "priority" to "klaza_discord_priority"),
-                mapOf("type" to "TELEGRAM", "var" to "klaza_telegram", "priority" to "klaza_telegram_priority"),
-                mapOf("type" to "WHATSAPP", "var" to "klaza_whatsapp", "priority" to "klaza_whatsapp_priority")
-            )
+            val userContacts = userService.getOnlyAllowedUserNotificationContacts(u.id!!)
 
             for (instance in loopInstance) {
 
-                val instanceMap = loopInstanceMap[loopInstance.indexOf(instance)]
+                if (instance != null) {
 
-                if (instance != null && userInfo[instanceMap["priority"]] != "-1") {
-
-                    val newValue = mapOf("type" to instanceMap["type"], "value" to (userInfo[instanceMap["var"]] ?: ""), "priority" to (userInfo[instanceMap["priority"]] ?: "-1")) as Map<String, String>
+                    val contact = userContacts.find { it.type == instance.type } ?: continue
 
                     if (!map.containsKey(u)) {
-                        map[u] = mutableListOf(newValue)
+                        map[u] = mutableListOf(contact)
                     }
                     else {
                         val list = map[u]!!.toMutableList()
-                        list.add(newValue)
+                        list.add(contact)
                         map[u] = list
                     }
 
@@ -116,14 +109,14 @@ class NotificationService {
 
                 val userList = map[u]!!.toMutableList()
 
-                userList.sortBy { it["priority"] }
-                userList.add(emailMap)
+                userList.sortBy { it.priority }
+                userList.add(emailContact)
 
                 map[u] = userList
 
             }
             else {
-                map[u] = listOf(emailMap)
+                map[u] = listOf(emailContact)
             }
 
         }
@@ -134,7 +127,7 @@ class NotificationService {
 
     }
 
-    fun sendNotificationToUsers(eventData: EventData, instances: MutableMap<User, List<Map<String, String>>>) {
+    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<User, List<UserNotificationContactDTO>>) {
 
 //        LOGGER.info(instances.toString())
 
@@ -146,36 +139,104 @@ class NotificationService {
 
                 val i = userInstances.indexOf(instance)
 
-                when (instance["type"]) {
+                when (instance.type) {
                     "DISCORD" -> {
-                        if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                        if (discordComponent.sendUserNotification(eventData, instance.value, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "TELEGRAM" -> {
-                        if (telegramComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                        if (telegramComponent.sendUserNotification(eventData, instance.value, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "WHATSAPP" -> {
-                        if (whatsAppComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                        if (whatsAppComponent.sendUserNotification(eventData, instance.value, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "EMAIL" -> {
-                        emailComponent.sendUserNotification(eventData, u.getEmail()!!)
+                        emailComponent.sendUserNotification(eventData, u.email!!)
                         break
                     }
                 }
             }
 
         }
+    }
+
+    fun sendNotificationToUsers(eventData: EventData, users: List<User>) {
+
+        for (u in users) {
+
+            val userInstances = userService.getOnlyAllowedUserNotificationContacts(u.id!!)
+
+            sendNotificationToUsersInstances(eventData, mutableMapOf(u to userInstances))
+
+        }
+
+    }
+
+
+
+    fun sendCourseNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendCourseNotification -> $eventData" + Colors.RESET)
+
+        val discordInstances = klazaDiscordInstanceRepository.findAllByCourse_Id(eventData.course!!.id!!)
+        val telegramInstances = klazaTelegramInstanceRepository.findAllByCourse_Id(eventData.course!!.id!!)
+
+        val users = userRepository.findAllByCourseID(eventData.course!!.id!!)
+
+        val userInstances = sortUserInstancesByPriority(eventData.course!!.id!!, users)
+
+        // DISCORD
+        discordComponent.sendServerNotifications(eventData, discordInstances)
+
+        // TELEGRAM
+        telegramComponent.sendServerNotifications(eventData, telegramInstances)
+
+        // USERS
+        sendNotificationToUsersInstances(eventData, userInstances)
+
+    }
+
+    fun sendMessageNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendMessageNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, listOf(eventData.relateduser!!))
+
+    }
+
+    fun sendSubmissionNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendMessageNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
+
+    }
+
+    fun sendAttemptNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendAttemptNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
+
+    }
+
+    fun sendCommentNotification(eventData: EventData) {
+
+        LOGGER.info(Colors.GREEN + "sendCommentNotification -> $eventData" + Colors.RESET)
+
+        sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
+
     }
 
 }

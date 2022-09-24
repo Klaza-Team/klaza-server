@@ -64,7 +64,7 @@ class DiscordComponent {
 
             try {
 
-                val channel = client.getChannelById(Snowflake.of(i.getChannel()!!))
+                val channel = client.getChannelById(Snowflake.of(i.channel!!))
 
                 val embed = EmbedData.builder()
                     .title("Notificação de Teste")
@@ -79,7 +79,7 @@ class DiscordComponent {
 
             }
             catch (e: Exception) {
-                LOGGER.error(Colors.RED + "Error sending server notification to Guild: ${i.getGuild()}, Channel: ${i.getChannel()}, Event: ${event.eventname}" + Colors.RESET)
+                LOGGER.error(Colors.RED + "Error sending server notification to Guild: ${i.guild}, Channel: ${i.channel}, Event: ${event.eventname}" + Colors.RESET)
                 LOGGER.error(Colors.RED + e.message + Colors.RESET)
             }
 

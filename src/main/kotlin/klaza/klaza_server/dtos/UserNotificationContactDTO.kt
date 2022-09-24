@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - ConfigPlugins.kt
+// Plugin Klaza para Moodle - Server - UserNotificationContactDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -14,30 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package klaza.klaza_server.models
+package klaza.klaza_server.dtos
 
-import javax.persistence.*
-
-@Entity
-@Table(name = "mdl_config_plugins")
-class ConfigPlugins {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    var id: Long? = null
-
-    @Column(name = "plugin", length = 100, nullable = false)
-    var plugin: String? = null
-
-    @Column(name = "name", length = 100, nullable = false)
-    var name: String? = null
-
-    @Column(name = "value", columnDefinition = "LONGTEXT", nullable = false)
-    var value: String? = null
+class UserNotificationContactDTO(
+    var type: String,
+    var value: String,
+    var priority: Int
+) {
 
     override fun toString(): String {
-        return "ConfigPlugins(id=$id, plugin=$plugin, name=$name, value=$value)"
+        return "UserNotificationContactDTO(type='$type', value='$value', priority=$priority)"
     }
 
 }

@@ -25,14 +25,14 @@ class KlazaAssignNotification() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(name = "eventname", nullable = false)
-    private var eventname: String? = null
+    var eventname: String? = null
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assign_id", nullable = false)
-    private var assign: Assign? = null
+    var assign: Assign? = null
 
     constructor(assign: Assign, eventName: String) : this() {
         this.assign = assign
@@ -43,30 +43,6 @@ class KlazaAssignNotification() {
         this.id = id
         this.assign = assign
         this.eventname = eventName
-    }
-
-    fun getId(): Long? {
-        return id
-    }
-
-    fun setId(id: Long?) {
-        this.id = id
-    }
-
-    fun getAssign(): Assign? {
-        return assign
-    }
-
-    fun setAssign(assign: Assign?) {
-        this.assign = assign
-    }
-
-    fun getEventname(): String? {
-        return eventname
-    }
-
-    fun setEventname(eventname: String) {
-        this.eventname = eventname
     }
 
     override fun toString(): String {
