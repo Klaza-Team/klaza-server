@@ -23,6 +23,7 @@ import klaza.klaza_server.components.EmailComponent
 import klaza.klaza_server.components.TelegramComponent
 import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
+import klaza.klaza_server.dtos.UserNotificationContactDTO
 import klaza.klaza_server.models.User
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
@@ -46,6 +47,7 @@ class NotificationService {
     @Autowired lateinit var whatsAppComponent: WhatsAppComponent
     @Autowired lateinit var telegramComponent: TelegramComponent
     @Autowired lateinit var emailComponent: EmailComponent
+    @Autowired lateinit var userService: UserService
 
     fun sendNotification(eventData: EventData) {
 
@@ -69,44 +71,33 @@ class NotificationService {
 
     }
 
-    fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<Map<String, String>>> {
+    fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<UserNotificationContactDTO>> {
 
-        val map = mutableMapOf<User, List<Map<String, String>>>()
+        val map = mutableMapOf<User, List<UserNotificationContactDTO>>()
 
         for (u in users) {
 
-            val userInfo = mutableMapOf<String, String>()
-            val emailMap = mapOf("type" to "EMAIL", "value" to u.email, "priority" to "0") as Map<String, String>
-
-           userInfoDataRepository.findAllKlazaUserInfoDataByUserId(u.id!!).forEach { it ->
-               userInfo[it.field!!.shortname!!] = it.data!!
-           }
+            val emailContact = UserNotificationContactDTO("EMAIL", u.email!!, 0)
 
             val userDiscordInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "DISCORD")
             val userTelegramInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "TELEGRAM")
             val userWhatsappInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "WHATSAPP")
 
             val loopInstance = listOf(userDiscordInstance, userTelegramInstance, userWhatsappInstance)
-            val loopInstanceMap = listOf(
-                mapOf("type" to "DISCORD", "var" to "klaza_discord", "priority" to "klaza_discord_priority"),
-                mapOf("type" to "TELEGRAM", "var" to "klaza_telegram", "priority" to "klaza_telegram_priority"),
-                mapOf("type" to "WHATSAPP", "var" to "klaza_whatsapp", "priority" to "klaza_whatsapp_priority")
-            )
+            val userContacts = userService.getOnlyAllowedUserNotificationContacts(u.id!!)
 
             for (instance in loopInstance) {
 
-                val instanceMap = loopInstanceMap[loopInstance.indexOf(instance)]
+                if (instance != null) {
 
-                if (instance != null && userInfo[instanceMap["priority"]] != "-1") {
-
-                    val newValue = mapOf("type" to instanceMap["type"], "value" to (userInfo[instanceMap["var"]] ?: ""), "priority" to (userInfo[instanceMap["priority"]] ?: "-1")) as Map<String, String>
+                    val contact = userContacts.find { it.type == instance.type } ?: continue
 
                     if (!map.containsKey(u)) {
-                        map[u] = mutableListOf(newValue)
+                        map[u] = mutableListOf(contact)
                     }
                     else {
                         val list = map[u]!!.toMutableList()
-                        list.add(newValue)
+                        list.add(contact)
                         map[u] = list
                     }
 
@@ -118,14 +109,14 @@ class NotificationService {
 
                 val userList = map[u]!!.toMutableList()
 
-                userList.sortBy { it["priority"] }
-                userList.add(emailMap)
+                userList.sortBy { it.priority }
+                userList.add(emailContact)
 
                 map[u] = userList
 
             }
             else {
-                map[u] = listOf(emailMap)
+                map[u] = listOf(emailContact)
             }
 
         }
@@ -136,7 +127,7 @@ class NotificationService {
 
     }
 
-    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<User, List<Map<String, String>>>) {
+    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<User, List<UserNotificationContactDTO>>) {
 
 //        LOGGER.info(instances.toString())
 
@@ -148,23 +139,23 @@ class NotificationService {
 
                 val i = userInstances.indexOf(instance)
 
-                when (instance["type"]) {
+                when (instance.type) {
                     "DISCORD" -> {
-                        if (discordComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                        if (discordComponent.sendUserNotification(eventData, instance.value, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "TELEGRAM" -> {
-                        if (telegramComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                        if (telegramComponent.sendUserNotification(eventData, instance.value, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "WHATSAPP" -> {
-                        if (whatsAppComponent.sendUserNotification(eventData, instance["value"]!!, i == 0)) {
+                        if (whatsAppComponent.sendUserNotification(eventData, instance.value, i == 0)) {
                             break
                         } else {
                             continue
@@ -184,9 +175,9 @@ class NotificationService {
 
         for (u in users) {
 
-            val userInfo = userInfoDataRepository.findAllKlazaUserInfoDataByUserId(u.id!!)
+            val userInstances = userService.getOnlyAllowedUserNotificationContacts(u.id!!)
 
-
+            sendNotificationToUsersInstances(eventData, mutableMapOf(u to userInstances))
 
         }
 
@@ -220,7 +211,7 @@ class NotificationService {
 
         LOGGER.info(Colors.GREEN + "sendMessageNotification -> $eventData" + Colors.RESET)
 
-        val userInstances = sortUserInstancesByPriority(eventData.course!!.id!!, listOf(eventData.user!!))
+        sendNotificationToUsers(eventData, listOf(eventData.relateduser!!))
 
     }
 
