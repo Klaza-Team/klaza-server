@@ -1,3 +1,7 @@
+# 1.0.1
+
+- Adicionado verificação para impedir erro se o usuario não tiver informações salvas em `user_info_data`
+
 # 1.0.0
 
 - Versão inicial do servidor

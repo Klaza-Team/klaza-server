@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>klaza</groupId>
 	<artifactId>klaza_server</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>Klaza Server</name>
 	<description>Klaza Server with Spring Boot</description>
 	<properties>
