@@ -32,6 +32,11 @@ class UserService {
     fun getUserNotificationContacts(userId: Long): List<UserNotificationContactDTO> {
 
         val userInfoData = userInfoDataRepository.findAllKlazaUserInfoDataByUserId(userId)
+
+        if (userInfoData.isEmpty()) {
+            return listOf()
+        }
+
         val user = userInfoData[0].user!!
 
         val discord = userInfoData.find { value -> value.field!!.shortname == "klaza_discord" }!!.data!!
