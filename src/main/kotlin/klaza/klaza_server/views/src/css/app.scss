@@ -1,40 +1,118 @@
+@font-face {
+	font-family: "Montserrat";
+	src: url("../fonts/Montserrat-Bold.ttf");
+}
+
+* {
+	font-family: "Montserrat";
+}
+
 // app global css in SCSS form
 .bg-a {
-  background-color: var(--q-color-a);
+  background-color: $color-a;
 }
 
 .text-a {
-    color: var(--q-color-a);
+	color: $color-a;
 }
 
 .bg-b {
-  background-color: var(--q-color-b);
+  background-color: $color-b;
 }
 
 .text-b {
-    color: var(--q-color-b);
+	color: $color-b;
 }
 
 .bg-c {
-  background-color: var(--q-color-c);
+  background-color: $color-c;
 }
 
 .text-c {
-    color: var(--q-color-c);
+	color: $color-c;
 }
 
-.bg-white {
-  background-color: var(--q-color-white);
+.bg-w {
+  	background-color: $color-w;
 }
 
-.text-white {
-    color: var(--q-color-white);
+.text-w {
+	color: $color-w;
 }
 
-.bg-black {
-  background-color: var(--q-color-black);
+.bg-bk {
+  	background-color: $color-bk;
 }
 
-.text-black {
-    color: var(--q-color-black);
+.text-bk {
+	color: $color-bk;
+}
+
+.h-60vh {
+  	height: 60vh;
+}
+
+.h-70vh {
+  	height: 70vh;
+}
+
+.w-60vw {
+	width: 60vw;
+}
+
+.w-70vw {
+	width: 70vw;
+}
+
+.w-70 {
+ 	width: 70%;
+}
+
+.w-80 {
+  	width: 80%;
+}
+
+.r-10 {
+  	border-radius: 10px;
+}
+
+.r-15 {
+	border-radius: 15px;
+}
+
+.r-20 {
+  	border-radius: 20px;
+}
+
+.input .q-field__control:before {
+	border-color: $color-w;
+}
+
+.q-btn__content > span {
+	color: $color-w;
+}
+
+.f-10 {
+	font-size: 10px;
+}
+
+.f-15 {
+	font-size: 15px;
+}
+
+.f-20 {
+	font-size: 20px;
+}
+
+.f-25 {
+	font-size: 25px;
+}
+
+.f-45 {
+	font-size: 45px;
+}
+
+.tooltip {
+	background-color: $color-b;
+	color: $color-w;
 }

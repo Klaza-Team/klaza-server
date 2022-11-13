@@ -57,7 +57,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
       // publicPath: '/',
@@ -97,8 +97,8 @@ module.exports = configure(function (ctx) {
 				"color-a": "#1F5014",
         "color-b": "#457D58",
         "color-c": "#7D9B76",
-        "white": "#CBDDD1",
-        "black": "#272727",
+        "color-w": "#CBDDD1",
+        "color-bk": "#272727",
 			}
 		},
 
