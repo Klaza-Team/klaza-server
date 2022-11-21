@@ -115,4 +115,11 @@
 .tooltip {
 	background-color: $color-b;
 	color: $color-w;
+	font-size: 12px;
+}
+
+.text-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

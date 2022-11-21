@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+// TODO: Pegar infos do server
 export const useLoginStore = defineStore('login', {
 
 	state: () => ({
