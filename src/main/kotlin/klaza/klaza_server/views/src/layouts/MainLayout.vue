@@ -10,6 +10,7 @@
 					icon="fa-solid fa-bars"
 					aria-label="Menu"
 					@click="toggleLeftDrawer"
+					color="w"
 				/>
 
 				<q-space />
