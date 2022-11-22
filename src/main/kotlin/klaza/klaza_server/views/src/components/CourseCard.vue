@@ -1,19 +1,19 @@
 <template>
-    <q-card class="cursor-pointer">
+    <q-card class="cursor-pointer" @click="setEdit">
         <q-img :src="course.image" class="fit">
-           
             <div v-show="!course.actived" class="fit"></div>
 
             <div class="absolute-top check">
                 <q-checkbox v-model="isSelected" color="c" />
             </div>
 
-            <div class="absolute-bottom text-subtitle1 text-center"> {{ course.fullName }} </div>
+            <div class="absolute-bottom text-subtitle1 text-center">
+                {{ course.fullName }}
+            </div>
 
             <q-tooltip class="tooltip">
                 {{ course.fullName }}
             </q-tooltip>
-
         </q-img>
     </q-card>
 </template>
@@ -24,7 +24,7 @@ import { defineComponent } from "vue";
 import { CourseDTO } from "src/@types/dtos";
 
 export default defineComponent({
-    name: 'CourseCard',
+    name: "CourseCard",
     props: {
         course: {
             type: Object as () => CourseDTO,
@@ -33,6 +33,11 @@ export default defineComponent({
         selected: {
             type: Array,
             required: true,
+        },
+    },
+    methods: {
+        setEdit() {
+            this.$emit("set-edit", this.course);
         },
     },
     computed: {
@@ -46,15 +51,13 @@ export default defineComponent({
                 } else {
                     this.$emit("remove-selected", this.course.id);
                 }
-            }
+            },
         },
     },
 });
-
 </script>
 
 <style lang="scss" scoped>
-
 .q-card {
     width: 300px;
     height: 170px;
@@ -65,13 +68,13 @@ export default defineComponent({
     background-color: rgba($color-b, $alpha: 0.7);
     color: $color-w;
     overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .q-img__content > div.check {
     background: none;
     color: $color-w;
+    padding: 0px;
 }
-
 </style>

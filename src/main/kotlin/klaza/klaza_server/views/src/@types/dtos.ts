@@ -4,4 +4,8 @@ export interface CourseDTO {
     shortName: string;
     image: string;
     actived: boolean;
+
+    user_config: {
+        [key: string]: boolean;
+    };
 }
