@@ -20,8 +20,8 @@
                 <div class="text-h6 text-w text-center">
                     {{ localCourse.fullName }}
                 </div>
-                <div>
-                    <div class="text-center text-w">
+                <div class="full-width column content-center">
+                    <div class="text-w row justify-between items-center" style="width: 370px;">
                         <span>Ativar notificações para esse curso</span>
                         <q-toggle
                             v-model="localCourse.actived"
@@ -30,7 +30,7 @@
                             unchecked-icon="fa-solid fa-times"
                         />
                     </div>
-                    <div class="text-center text-w">
+                    <div class="text-w row justify-between items-center" style="width: 370px;">
                         <span>Usar configuração global para esse curso</span>
                         <q-toggle
                             v-model="localCourse.user_config['use_global']"
@@ -40,7 +40,7 @@
                         />
                     </div>
                 </div>
-                <q-scroll-area style="width: 100%; height: 300px">
+                <q-scroll-area>
                     <div class="row justify-center gap-15">
                         <fieldset class="config-group">
                             <legend>Conteudo</legend>
@@ -276,9 +276,35 @@ export default defineComponent({
     color: $color-w;
     border-radius: 20px;
     padding: 10px;
+    flex-grow: 1;
 
     legend {
         padding: 0 5px;
     }
 }
+
+.q-scrollarea {
+    width: 100%; 
+    height: 300px;
+
+
+
+}
+
+</style>
+
+<style lang="scss">
+
+.q-scrollarea {
+    .q-scrollarea__content {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .q-scrollarea__content > div {
+        width: 95%;
+    }
+}
+
+
 </style>
