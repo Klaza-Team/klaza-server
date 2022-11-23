@@ -55,6 +55,7 @@
                     :key="c.id"
                     :course="c"
                     :selected="selected"
+                    :mulitple="multiple"
                     @add-selected="addSelected"
                     @remove-selected="removeSelected"
                     @set-edit="setEdit"

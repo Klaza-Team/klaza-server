@@ -3,7 +3,7 @@
         <q-img :src="course.image" class="fit">
             <div v-show="!course.actived" class="fit"></div>
 
-            <div class="absolute-top check">
+            <div v-if="mulitple" class="absolute-top check">
                 <q-checkbox v-model="isSelected" color="c" />
             </div>
 
@@ -34,6 +34,10 @@ export default defineComponent({
             type: Array,
             required: true,
         },
+        mulitple: {
+            type: Boolean,
+            required: true
+        }
     },
     methods: {
         setEdit() {
