@@ -14,6 +14,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 6,
@@ -25,6 +27,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 1,
@@ -35,6 +39,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 4,
@@ -45,6 +51,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 2,
@@ -55,6 +63,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 5,
@@ -65,6 +75,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 8,
@@ -75,6 +87,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
             {
                 id: 7,
@@ -85,6 +99,8 @@ export const useCoursesStore = defineStore("courses", {
                 user_config: {
                     use_global: false,
                 },
+                discordIntances: [],
+                instagramIntances: [],
             },
         ] as CourseDTO[],
     }),

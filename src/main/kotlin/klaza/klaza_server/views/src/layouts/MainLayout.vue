@@ -33,9 +33,34 @@
 			v-model="leftDrawerOpen"
 			class="bg-a"
 		>
-			<q-list>
+			<q-list class="text-w">
 				
+				<q-item to="/klaza/dashboard" active-class="text-c" clickable v-ripple>
+					<q-item-section avatar>
+						<q-icon name="fa-solid fa-user-gear" />
+					</q-item-section>
+					<q-item-section>
+						<q-item-label>Configurações diretas</q-item-label>
+					</q-item-section>
+				</q-item>
 
+				<q-item to="/klaza/servers" active-class="text-c" clickable v-ripple>
+					<q-item-section avatar>
+						<q-icon name="fa-solid fa-server" />
+					</q-item-section>
+					<q-item-section>
+						<q-item-label>Configurações servers</q-item-label>
+					</q-item-section>
+				</q-item>
+
+				<q-item to="/klaza/perfil" active-class="text-c" clickable v-ripple>
+					<q-item-section avatar>
+						<q-icon name="fa-solid fa-user" />
+					</q-item-section>
+					<q-item-section>
+						<q-item-label>Perfil</q-item-label>
+					</q-item-section>
+				</q-item>
 
 			</q-list>
 

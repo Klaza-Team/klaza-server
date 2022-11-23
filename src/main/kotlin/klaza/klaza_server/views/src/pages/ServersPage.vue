@@ -1,58 +1,14 @@
 <template>
     <q-page class="row items-center justify-evenly">
         <div class="row items-center justify-evenly fit">
-            <h2 class="text-bk">Configurações diretas</h2>
+            <h2 class="text-bk">Configurações de servidores</h2>
         </div>
 
         <div class="column">
-            <div class="fit row justify-end content-center q-pr-xl">
-                <div class="row content-center">
-                    <q-icon
-                        name="fa-solid fa-circle-question cursor-pointer"
-                        size="sm"
-                    >
-                        <q-tooltip class="tooltip text-center">
-                            <span
-                                >Caso queira ativar/desativar varias
-                                configurações <br />
-                                clique em </span
-                            >“<span class="text-bk">selecionar multiplos</span>”
-                        </q-tooltip>
-                    </q-icon>
-                </div>
-
-                <q-checkbox
-                    v-model="multiple"
-                    color="bk"
-                    label="selecionar multiplos"
-                />
-            </div>
-
-            <div
-                v-show="multiple"
-                class="row content-center justify-center q-mb-lg q-gutter-x-xl"
-            >
-                <q-btn
-                    class="q-mr-sm"
-                    @click="activeAll"
-                    color="b"
-                    rounded
-                    label="Ativar todos"
-                />
-
-                <q-btn
-                    class="q-mr-sm"
-                    @click="disableAll"
-                    color="b"
-                    rounded
-                    label="Desativar todos"
-                />
-            </div>
-
             <div class="fit row wrap justify-center items-center q-gutter-lg">
                 <course-card
                     v-for="c in courses"
-                    type="direct"
+                    type="server"
                     :key="c.id"
                     :course="c"
                     :selected="selected"
