@@ -107,10 +107,10 @@ export default defineComponent({
             },
         },
         hasDiscod() {
-            return this.course.discordIntances.length > 0;
+            return this.course.discordIntances.user.length > 0;
         },
         hasTelegram() {
-            return this.course.telegramIntances.length > 0;
+            return this.course.telegramIntances.user.length > 0;
         },
         isActived() {
             if (this.type === "direct") {
