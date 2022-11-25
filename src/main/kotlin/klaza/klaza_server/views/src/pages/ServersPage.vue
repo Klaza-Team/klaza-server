@@ -49,7 +49,7 @@ export default defineComponent({
     },
     computed: {
         courses() {
-            return useCoursesStore().sortCoursesActivedAndFullName;
+            return useCoursesStore().sortServerCoursesActivedAndFullName;
         },
     },
     methods: {
