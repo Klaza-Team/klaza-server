@@ -8,8 +8,7 @@ export interface CourseDTO {
     user_config: CourseConfigDTO;
 
     discordIntances: DiscordInstanceDTO[];
-    instagramIntances: InstagramInstanceDTO[];
-
+    telegramIntances: TelegramInstanceDTO[];
 }
 
 export interface CourseConfigDTO {
@@ -22,24 +21,24 @@ export interface DiscordInstanceDTO {
         guild_id: string;
         channel_id: string;
         config: CourseConfigDTO;
-    }[],
+    }[];
     other: {
         id: number;
         guild_id: string;
         channel_id: string;
         config: CourseConfigDTO;
-    }[],
+    }[];
 }
 
-export interface InstagramInstanceDTO {
+export interface TelegramInstanceDTO {
     user: {
         id: number;
         channel_id: string;
         config: CourseConfigDTO;
-    }[],
+    }[];
     other: {
         id: number;
         channel_id: string;
         config: CourseConfigDTO;
-    }[],
+    }[];
 }

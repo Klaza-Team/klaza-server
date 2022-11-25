@@ -15,7 +15,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 6,
@@ -28,7 +28,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 1,
@@ -40,7 +40,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 4,
@@ -52,7 +52,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 2,
@@ -64,7 +64,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 5,
@@ -76,7 +76,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 8,
@@ -88,7 +88,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
             {
                 id: 7,
@@ -100,7 +100,7 @@ export const useCoursesStore = defineStore("courses", {
                     use_global: false,
                 },
                 discordIntances: [],
-                instagramIntances: [],
+                telegramIntances: [],
             },
         ] as CourseDTO[],
     }),
