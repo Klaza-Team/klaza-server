@@ -42,6 +42,7 @@ export interface UserDTO {
     avatar: string
     role: string
     courses: CourseDTO[]
+    globalConfig: CourseConfigDTO
 }
 
 export interface UserCourseTelegramConfigDTO {

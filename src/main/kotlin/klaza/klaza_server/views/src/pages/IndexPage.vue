@@ -72,8 +72,8 @@
 import { defineComponent } from "vue";
 import { useCoursesStore } from "stores/courses";
 
-import CourseCard from "src/components/CourseCard.vue";
-import ModalEdit from "components/ModalEdit.vue";
+import CourseCard from "src/components/geral/CourseCard.vue";
+import ModalEdit from "src/components/direct/ModalEdit.vue";
 import { CourseDTO } from "src/@types/dtos";
 
 export default defineComponent({
