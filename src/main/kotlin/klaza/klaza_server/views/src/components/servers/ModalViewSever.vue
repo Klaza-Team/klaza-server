@@ -4,7 +4,7 @@
             <div class="container-tabs">
                 <q-tabs v-model="tab">
                     <q-tab name="discord" label="Discord" no-caps />
-                    <q-tab name="telegram" label="Telergam" no-caps />
+                    <q-tab name="telegram" label="Telegram" no-caps />
                 </q-tabs>
             </div>
         </div>
@@ -91,6 +91,9 @@
             </q-tab-panel>
 
         </q-tab-panels>
+
+        <modal-create-config-server v-model="create" :course="course" :type="tab" />
+
     </modal-template>
 </template>
 
@@ -101,12 +104,14 @@ import { defineComponent } from "vue";
 
 import ModalTemplate from "src/components/geral/ModalTemplate.vue";
 import InstanceItem from "src/components/servers/InstanceItem.vue";
+import ModalCreateConfigServer from "src/components/servers/ModalCreateConfigServer.vue";
 
 export default defineComponent({
     name: "ModalViewServer",
     components: {
         ModalTemplate,
-        InstanceItem
+        InstanceItem,
+        ModalCreateConfigServer
     },
     props: {
         value: {
@@ -120,7 +125,8 @@ export default defineComponent({
     },
     data() {
         return {
-            tab: "discord",
+            tab: "discord" as "discord" | "telegram",
+            create: false
         };
     },
     computed: {
@@ -135,6 +141,7 @@ export default defineComponent({
     },
     methods: {
         addInstance(type: "discord" | "telegram") {
+            this.create = true;
             //TODO: implementar
         },
     },

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { UserDTO } from 'src/@types/dtos';
+import { UserDiscordTelegramServer, UserDTO } from 'src/@types/dtos';
 
 // TODO: Pegar infos do server
 export const useUserStore = defineStore('user', {
@@ -27,7 +27,16 @@ export const useUserStore = defineStore('user', {
 		} as UserDTO,
 	}),
 
-	getters: {},
+	getters: {
+		getUserDiscordServers(): UserDiscordTelegramServer[] {
+			//TODO - Pegar os servidores do discord do usuário
+			return [ { id: "discord_aisudhaiudh9asdhiashd98yu9", name: "Server Discord 1" } ];
+		},
+		getUserTelegramServers(): UserDiscordTelegramServer[] {
+			//TODO - Pegar os servidores do telegram do usuário
+			return [ { id: "telegram_98yusad98unv08aysdgadfhg", name: "Server Telegram 1" } ];
+		}
+	},
 
 	actions: {}
 });

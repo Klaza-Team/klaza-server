@@ -88,6 +88,28 @@
     border-color: $color-w;
 }
 
+.input .q-field__control {
+
+    .q-field__control-container .q-field__native span {
+        color: $color-w;
+    }
+
+    .q-icon {
+        color: $color-w;
+    }
+}
+
+.input.q-field--focused .q-field__control {
+
+    .q-field__control-container .q-field__native span {
+        color: $color-a;
+    }
+
+    .q-icon {
+        color: $color-a;
+    }
+}
+
 .q-btn__content > span {
     color: $color-w;
 }
@@ -127,3 +149,5 @@
 .gap-15 {
     gap: 15px;
 }
+
+

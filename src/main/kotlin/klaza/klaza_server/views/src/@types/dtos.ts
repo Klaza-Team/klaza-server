@@ -59,3 +59,8 @@ export interface UserCourseDiscordConfigDTO {
     config: CourseConfigDTO;
     creator: UserDTO
 }
+
+export interface UserDiscordTelegramServer {
+    id: string;
+    name: string;
+}
