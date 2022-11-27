@@ -8,7 +8,20 @@ const usersExemple: UserDTO[] = [
         avatar: "https://i.imgur.com/4Z5j5Zm.png",
         courses: [],
         email: "",
-        role: ""
+        role: "",
+        globalConfig: {
+            use_global: true,
+            notify_create_content: true,
+            notify_edit_content: true,
+            notify_delete_content: true,
+            notify_deadline_2_days: true,
+            notify_deadline_1_day: true,
+            notify_deadline: true,
+            notify_send_assignment: true,
+            notify_receive_message: true,
+            notify_receive_comment: true,
+            notify_delete_comment: true,
+        }
     },
     {
         id: 2,
@@ -16,7 +29,20 @@ const usersExemple: UserDTO[] = [
         avatar: "https://i.imgur.com/4Z5j5Zm.png",
         courses: [],
         email: "",
-        role: ""
+        role: "",
+        globalConfig: {
+            use_global: false,
+            notify_create_content: false,
+            notify_edit_content: false,
+            notify_delete_content: false,
+            notify_deadline_2_days: false,
+            notify_deadline_1_day: false,
+            notify_deadline: false,
+            notify_send_assignment: false,
+            notify_receive_message: false,
+            notify_receive_comment: false,
+            notify_delete_comment: false,
+        }
     }
 ]
 
@@ -65,24 +91,24 @@ const userConfigExemple: CourseConfigDTO[] = [
 const discordIntancesExemple: UserCourseDiscordConfigDTO[] = [
     {
         id: 1,
-        channel_id: "123",
-        guild_id: "123",
+        channel_id: "discord_123",
+        guild_id: "discord_123",
         config: userConfigExemple[0],
         creator: usersExemple[0]
     },
     {
         id: 2,
-        channel_id: "a586s4da98sd7a6s12d36540",
-        guild_id: "a6s5d4a968sd49",
+        channel_id: "discord_a586s4da98sd7a6s12d36540",
+        guild_id: "discord_a6s5d4a968sd49",
         config: userConfigExemple[2],
         creator: usersExemple[1]
     },
     {
         id: 3,
-        channel_id: "65as4d6a312sd06a84d1032asd495",
-        guild_id: "58as7d6a21da698sd41a32sd1918",
+        channel_id: "discord_65as4d6a312sd06a84d1032asd495",
+        guild_id: "discord_58as7d6a21da698sd41a32sd1918",
         config: userConfigExemple[1],
-        creator: usersExemple[2]
+        creator: usersExemple[1]
     }
 
 ]
@@ -90,21 +116,21 @@ const discordIntancesExemple: UserCourseDiscordConfigDTO[] = [
 const telegramIntancesExemple: UserCourseTelegramConfigDTO[] = [
     {
         id: 1,
-        channel_id: "z0xc.2as64d2a1sd98a841d30axc65as541da32sd4",
+        channel_id: "telegram_z0xc.2as64d2a1sd98a841d30axc65as541da32sd4",
         config: userConfigExemple[0],
         creator: usersExemple[0]
     },
     {
         id: 2,
-        channel_id: "0xc0.1c65x5c49s4d10asd6354as6d51",
+        channel_id: "telegram_0xc0.1c65x5c49s4d10asd6354as6d51",
         config: userConfigExemple[2],
         creator: usersExemple[1]
     },
     {
         id: 3,
-        channel_id: "2sa0d3a2sd65a45sd986a512sd234",
+        channel_id: "telegram_2sa0d3a2sd65a45sd986a512sd234",
         config: userConfigExemple[1],
-        creator: usersExemple[2]
+        creator: usersExemple[0]
     }
 
 ]

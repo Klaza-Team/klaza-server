@@ -42,6 +42,7 @@ export interface UserDTO {
     avatar: string
     role: string
     courses: CourseDTO[]
+    globalConfig: CourseConfigDTO
 }
 
 export interface UserCourseTelegramConfigDTO {
@@ -57,4 +58,9 @@ export interface UserCourseDiscordConfigDTO {
     channel_id: string;
     config: CourseConfigDTO;
     creator: UserDTO
+}
+
+export interface UserDiscordTelegramServer {
+    id: string;
+    name: string;
 }

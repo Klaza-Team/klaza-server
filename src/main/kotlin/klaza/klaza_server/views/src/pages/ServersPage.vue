@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <modal-edit v-model="showEdit" :course="editCourse" />
+        <modal-view-sever v-model="showView" :course="viewCourse" />
     </q-page>
 </template>
 
@@ -28,23 +28,23 @@
 import { defineComponent } from "vue";
 import { useCoursesStore } from "stores/courses";
 
-import CourseCard from "src/components/CourseCard.vue";
-import ModalEdit from "components/ModalEdit.vue";
+import CourseCard from "src/components/geral/CourseCard.vue";
+import ModalViewSever from "src/components/servers/ModalViewSever.vue";
 import { CourseDTO } from "src/@types/dtos";
 
 export default defineComponent({
     name: "IndexPage",
     components: {
         CourseCard,
-        ModalEdit,
+        ModalViewSever,
     },
     data() {
         return {
             multiple: false,
             selected: [] as number[],
 
-            showEdit: false,
-            editCourse: {} as CourseDTO,
+            showView: false,
+            viewCourse: {} as CourseDTO,
         };
     },
     computed: {
@@ -66,8 +66,8 @@ export default defineComponent({
             this.selected.splice(this.selected.indexOf(id), 1);
         },
         setEdit(course: CourseDTO) {
-            this.editCourse = course;
-            this.showEdit = true;
+            this.viewCourse = course;
+            this.showView = true;
         },
     },
 });
