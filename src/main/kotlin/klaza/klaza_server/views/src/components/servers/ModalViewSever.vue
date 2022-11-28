@@ -1,5 +1,8 @@
 <template>
-    <modal-template v-model="show" :title="`Editar configuração de servidor do curso ${course.fullName}`">
+    <modal-template
+        v-model="show"
+        :title="`Editar configuração de servidor do curso ${course.fullName}`"
+    >
         <div class="row justify-center">
             <div class="container-tabs">
                 <q-tabs v-model="tab">
@@ -9,96 +12,178 @@
             </div>
         </div>
 
-        <q-tab-panels
-            v-model="tab"
-            class="bg-b"
-            animated
-        >
+        <q-tab-panels v-model="tab" class="bg-b" animated>
             <q-tab-panel name="discord">
                 <q-scroll-area>
-                    <div>
-                        <span class="title-separtor">Seus servers</span>
-                        <q-separator color="w" class="q-my-sm" />
+                    <div class="column">
+                        <div>
+                            <span class="title-separtor">Seus servers</span>
+                            <q-separator color="w" class="q-my-sm" />
 
-                        <q-list :class="course.discordIntances.user.length == 0 ? 'text-center no-server' : ''">
-                            <instance-item v-for="i in course.discordIntances.user" :key="i.id" :course="course" :instance="i" type="discord_user"/>
-                            <span class="no-server" v-if="course.discordIntances.user.length == 0"> Nenhum servidor entrontrado </span>
-                        </q-list>
-
-                        <div class="row justify-center">
-                            <q-btn 
-                                color="a" 
-                                label="Adicionar"
-                                icon="fa-solid fa-plus"
-                                class="btn-add"
-                                @click="addInstance('discord')" 
-                                no-caps
+                            <q-list
+                                :class="
+                                    course.discordIntances.user.length == 0
+                                        ? 'text-center no-server'
+                                        : ''
+                                "
                             >
-                                <q-tooltip class="tooltip">
-                                    Adicionar novo servidor para notificação
-                                </q-tooltip>
-                            </q-btn>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="title-separtor">Servers dos outros</span>
-                        <q-separator color="w" class="q-my-sm" />
+                                <instance-item
+                                    v-for="i in course.discordIntances.user"
+                                    :key="i.id"
+                                    :course="course"
+                                    :instance="i"
+                                    type="discord_user"
+                                />
+                                <span
+                                    class="no-server"
+                                    v-if="
+                                        course.discordIntances.user.length == 0
+                                    "
+                                >
+                                    Nenhum servidor entrontrado
+                                </span>
+                            </q-list>
 
-                        <q-list :class="course.discordIntances.other.length == 0 ? 'text-center no-server' : ''">
-                            <instance-item v-for="i in course.discordIntances.other" :key="i.id" :course="course" :instance="i" type="discord_other"/>
-                            <span class="no-server" v-if="course.discordIntances.other.length == 0"> Nenhum servidor entrontrado </span>
-                        </q-list>
+                            <div class="row justify-center">
+                                <q-btn
+                                    color="a"
+                                    label="Adicionar"
+                                    icon="fa-solid fa-plus"
+                                    class="btn-add"
+                                    @click="addInstance('discord')"
+                                    no-caps
+                                >
+                                    <q-tooltip class="tooltip">
+                                        Adicionar novo servidor para notificação
+                                    </q-tooltip>
+                                </q-btn>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="title-separtor"
+                                >Servers dos outros</span
+                            >
+                            <q-separator color="w" class="q-my-sm" />
+
+                            <q-list
+                                :class="
+                                    course.discordIntances.other.length == 0
+                                        ? 'text-center no-server'
+                                        : ''
+                                "
+                            >
+                                <instance-item
+                                    v-for="i in course.discordIntances.other"
+                                    :key="i.id"
+                                    :course="course"
+                                    :instance="i"
+                                    type="discord_other"
+                                />
+                                <span
+                                    class="no-server"
+                                    v-if="
+                                        course.discordIntances.other.length == 0
+                                    "
+                                >
+                                    Nenhum servidor entrontrado
+                                </span>
+                            </q-list>
+                        </div>
                     </div>
                 </q-scroll-area>
             </q-tab-panel>
-    
+
             <q-tab-panel name="telegram">
                 <q-scroll-area>
-                    <div>
-                        <span class="title-separtor">Seus servers</span>
-                        <q-separator color="w" class="q-my-sm" />
+                    <div class="column">
+                        <div>
+                            <span class="title-separtor">Seus servers</span>
+                            <q-separator color="w" class="q-my-sm" />
 
-                        <q-list :class="course.telegramIntances.user.length == 0 ? 'text-center no-server' : ''">
-                            <instance-item v-for="i in course.telegramIntances.user" :key="i.id" :course="course" :instance="i" type="telegram_user"/>
-                            <span class="no-server" v-if="course.telegramIntances.user.length == 0"> Nenhum servidor entrontrado </span>
-                        </q-list>
-
-                        <div class="row justify-center">
-                            <q-btn 
-                                color="a" 
-                                label="Adicionar"
-                                icon="fa-solid fa-plus"
-                                class="btn-add"
-                                @click="addInstance('telegram')" 
-                                no-caps
+                            <q-list
+                                :class="
+                                    course.telegramIntances.user.length == 0
+                                        ? 'text-center no-server'
+                                        : ''
+                                "
                             >
-                                <q-tooltip class="tooltip">
-                                    Adicionar novo servidor para notificação
-                                </q-tooltip>
-                            </q-btn>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="title-separtor">Servers dos outros</span>
-                        <q-separator color="w" class="q-my-sm" />
+                                <instance-item
+                                    v-for="i in course.telegramIntances.user"
+                                    :key="i.id"
+                                    :course="course"
+                                    :instance="i"
+                                    type="telegram_user"
+                                />
+                                <span
+                                    class="no-server"
+                                    v-if="
+                                        course.telegramIntances.user.length == 0
+                                    "
+                                >
+                                    Nenhum servidor entrontrado
+                                </span>
+                            </q-list>
 
-                        <q-list :class="course.telegramIntances.other.length == 0 ? 'text-center no-server' : ''">
-                            <instance-item v-for="i in course.telegramIntances.other" :key="i.id" :course="course" :instance="i" type="telegram_other"/>
-                            <span class="no-server" v-if="course.telegramIntances.other.length == 0"> Nenhum servidor entrontrado </span>
-                        </q-list>
+                            <div class="row justify-center">
+                                <q-btn
+                                    color="a"
+                                    label="Adicionar"
+                                    icon="fa-solid fa-plus"
+                                    class="btn-add"
+                                    @click="addInstance('telegram')"
+                                    no-caps
+                                >
+                                    <q-tooltip class="tooltip">
+                                        Adicionar novo servidor para notificação
+                                    </q-tooltip>
+                                </q-btn>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="title-separtor"
+                                >Servers dos outros</span
+                            >
+                            <q-separator color="w" class="q-my-sm" />
+
+                            <q-list
+                                :class="
+                                    course.telegramIntances.other.length == 0
+                                        ? 'text-center no-server'
+                                        : ''
+                                "
+                            >
+                                <instance-item
+                                    v-for="i in course.telegramIntances.other"
+                                    :key="i.id"
+                                    :course="course"
+                                    :instance="i"
+                                    type="telegram_other"
+                                />
+                                <span
+                                    class="no-server"
+                                    v-if="
+                                        course.telegramIntances.other.length ==
+                                        0
+                                    "
+                                >
+                                    Nenhum servidor entrontrado
+                                </span>
+                            </q-list>
+                        </div>
                     </div>
                 </q-scroll-area>
             </q-tab-panel>
-
         </q-tab-panels>
 
-        <modal-create-config-server v-model="create" :course="course" :type="tab" />
-
+        <modal-create-config-server
+            v-model="create"
+            :course="course"
+            :type="tab"
+        />
     </modal-template>
 </template>
 
 <script lang="ts">
-
 import { CourseDTO } from "src/@types/dtos";
 import { defineComponent } from "vue";
 
@@ -111,7 +196,7 @@ export default defineComponent({
     components: {
         ModalTemplate,
         InstanceItem,
-        ModalCreateConfigServer
+        ModalCreateConfigServer,
     },
     props: {
         value: {
@@ -126,7 +211,7 @@ export default defineComponent({
     data() {
         return {
             tab: "discord" as "discord" | "telegram",
-            create: false
+            create: false,
         };
     },
     computed: {
@@ -146,13 +231,10 @@ export default defineComponent({
         },
     },
 });
-
 </script>
 
 <style lang="scss" scoped>
-
 .container-tabs {
-
     margin-bottom: 1rem;
     width: 500px;
 
@@ -160,13 +242,12 @@ export default defineComponent({
         background-color: $color-a;
         border-radius: 20px;
         color: $color-w;
-    }   
-
+    }
 }
 
 .q-scrollarea {
-    width: 100%; 
-    height: 500px;
+    max-width: 100%;
+    height: 50vh;
 }
 
 .title-separtor {
@@ -188,5 +269,4 @@ export default defineComponent({
     font-size: 20px;
     margin-left: 20px;
 }
-
 </style>
