@@ -1,5 +1,11 @@
 import { defineStore } from "pinia";
-import { CourseConfigDTO, CourseDTO, UserCourseDiscordConfigDTO, UserCourseTelegramConfigDTO, UserDTO } from "src/@types/dtos";
+import {
+    CourseConfigDTO,
+    CourseDTO,
+    UserCourseDiscordConfigDTO,
+    UserCourseTelegramConfigDTO,
+    UserDTO,
+} from "src/@types/dtos";
 
 const usersExemple: UserDTO[] = [
     {
@@ -21,7 +27,12 @@ const usersExemple: UserDTO[] = [
             notify_receive_message: true,
             notify_receive_comment: true,
             notify_delete_comment: true,
-        }
+        },
+        notification_priority: [
+            { id: 1, priority: 2, type: "discord", value: "123456789" },
+            { id: 2, priority: 1, type: "telegram", value: "123456789" },
+            { id: 3, priority: 0, type: "whatsapp", value: "123456789" },
+        ],
     },
     {
         id: 2,
@@ -42,9 +53,14 @@ const usersExemple: UserDTO[] = [
             notify_receive_message: false,
             notify_receive_comment: false,
             notify_delete_comment: false,
-        }
-    }
-]
+        },
+        notification_priority: [
+            { id: 1, priority: 2, type: "discord", value: "123456789" },
+            { id: 2, priority: 1, type: "telegram", value: "123456789" },
+            { id: 3, priority: 0, type: "whatsapp", value: "123456789" },
+        ],
+    },
+];
 
 const userConfigExemple: CourseConfigDTO[] = [
     {
@@ -58,7 +74,7 @@ const userConfigExemple: CourseConfigDTO[] = [
         notify_send_assignment: false,
         notify_receive_message: false,
         notify_receive_comment: false,
-        notify_delete_comment: false
+        notify_delete_comment: false,
     },
     {
         use_global: true,
@@ -71,7 +87,7 @@ const userConfigExemple: CourseConfigDTO[] = [
         notify_send_assignment: false,
         notify_receive_message: false,
         notify_receive_comment: false,
-        notify_delete_comment: false
+        notify_delete_comment: false,
     },
     {
         use_global: false,
@@ -84,9 +100,9 @@ const userConfigExemple: CourseConfigDTO[] = [
         notify_send_assignment: false,
         notify_receive_message: true,
         notify_receive_comment: true,
-        notify_delete_comment: true
-    }
-]
+        notify_delete_comment: true,
+    },
+];
 
 const discordIntancesExemple: UserCourseDiscordConfigDTO[] = [
     {
@@ -94,49 +110,46 @@ const discordIntancesExemple: UserCourseDiscordConfigDTO[] = [
         channel_id: "discord_123",
         guild_id: "discord_123",
         config: userConfigExemple[0],
-        creator: usersExemple[0]
+        creator: usersExemple[0],
     },
     {
         id: 2,
         channel_id: "discord_a586s4da98sd7a6s12d36540",
         guild_id: "discord_a6s5d4a968sd49",
         config: userConfigExemple[2],
-        creator: usersExemple[1]
+        creator: usersExemple[1],
     },
     {
         id: 3,
         channel_id: "discord_65as4d6a312sd06a84d1032asd495",
         guild_id: "discord_58as7d6a21da698sd41a32sd1918",
         config: userConfigExemple[1],
-        creator: usersExemple[1]
-    }
-
-]
+        creator: usersExemple[1],
+    },
+];
 
 const telegramIntancesExemple: UserCourseTelegramConfigDTO[] = [
     {
         id: 1,
         channel_id: "telegram_z0xc.2as64d2a1sd98a841d30axc65as541da32sd4",
         config: userConfigExemple[0],
-        creator: usersExemple[0]
+        creator: usersExemple[0],
     },
     {
         id: 2,
         channel_id: "telegram_0xc0.1c65x5c49s4d10asd6354as6d51",
         config: userConfigExemple[2],
-        creator: usersExemple[1]
+        creator: usersExemple[1],
     },
     {
         id: 3,
         channel_id: "telegram_2sa0d3a2sd65a45sd986a512sd234",
         config: userConfigExemple[1],
-        creator: usersExemple[0]
-    }
-
-]
+        creator: usersExemple[0],
+    },
+];
 
 const courses_exemple: CourseDTO[] = [
-
     {
         id: 3,
         fullName: "Introdução a inteligência artificial",
@@ -145,13 +158,13 @@ const courses_exemple: CourseDTO[] = [
         actived: true,
         user_config: userConfigExemple[0],
         discordIntances: {
-            user: [ discordIntancesExemple[0], discordIntancesExemple[2] ],
-            other: [ discordIntancesExemple[1], discordIntancesExemple[2] ]
+            user: [discordIntancesExemple[0], discordIntancesExemple[2]],
+            other: [discordIntancesExemple[1], discordIntancesExemple[2]],
         },
         telegramIntances: {
-            user: [ telegramIntancesExemple[0], telegramIntancesExemple[2] ],
-            other: [ telegramIntancesExemple[1], telegramIntancesExemple[2] ]
-        }
+            user: [telegramIntancesExemple[0], telegramIntancesExemple[2]],
+            other: [telegramIntancesExemple[1], telegramIntancesExemple[2]],
+        },
     },
     {
         id: 6,
@@ -163,11 +176,11 @@ const courses_exemple: CourseDTO[] = [
         user_config: userConfigExemple[1],
         discordIntances: {
             user: [],
-            other: []
+            other: [],
         },
         telegramIntances: {
             user: [],
-            other: []
+            other: [],
         },
     },
     {
@@ -179,11 +192,11 @@ const courses_exemple: CourseDTO[] = [
         user_config: userConfigExemple[2],
         discordIntances: {
             user: [],
-            other: []
+            other: [],
         },
         telegramIntances: {
             user: [],
-            other: []
+            other: [],
         },
     },
     {
@@ -194,12 +207,12 @@ const courses_exemple: CourseDTO[] = [
         actived: false,
         user_config: userConfigExemple[0],
         discordIntances: {
-            user: [ discordIntancesExemple[0], discordIntancesExemple[2] ],
-            other: [ discordIntancesExemple[1], discordIntancesExemple[2] ]
+            user: [discordIntancesExemple[0], discordIntancesExemple[2]],
+            other: [discordIntancesExemple[1], discordIntancesExemple[2]],
         },
         telegramIntances: {
             user: [],
-            other: []
+            other: [],
         },
     },
     {
@@ -211,11 +224,11 @@ const courses_exemple: CourseDTO[] = [
         user_config: userConfigExemple[2],
         discordIntances: {
             user: [],
-            other: []
+            other: [],
         },
         telegramIntances: {
             user: [],
-            other: []
+            other: [],
         },
     },
     {
@@ -227,11 +240,11 @@ const courses_exemple: CourseDTO[] = [
         user_config: userConfigExemple[1],
         discordIntances: {
             user: [],
-            other: []
+            other: [],
         },
         telegramIntances: {
             user: [],
-            other: []
+            other: [],
         },
     },
     {
@@ -243,11 +256,19 @@ const courses_exemple: CourseDTO[] = [
         user_config: userConfigExemple[0],
         discordIntances: {
             user: [],
-            other: [ discordIntancesExemple[0], discordIntancesExemple[1], discordIntancesExemple[2] ]
+            other: [
+                discordIntancesExemple[0],
+                discordIntancesExemple[1],
+                discordIntancesExemple[2],
+            ],
         },
         telegramIntances: {
-            user: [ telegramIntancesExemple[0], telegramIntancesExemple[1], telegramIntancesExemple[2] ],
-            other: []
+            user: [
+                telegramIntancesExemple[0],
+                telegramIntancesExemple[1],
+                telegramIntancesExemple[2],
+            ],
+            other: [],
         },
     },
     {
@@ -259,15 +280,14 @@ const courses_exemple: CourseDTO[] = [
         user_config: userConfigExemple[2],
         discordIntances: {
             user: [],
-            other: []
+            other: [],
         },
         telegramIntances: {
-            user: [ telegramIntancesExemple[0] ],
-            other: [ telegramIntancesExemple[1], telegramIntancesExemple[2] ]
+            user: [telegramIntancesExemple[0]],
+            other: [telegramIntancesExemple[1], telegramIntancesExemple[2]],
         },
     },
-
-]
+];
 
 // TODO: Pegar infos do server
 export const useCoursesStore = defineStore("courses", {
@@ -305,17 +325,29 @@ export const useCoursesStore = defineStore("courses", {
             });
         },
         sortServerCoursesActived: (state) => {
-            return state.courses.sort((a) => (a.discordIntances.other.length > 0 ? -1 : 1 || a.telegramIntances.other.length > 0 ? -1 : 1));
+            return state.courses.sort((a) =>
+                a.discordIntances.other.length > 0
+                    ? -1
+                    : 1 || a.telegramIntances.other.length > 0
+                    ? -1
+                    : 1
+            );
         },
         sortServerCoursesActivedAndFullName: (state) => {
-
             return state.courses.sort((a, b) => {
+                const ADiscord =
+                    a.discordIntances.user.length > 0 ||
+                    a.discordIntances.other.length > 0;
+                const ATelegram =
+                    a.telegramIntances.user.length > 0 ||
+                    a.telegramIntances.other.length > 0;
 
-                const ADiscord = a.discordIntances.user.length > 0 || a.discordIntances.other.length > 0
-                const ATelegram = a.telegramIntances.user.length > 0 || a.telegramIntances.other.length > 0
-
-                const BDiscord = b.discordIntances.user.length > 0 || b.discordIntances.other.length > 0
-                const BTelegram = b.telegramIntances.user.length > 0 || b.telegramIntances.other.length > 0
+                const BDiscord =
+                    b.discordIntances.user.length > 0 ||
+                    b.discordIntances.other.length > 0;
+                const BTelegram =
+                    b.telegramIntances.user.length > 0 ||
+                    b.telegramIntances.other.length > 0;
 
                 if ((ADiscord || ATelegram) && !(BDiscord || BTelegram)) {
                     return -1;
@@ -327,7 +359,7 @@ export const useCoursesStore = defineStore("courses", {
 
                 return a.fullName.localeCompare(b.fullName);
             });
-        }
+        },
     },
 
     actions: {},

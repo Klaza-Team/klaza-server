@@ -3,7 +3,9 @@
         <div class="row">
             <q-avatar>
                 <!-- //TODO - colocar a imagem do usuário -->
-                <img src="https://cdn.quasar.dev/img/avatar.png" />
+                <img
+                    src="https://media.tenor.com/kB_HPWQFeEkAAAAC/nekopara-cinnamon.gif"
+                />
             </q-avatar>
             <div class="column justify-center q-ml-lg text-w">
                 <span class="username"> {{ user.username }} </span>
@@ -16,16 +18,17 @@
                     <span class="title-separator">Contas</span>
                     <q-separator color="w" class="q-my-sm" />
 
-                    <draggable 
-                        v-model="list"
-                        @start="drag=true" 
-                        @end="drag=false" 
+                    <draggable
+                        v-model="user.notification_priority"
+                        @start="drag = true"
+                        @end="drag = false"
                     >
-                        <template #item="{element}">
-                            <div>{{element}}</div>
+                        <template #item="{ element }">
+                            <q-list bordered>
+                                <account-item :account="element" />
+                            </q-list>
                         </template>
                     </draggable>
-
                 </div>
             </q-card-section>
         </q-card>
@@ -36,18 +39,19 @@
 import { defineComponent } from "vue";
 import { useUserStore } from "stores/user";
 
-import draggable from 'vuedraggable'
+import draggable from "vuedraggable";
+import AccountItem from "src/components/perfil/AccountItem.vue";
 
 export default defineComponent({
     name: "PerfilPage",
     components: {
-        draggable
+        draggable,
+        AccountItem,
     },
     data() {
         return {
             drag: false,
-            list: [ "discord", "telegram", "whatsapp" ]
-        }
+        };
     },
     setup() {
         return {
@@ -58,7 +62,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 .q-avatar {
     width: 150px;
     height: 150px;
@@ -71,5 +74,4 @@ export default defineComponent({
 .role {
     font-size: 25px;
 }
-
 </style>
