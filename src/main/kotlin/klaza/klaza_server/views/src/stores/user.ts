@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { UserDiscordTelegramServer, UserDTO } from "src/@types/dtos";
+import { UserDiscordTelegramServerDTO, UserDTO } from "src/@types/dtos";
 
 // TODO: Pegar infos do server
 export const useUserStore = defineStore("user", {
@@ -24,11 +24,31 @@ export const useUserStore = defineStore("user", {
                 notify_receive_comment: true,
                 notify_delete_comment: true,
             },
+            notification_priority: [
+                {
+                    id: 1,
+                    priority: 2,
+                    type: "discord",
+                    value: "123456789",
+                },
+                {
+                    id: 2,
+                    priority: 1,
+                    type: "telegram",
+                    value: "123456789",
+                },
+                {
+                    id: 3,
+                    priority: 0,
+                    type: "whatsapp",
+                    value: "123456789",
+                }
+            ]
         } as UserDTO,
     }),
 
     getters: {
-        getUserDiscordServers(): UserDiscordTelegramServer[] {
+        getUserDiscordServers(): UserDiscordTelegramServerDTO[] {
             //TODO - Pegar os servidores do discord do usuário
             return [
                 {
@@ -37,7 +57,7 @@ export const useUserStore = defineStore("user", {
                 },
             ];
         },
-        getUserTelegramServers(): UserDiscordTelegramServer[] {
+        getUserTelegramServers(): UserDiscordTelegramServerDTO[] {
             //TODO - Pegar os servidores do telegram do usuário
             return [
                 {

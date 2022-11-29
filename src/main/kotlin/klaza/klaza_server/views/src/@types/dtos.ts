@@ -43,6 +43,7 @@ export interface UserDTO {
     role: string
     courses: CourseDTO[]
     globalConfig: CourseConfigDTO
+    notification_priority: UserNotificationAppDTO[]
 }
 
 export interface UserCourseTelegramConfigDTO {
@@ -60,7 +61,14 @@ export interface UserCourseDiscordConfigDTO {
     creator: UserDTO
 }
 
-export interface UserDiscordTelegramServer {
+export interface UserDiscordTelegramServerDTO {
     id: string;
     name: string;
+}
+
+export interface UserNotificationAppDTO {
+    id: number;
+    type: "discord" | "telegram" | "whatsapp";
+    priority: number;
+    value: string;
 }

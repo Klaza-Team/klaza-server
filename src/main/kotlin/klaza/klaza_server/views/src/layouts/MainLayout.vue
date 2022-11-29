@@ -32,6 +32,7 @@
 		<q-drawer
 			v-model="leftDrawerOpen"
 			class="bg-a"
+			overlay
 		>
 			<q-list class="text-w">
 				

@@ -97,7 +97,7 @@
                 <q-scroll-area>
                     <div class="column">
                         <div>
-                            <span class="title-separtor">Seus servers</span>
+                            <span class="title-separator">Seus servers</span>
                             <q-separator color="w" class="q-my-sm" />
 
                             <q-list
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                         <div>
-                            <span class="title-separtor"
+                            <span class="title-separator"
                                 >Servers dos outros</span
                             >
                             <q-separator color="w" class="q-my-sm" />
@@ -248,11 +248,6 @@ export default defineComponent({
 .q-scrollarea {
     max-width: 100%;
     height: 50vh;
-}
-
-.title-separtor {
-    color: $color-w;
-    font-size: 30px;
 }
 
 .q-list:not(.no-server) {
