@@ -1,7 +1,7 @@
 <template>
     <div class="column justify-center gap-15">
         <div class="row justify-center">
-            <div class="text-w row justify-between items-center" style="width: 370px;">
+            <div v-if="type != 'geral'" class="text-w row justify-between items-center" style="width: 370px;">
                 <span>Usar configuração global para esse curso</span>
                 <q-toggle
                     v-model="localConfig['use_global']"
@@ -174,7 +174,7 @@ export default defineComponent({
     props: {
         course: {
             type: Object as () => CourseDTO,
-            required: true,
+            required: false,
         },
         type: {
             type: String as () => "user" | "discord_user" | "discord_other" | "telegram_user" | "telegram_other" | "new" | "geral",
@@ -188,7 +188,7 @@ export default defineComponent({
     data() {
         return {
             localConfig: (
-                (this.type === "user") ? { ...this.course.user_config } : 
+                (this.type === "user") ? { ...this.course?.user_config } : 
                 (this.type === "discord_user" || this.type === "discord_other" || this.type === "telegram_user" || this.type === "telegram_other") ? { ...this.instance?.config } :
                 (this.type === "new") ? {
                     use_global: true,

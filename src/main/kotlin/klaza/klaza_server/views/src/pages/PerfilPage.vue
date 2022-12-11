@@ -12,7 +12,7 @@
                 <span class="role"> {{ user.role }} </span>
             </div>
         </div>
-        <q-card class="bg-b text-w w-80vw">
+        <q-card class="bg-b text-w w-80vw r-20 q-pa-lg">
             <q-card-section>
                 <div>
                     <span class="title-separator">Contas</span>
@@ -30,6 +30,13 @@
                         </template>
                     </draggable>
                 </div>
+                <div class="q-mt-md">
+                    <span class="title-separator">Configuração global</span>
+                    <q-separator color="w" class="q-my-sm" />
+
+                    <course-configs :type="'geral'" />
+
+                </div>
             </q-card-section>
         </q-card>
     </q-page>
@@ -41,13 +48,17 @@ import { useUserStore } from "stores/user";
 
 import draggable from "vuedraggable";
 import AccountItem from "src/components/perfil/AccountItem.vue";
+import CourseConfigs from "src/components/geral/CourseConfigs.vue";
+
 import { UserNotificationAppDTO } from "src/@types/dtos";
+
 
 export default defineComponent({
     name: "PerfilPage",
     components: {
         draggable,
         AccountItem,
+        CourseConfigs
     },
     data() {
         return {
