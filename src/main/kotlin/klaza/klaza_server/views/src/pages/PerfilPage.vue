@@ -12,7 +12,7 @@
                 <span class="role"> {{ user.role }} </span>
             </div>
         </div>
-        <q-card class="bg-b text-w w-80vw">
+        <q-card class="bg-b text-w w-80vw r-20 q-pa-lg">
             <q-card-section>
                 <div>
                     <span class="title-separator">Contas</span>
@@ -24,11 +24,23 @@
                         @end="drag = false"
                     >
                         <template #item="{ element, index }">
-                            <q-list bordered>
+                            <q-list>
                                 <account-item :account="element" :index="index" @update-priority="updatePriority"/>
                             </q-list>
                         </template>
                     </draggable>
+
+                    <div class="q-mt-md row justify-center">
+                        <q-btn color="a" label="Salvar" @click="saveAccounts()" />
+                    </div>
+
+                </div>
+                <div class="q-mt-md">
+                    <span class="title-separator">Configuração global</span>
+                    <q-separator color="w" class="q-my-sm" />
+
+                    <course-configs :type="'geral'" />
+
                 </div>
             </q-card-section>
         </q-card>
@@ -41,13 +53,17 @@ import { useUserStore } from "stores/user";
 
 import draggable from "vuedraggable";
 import AccountItem from "src/components/perfil/AccountItem.vue";
+import CourseConfigs from "src/components/geral/CourseConfigs.vue";
+
 import { UserNotificationAppDTO } from "src/@types/dtos";
+
 
 export default defineComponent({
     name: "PerfilPage",
     components: {
         draggable,
         AccountItem,
+        CourseConfigs
     },
     data() {
         return {
@@ -65,6 +81,9 @@ export default defineComponent({
             p.value = priority.value;
             p.priority = (priority.priority == 0) ? priority.index : -1
         },
+        saveAccounts() {
+            // TODO - salvar as contas no banco
+        }
     },
 });
 </script>
