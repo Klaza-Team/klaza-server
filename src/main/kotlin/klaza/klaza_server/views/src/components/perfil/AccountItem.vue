@@ -1,9 +1,7 @@
 <template>
     <q-item class="justify-center">
         <div>
-
-            <q-btn no-caps>
-
+            <q-btn @click="login" no-caps>
                 <div class="q-mr-sm">
                     <q-icon name="fa-solid fa-up-down" size="15px" />
                 </div>
@@ -86,7 +84,6 @@
                         v-model="enabled"
                     />
                 </div>
-                
             </q-btn>
         </div>
 
@@ -134,6 +131,34 @@ export default defineComponent({
                 : "Clique para conectar";
         },
     },
+    methods: {
+        login() {
+            switch (this.account.type) {
+                case "discord":
+                    this.loginDiscord();
+                    break;
+                case "telegram":
+                    this.loginTelegram();
+                    break;
+                case "whatsapp":
+                    this.loginWhatsapp();
+                    break;
+            }
+        },
+        loginDiscord() {
+            window.open(
+                "https://discord.com/api/oauth2/authorize?client_id=1016881283986632764&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fklaza%2Fperfil&response_type=code&scope=identify",
+                "_self"
+            )
+            // TODO - Implementar login com Discord
+        },
+        loginTelegram() {
+            // TODO - Implementar login com Telegram
+        },
+        loginWhatsapp() {
+            //TODO - Implementar login com Whatsapp
+        },
+    }
 });
 </script>
 
