@@ -27,7 +27,7 @@
                     color="bk"
                     checked-icon="fa-solid fa-check"
                     unchecked-icon="fa-solid fa-times"
-                    :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                    :disable="disabled"
                 />
             </div>
 
@@ -40,7 +40,7 @@
                     color="bk"
                     checked-icon="fa-solid fa-check"
                     unchecked-icon="fa-solid fa-times"
-                    :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                    :disable="disabled"
                 />
             </div>
 
@@ -53,7 +53,7 @@
                     color="bk"
                     checked-icon="fa-solid fa-check"
                     unchecked-icon="fa-solid fa-times"
-                    :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                    :disable="disabled"
                 />
             </div>
             </fieldset>
@@ -69,7 +69,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
 
@@ -82,7 +82,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
 
@@ -95,7 +95,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
 
@@ -108,7 +108,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
             </fieldset>
@@ -124,7 +124,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
 
@@ -139,7 +139,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
 
@@ -152,7 +152,7 @@
                         color="bk"
                         checked-icon="fa-solid fa-check"
                         unchecked-icon="fa-solid fa-times"
-                        :disable="localConfig['use_global'] || type == 'discord_other' || type == 'telegram_other'"
+                        :disable="disabled"
                     />
                 </div>
             </fieldset>
@@ -209,6 +209,11 @@ export default defineComponent({
     methods: {
         save() {
             //TODO: meter o update no banco
+        },
+    },
+    computed: {
+        disabled() {
+            return (this.type == "geral") ? false : this.localConfig['use_global'] || this.type == 'discord_other' || this.type == 'telegram_other';
         },
     },
     watch: {
