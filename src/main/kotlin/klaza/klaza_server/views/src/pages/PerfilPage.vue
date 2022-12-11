@@ -29,6 +29,11 @@
                             </q-list>
                         </template>
                     </draggable>
+
+                    <div class="q-mt-md row justify-center">
+                        <q-btn color="a" label="Salvar" @click="saveAccounts()" />
+                    </div>
+
                 </div>
                 <div class="q-mt-md">
                     <span class="title-separator">Configuração global</span>
@@ -76,6 +81,9 @@ export default defineComponent({
             p.value = priority.value;
             p.priority = (priority.priority == 0) ? priority.index : -1
         },
+        saveAccounts() {
+            // TODO - salvar as contas no banco
+        }
     },
 });
 </script>

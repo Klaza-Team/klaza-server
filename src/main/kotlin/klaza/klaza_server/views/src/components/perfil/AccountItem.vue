@@ -89,6 +89,11 @@
                 
             </q-btn>
         </div>
+
+        <q-tooltip class="tooltip">
+            <span> {{ tooltipText }} </span>
+        </q-tooltip>
+
     </q-item>
 </template>
 
@@ -123,7 +128,12 @@ export default defineComponent({
                 });
             },
         },
-    }
+        tooltipText() {
+            return this.account.value != ""
+                ? `Conectado como ${this.account.value}`
+                : "Clique para conectar";
+        },
+    },
 });
 </script>
 
