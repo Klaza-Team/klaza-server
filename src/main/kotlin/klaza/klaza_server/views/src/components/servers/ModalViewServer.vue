@@ -2,6 +2,7 @@
     <modal-template
         v-model="show"
         :title="`Editar configuração de servidor do curso ${course.fullName}`"
+        type="modal_create"
     >
         <div class="row justify-center">
             <div class="container-tabs">

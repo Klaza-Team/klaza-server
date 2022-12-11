@@ -66,6 +66,21 @@ export const useUserStore = defineStore("user", {
                 },
             ];
         },
+        getUserServerByID(state): (id: string, type: "discord" | "telegram") => UserDiscordTelegramServerDTO {
+            return (id: string, type: "discord" | "telegram") => {
+                // TODO - Pegar o servidor do usuário pelo id
+                if (type === "discord") {
+                    return {
+                        id: "discord_aisudhaiudh9asdhiashd98yu9",
+                        name: "Server Discord 1",
+                    };
+                }
+                return {
+                    id: "telegram_98yusad98unv08aysdgadfhg",
+                    name: "Server Telegram 1",
+                };   
+            }
+        }
     },
 
     actions: {},

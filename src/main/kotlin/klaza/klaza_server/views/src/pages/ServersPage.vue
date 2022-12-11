@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <modal-view-sever v-model="showView" :course="viewCourse" />
+        <modal-view-server v-model="showView" :course="viewCourse" />
     </q-page>
 </template>
 
@@ -29,14 +29,16 @@ import { defineComponent } from "vue";
 import { useCoursesStore } from "stores/courses";
 
 import CourseCard from "src/components/geral/CourseCard.vue";
-import ModalViewSever from "src/components/servers/ModalViewSever.vue";
+import ModalViewServer from "src/components/servers/ModalViewServer.vue";
 import { CourseDTO } from "src/@types/dtos";
 
+import { RouteLocationNormalizedLoaded } from "vue-router"
+
 export default defineComponent({
-    name: "IndexPage",
+    name: "ServersPage",
     components: {
         CourseCard,
-        ModalViewSever,
+        ModalViewServer,
     },
     data() {
         return {
@@ -66,9 +68,36 @@ export default defineComponent({
             this.selected.splice(this.selected.indexOf(id), 1);
         },
         setEdit(course: CourseDTO) {
-            this.viewCourse = course;
-            this.showView = true;
+            this.$router.replace({ query: { modal_view: course.id } })
+            this.$route
         },
+        showModalView() {
+            const query = this.$route.query;
+            if (query.modal_view) {
+
+                const courseQuery = useCoursesStore().getCourseById(parseInt(query.modal_view as string));
+
+                if (courseQuery) {
+                    this.viewCourse = courseQuery
+                    this.showView = true;
+                }
+                else {
+
+                    const newRouterQuery = { ...this.$route.query };
+                    delete newRouterQuery.modal_view;
+
+                    this.$router.replace({ query: newRouterQuery })
+                }
+            }
+        },
+    },
+    mounted() { this.showModalView() },
+    watch: {
+        $route(to: RouteLocationNormalizedLoaded, from: RouteLocationNormalizedLoaded){
+            if (to.query.modal_view && to.query.modal_view !== from.query.modal_view) {
+                this.showModalView();
+            }
+        }
     },
 });
 </script>

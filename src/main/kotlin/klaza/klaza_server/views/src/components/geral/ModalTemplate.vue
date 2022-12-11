@@ -13,6 +13,7 @@
                     round
                     dense
                     color="w"
+                    @click="close"
                     v-close-popup
                 />
             </q-card-section>
@@ -38,6 +39,10 @@ export default defineComponent({
             type: Boolean,
             default: false,
         },
+        type: {
+            type: String as () => "modal_view" | "modal_create",
+            required: true,
+        },
     },
     computed: {
         show: {
@@ -47,6 +52,16 @@ export default defineComponent({
             set(value: boolean) {
                 this.$emit("input", value);
             },
+        },
+    },
+    methods: {
+        close() {
+
+            const newRouterQuery = { ...this.$route.query };
+            delete newRouterQuery[this.type];
+
+            this.$router.replace({ query: newRouterQuery })
+            this.show = false;
         },
     },
 });

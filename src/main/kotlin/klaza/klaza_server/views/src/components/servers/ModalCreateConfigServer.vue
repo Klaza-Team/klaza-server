@@ -1,5 +1,9 @@
 <template>
-    <modal-template v-model="show" title="Criar configuração de servidor">
+    <modal-template 
+        v-model="show" 
+        title="Criar configuração de servidor"
+        type="modal_create"
+        >
         <div class="row justify-center">
             <div class="selects-container q-gutter-y-md">
                 <q-select
@@ -69,15 +73,15 @@ export default defineComponent({
             default: false,
         },
         course: {
-            type: Object as () => CourseDTO,
+            type: Object as () => CourseDTO | null,
             default: null,
         },
         type: {
-            type: String as () => "discord" | "telegram",
+            type: String as () => "discord" | "telegram" | null,
             default: null,
         },
         server: {
-            type: Object as () => UserDiscordTelegramServerDTO,
+            type: Object as () => UserDiscordTelegramServerDTO | null,
             default: null,
         },
     },
