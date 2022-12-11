@@ -24,7 +24,7 @@
                         @end="drag = false"
                     >
                         <template #item="{ element, index }">
-                            <q-list bordered>
+                            <q-list>
                                 <account-item :account="element" :index="index" @update-priority="updatePriority"/>
                             </q-list>
                         </template>
