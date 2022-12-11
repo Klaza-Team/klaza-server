@@ -1,13 +1,13 @@
 <template>
-    <q-item>
+    <q-item class="justify-center">
         <q-item-section avatar>
             <div class="row">
                 <q-icon name="fa-solid fa-up-down" size="20px" />
                 <q-separator color="w" class="q-ml-xs" vertical />
             </div>
         </q-item-section>
-        <q-space />
-        <q-item-section>
+        <div>
+
             <q-btn v-if="account.type == 'discord'" no-caps>
                 <svg
                     width="30"
@@ -77,8 +77,13 @@
                     }}
                 </span>
             </q-btn>
-        </q-item-section>
-        <q-space />
+
+            <q-toggle 
+                color="w"
+                v-model="enabled"
+            />
+
+        </div>
     </q-item>
 </template>
 
@@ -89,12 +94,31 @@ import { UserNotificationAppDTO } from "src/@types/dtos";
 
 export default defineComponent({
     name: "AccountItem",
+    emits: ["update-priority"],
     props: {
         account: {
             type: Object as () => UserNotificationAppDTO,
             required: true,
         },
+        index: {
+            type: Number,
+            required: true,
+        },
     },
+    computed: {
+        enabled: {
+            get() {
+                return this.account.priority >= 0
+            },
+            set(value: boolean) {
+                this.$emit("update-priority", {
+                    ...this.account,
+                    priority: value ? 0 : -1,
+                    index: this.index,
+                });
+            },
+        },
+    }
 });
 </script>
 
@@ -105,4 +129,5 @@ export default defineComponent({
     border-radius: 50px;
     width: fit-content;
 }
+
 </style>

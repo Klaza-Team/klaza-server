@@ -23,9 +23,9 @@
                         @start="drag = true"
                         @end="drag = false"
                     >
-                        <template #item="{ element }">
+                        <template #item="{ element, index }">
                             <q-list bordered>
-                                <account-item :account="element" />
+                                <account-item :account="element" :index="index" @update-priority="updatePriority"/>
                             </q-list>
                         </template>
                     </draggable>
@@ -41,6 +41,7 @@ import { useUserStore } from "stores/user";
 
 import draggable from "vuedraggable";
 import AccountItem from "src/components/perfil/AccountItem.vue";
+import { UserNotificationAppDTO } from "src/@types/dtos";
 
 export default defineComponent({
     name: "PerfilPage",
@@ -57,6 +58,13 @@ export default defineComponent({
         return {
             user: useUserStore().user,
         };
+    },
+    methods: {
+        updatePriority(priority: any) {
+            const p = this.user.notification_priority.find((p) => p.type == priority.type) as UserNotificationAppDTO;
+            p.value = priority.value;
+            p.priority = (priority.priority == 0) ? priority.index : -1
+        },
     },
 });
 </script>
