@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - Context.kt
+// Plugin Klaza para Moodle - Server - KlazaTelegramInstanceConfig.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,34 +16,33 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.Id
+import klaza.klaza_server.classes.KlazaInstanceConfig
+import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
-import javax.persistence.Column
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "mdl_context")
-class Context {
-
-    // Properties
+@Table(name = "mdl_klaza_telegram_instance_config")
+class KlazaTelegramInstanceConfig: KlazaInstanceConfig() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(name = "contextlevel", nullable = false)
-    var contextlevel: Long? = null
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "telegram_instance_id", nullable = false)
+    var telegramInstance: KlazaTelegramInstance? = null
 
-    @Column(name = "instanceid", nullable = false)
-    var instanceid: Long? = null
-
-    // Override
-
+    @Override
     override fun toString(): String {
-        return "Context(id=$id, contextlevel=$contextlevel, instanceid=$instanceid)"
+        return "KlazaTelegramInstanceConfig(id=$id, telegramInstance=$telegramInstance, value=$value, name=$name)"
     }
 
 }

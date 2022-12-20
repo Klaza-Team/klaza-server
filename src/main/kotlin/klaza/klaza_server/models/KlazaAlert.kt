@@ -16,7 +16,15 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.*
+import javax.persistence.Id
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Column
+import javax.persistence.JoinColumn
+import javax.persistence.FetchType
+import javax.persistence.OneToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_klaza_alert")
@@ -34,8 +42,12 @@ class KlazaAlert {
     @JoinColumn(name = "course_id", nullable = false)
     var course: Course? = null
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "creator_id", nullable = false)
+    var creator: User? = null
+
     override fun toString(): String {
-        return "KlazaAlert(id=$id, text=$text, course=$course)"
+        return "KlazaAlert(id=$id, text=$text, course=$course, creator=$creator)"
     }
 
 }

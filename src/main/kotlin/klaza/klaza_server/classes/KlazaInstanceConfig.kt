@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - Role.kt
+// Plugin Klaza para Moodle - Server - KlazaInstanceConfig.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -14,31 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package klaza.klaza_server.models
+package klaza.klaza_server.classes
 
-import javax.persistence.Id
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Column
-import javax.persistence.Table
+import javax.persistence.*
 
-@Entity
-@Table(name = "mdl_role")
-class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    var id: Long? = null
+@MappedSuperclass
+open class KlazaInstanceConfig {
 
     @Column(name = "name", nullable = false)
     var name: String? = null
 
-    @Column(name = "shortname", length = 100, nullable = false)
-    var shortname: String? = null
-
-    @Column(name = "archetype", length = 30, nullable = false)
-    var archetype: String? = null
+    @Column(name = "value", nullable = false)
+    var value: String? = null
 
 }

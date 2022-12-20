@@ -16,7 +16,15 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.*
+import javax.persistence.Id
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Column
+import javax.persistence.JoinColumn
+import javax.persistence.FetchType
+import javax.persistence.OneToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_role_assignments")
@@ -44,7 +52,7 @@ class RoleAssignments {
     // Overrides
 
     override fun toString(): String {
-        return "RoleAssigments(id=$id, role=$role, context=$context)"
+        return "RoleAssigments(id=$id, role=$role, context=$context, user=$user)"
     }
 
 }

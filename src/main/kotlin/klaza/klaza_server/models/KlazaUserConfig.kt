@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - Context.kt
+// Plugin Klaza para Moodle - Server - KlazaUserConfig.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,34 +16,25 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.Id
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Column
-import javax.persistence.Table
+import javax.persistence.*
+import klaza.klaza_server.classes.KlazaInstanceConfig
 
-@Entity
-@Table(name = "mdl_context")
-class Context {
-
-    // Properties
+@Entity()
+@Table(name = "mdl_klaza_user_config")
+class KlazaUserConfig: KlazaInstanceConfig() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     var id: Long? = null
 
-    @Column(name = "contextlevel", nullable = false)
-    var contextlevel: Long? = null
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    var user: User? = null
 
-    @Column(name = "instanceid", nullable = false)
-    var instanceid: Long? = null
-
-    // Override
-
+    @Override
     override fun toString(): String {
-        return "Context(id=$id, contextlevel=$contextlevel, instanceid=$instanceid)"
+        return "KlazaUserConfig(id=$id, user=$user, value=$value, name=$name)"
     }
 
 }
