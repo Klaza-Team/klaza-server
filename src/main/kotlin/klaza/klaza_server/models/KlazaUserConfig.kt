@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - KlazaAlert.kt
+// Plugin Klaza para Moodle - Server - KlazaUserConfig.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -17,29 +17,19 @@
 package klaza.klaza_server.models
 
 import javax.persistence.*
+import klaza.klaza_server.classes.KlazaInstanceConfig
 
-@Entity
-@Table(name = "mdl_klaza_alert")
-class KlazaAlert {
+@Entity()
+@Table(name = "mdl_klaza_user_config")
+class KlazaUserConfig: KlazaInstanceConfig() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     var id: Long? = null
 
-    @Column(name = "text", columnDefinition = "LONGTEXT", nullable = false)
-    var text: String? = null
-
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "course_id", nullable = false)
-    var course: Course? = null
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "creator_id", nullable = false)
-    var creator: User? = null
-
-    override fun toString(): String {
-        return "KlazaAlert(id=$id, text=$text, course=$course, creator=$creator)"
-    }
+    @JoinColumn(name = "user_id", nullable = false)
+    var user: User? = null
 
 }
