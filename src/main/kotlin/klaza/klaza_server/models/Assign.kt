@@ -16,7 +16,15 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.*
+import javax.persistence.Id
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Column
+import javax.persistence.JoinColumn
+import javax.persistence.FetchType
+import javax.persistence.OneToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_assign")
@@ -44,7 +52,7 @@ class Assign {
     var allowsubmissionsfromdate: Long? = null
 
     override fun toString(): String {
-        return "Assign(id=$id, name=$name, dueDate=$dueDate, maxAttempts=$maxAttempts, course=$course)"
+        return "Assign(id=$id, name=$name, dueDate=$dueDate, maxAttempts=$maxAttempts, course=$course, allowsubmissionsfromdate=$allowsubmissionsfromdate)"
     }
 
 }

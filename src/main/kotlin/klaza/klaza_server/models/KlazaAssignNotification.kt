@@ -16,7 +16,15 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.*
+import javax.persistence.Id
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Column
+import javax.persistence.OneToOne
+import javax.persistence.JoinColumn
+import javax.persistence.FetchType
+import javax.persistence.Entity
+import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_klaza_assign_notification")
@@ -46,7 +54,7 @@ class KlazaAssignNotification() {
     }
 
     override fun toString(): String {
-        return "KlazaAssignNotification(id=$id, assign=$assign)"
+        return "KlazaAssignNotification(id=$id, assign=$assign, eventname=$eventname)"
     }
 
 }

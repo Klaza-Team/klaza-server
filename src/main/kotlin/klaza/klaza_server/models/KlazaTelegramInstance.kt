@@ -34,8 +34,15 @@ class KlazaTelegramInstance {
     @JoinColumn(name = "course_id", nullable = false)
     var course: Course? = null
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "creator_id", nullable = false)
+    var creator: User? = null
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "telegramInstance")
+    var configs: List<KlazaTelegramInstanceConfig> = ArrayList()
+
     override fun toString(): String {
-        return "KlazaTelegramInstance(id=$id, channel=$channel, course=$course)"
+        return "KlazaTelegramInstance(id=$id, channel=$channel, course=$course, creator=$creator, configs=$configs)"
     }
 
 }

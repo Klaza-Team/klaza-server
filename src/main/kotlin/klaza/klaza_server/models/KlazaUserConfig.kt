@@ -32,4 +32,9 @@ class KlazaUserConfig: KlazaInstanceConfig() {
     @JoinColumn(name = "user_id", nullable = false)
     var user: User? = null
 
+    @Override
+    override fun toString(): String {
+        return "KlazaUserConfig(id=$id, user=$user, value=$value, name=$name)"
+    }
+
 }

@@ -27,7 +27,4 @@ open class KlazaInstanceConfig {
     @Column(name = "value", nullable = false)
     var value: String? = null
 
-    @Column(name = "type", nullable = false)
-    var type: String? = null
-
 }

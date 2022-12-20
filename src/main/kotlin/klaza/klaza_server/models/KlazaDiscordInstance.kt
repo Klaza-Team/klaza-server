@@ -16,7 +16,16 @@
 
 package klaza.klaza_server.models
 
-import javax.persistence.*
+import javax.persistence.Id
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Column
+import javax.persistence.JoinColumn
+import javax.persistence.FetchType
+import javax.persistence.OneToMany
+import javax.persistence.OneToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_klaza_discord_instance")
@@ -37,8 +46,15 @@ class KlazaDiscordInstance {
     @JoinColumn(name = "course_id")
     var course: Course? = null
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "creator_id")
+    var creator: User? = null
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "discordInstance")
+    var configs: List<KlazaDiscordInstanceConfig> = ArrayList()
+
     override fun toString(): String {
-        return "KlazaDiscordInstance(id=$id, guild=$guild, channel=$channel, course=$course)"
+        return "KlazaDiscordInstance(id=$id, guild=$guild, channel=$channel, course=$course, creator=$creator, configs=$configs)"
     }
 
 }
