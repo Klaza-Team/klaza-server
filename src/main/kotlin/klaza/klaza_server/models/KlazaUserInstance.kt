@@ -43,7 +43,7 @@ class KlazaUserInstance {
     @JoinColumn(name = "klaza_user_id", nullable = false)
     var user: User? = null
 
-    @Column(name = "type", columnDefinition = "LONGTEXT",nullable = false)
+    @Column(name = "type", length = 100, nullable = false)
     var type: String? = null // DISCORD, TELEGRAM, WHATSAPP
 
     override fun toString(): String {

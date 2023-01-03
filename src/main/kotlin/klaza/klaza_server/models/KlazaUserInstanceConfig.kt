@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - KlazaDiscordInstanceConfig.kt
+// Plugin Klaza para Moodle - Server - KlazaUserInstanceConfig.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -28,18 +28,18 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "mdl_klaza_disc_inst_conf")
-class KlazaDiscordInstanceConfig: KlazaInstanceConfig() {
+@Table(name = "mdl_klaza_user_inst_conf")
+class KlazaUserInstanceConfig: KlazaInstanceConfig() {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "discord_instance_id", nullable = false)
-    var discordInstance: KlazaDiscordInstance? = null
+    @JoinColumn(name = "user_instance_id", nullable = false)
+    var userInstance: KlazaUserInstance? = null
 
     @Override
     override fun toString(): String {
         return "KlazaDiscordInstanceConfig(" +
                 "id=$id, " +
-                "discordInstance=$discordInstance, " +
+                "userInstance=$userInstance, " +
                 "useGlobal=$useGlobal, " +
                 "notifyCreateContent=$notifyCreateContent, " +
                 "notifyEditContent=$notifyEditContent, " +

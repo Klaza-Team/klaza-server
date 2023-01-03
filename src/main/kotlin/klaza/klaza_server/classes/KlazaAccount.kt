@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - KlazaUserConfig.kt
+// Plugin Klaza para Moodle - Server - KlazaAccount.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -14,21 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package klaza.klaza_server.models
+package klaza.klaza_server.classes
 
-import javax.persistence.Entity
+import klaza.klaza_server.models.User
+import org.hibernate.annotations.Type
+import javax.persistence.Id
+import javax.persistence.MappedSuperclass
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Table
 import javax.persistence.Column
 import javax.persistence.OneToOne
-import javax.persistence.JoinColumn
 import javax.persistence.FetchType
+import javax.persistence.JoinColumn
 
-@Entity()
-@Table(name = "mdl_klaza_user_config")
-class KlazaUserConfig {
+
+@MappedSuperclass
+open class KlazaAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,15 +40,15 @@ class KlazaUserConfig {
     @JoinColumn(name = "user_id", nullable = false)
     var user: User? = null
 
-    @Column(name = "name", length = 100, nullable = false)
-    var name: String? = null
-
-    @Column(name = "value", length = 100, nullable = false)
+    @Column(name="value", length = 100, nullable = false)
     var value: String? = null
 
-    @Override
+    @Column(name="priority", columnDefinition = "TINYINT(1)", nullable = false)
+    @Type(type = "org.hibernate.type.IntegerType")
+    var priority: Int? = null
+
     override fun toString(): String {
-        return "KlazaUserConfig(id=$id, user=$user, value=$value, name=$name)"
+        return "KlazaDiscordAccount(id=$id, user=$user, value=$value, priority=$priority)"
     }
 
 }

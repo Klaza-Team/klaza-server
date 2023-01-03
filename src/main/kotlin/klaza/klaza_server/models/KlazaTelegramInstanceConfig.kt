@@ -28,13 +28,8 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "mdl_klaza_telegram_instance_config")
+@Table(name = "mdl_klaza_tele_inst_conf")
 class KlazaTelegramInstanceConfig: KlazaInstanceConfig() {
-
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "telegram_instance_id", nullable = false)
@@ -42,7 +37,21 @@ class KlazaTelegramInstanceConfig: KlazaInstanceConfig() {
 
     @Override
     override fun toString(): String {
-        return "KlazaTelegramInstanceConfig(id=$id, telegramInstance=$telegramInstance, value=$value, name=$name)"
+        return "KlazaDiscordInstanceConfig(" +
+                "id=$id, " +
+                "telegramInstance=$telegramInstance, " +
+                "useGlobal=$useGlobal, " +
+                "notifyCreateContent=$notifyCreateContent, " +
+                "notifyEditContent=$notifyEditContent, " +
+                "notifyDeleteContent=$notifyDeleteContent, " +
+                "notifyDeadline2Days=$notifyDeadline2Days, " +
+                "notifyDeadline1Day=$notifyDeadline1Day, " +
+                "notifyDeadline=$notifyDeadline, " +
+                "notifySendAssignment=$notifySendAssignment, " +
+                "notifyReceiveMessage=$notifyReceiveMessage, " +
+                "notifyReceiveComment=$notifyReceiveComment" +
+                "notifyDeleteComment=$notifyDeleteComment" +
+                ")"
     }
 
 }
