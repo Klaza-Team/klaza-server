@@ -16,19 +16,19 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.KlazaUserInstance
+import klaza.klaza_server.models.KlazaUserInstanceModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface KlazaUserInstanceRepository : JpaRepository<KlazaUserInstance, Long> {
+interface KlazaUserInstanceRepository : JpaRepository<KlazaUserInstanceModel, Long> {
 
-    fun findAllByCourse_Id(courseId: Long): List<KlazaUserInstance>
+    fun findAllByCourse_Id(courseId: Long): List<KlazaUserInstanceModel>
 
-    fun findAllByUser_Id(userId: Long): List<KlazaUserInstance>
+    fun findAllByUser_Id(userId: Long): List<KlazaUserInstanceModel>
 
-    fun findAllByType(type: String): List<KlazaUserInstance>
+    fun findAllByType(type: String): List<KlazaUserInstanceModel>
 
-    fun findOneByUser_IdAndCourse_IdAndType(userId: Long, courseId: Long, type: String): KlazaUserInstance?
+    fun findOneByUser_IdAndCourse_IdAndType(userId: Long, courseId: Long, type: String): KlazaUserInstanceModel?
 
-    fun findAllByCourse_IdAndType(courseId: Long, type: String): List<KlazaUserInstance>
+    fun findAllByCourse_IdAndType(courseId: Long, type: String): List<KlazaUserInstanceModel>
 
 }

@@ -16,8 +16,8 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.Context
+import klaza.klaza_server.models.ContextModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface ContextRepository : JpaRepository<Context, Long> {
+interface ContextRepository : JpaRepository<ContextModel, Long> {
 }

@@ -16,15 +16,15 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.RoleAssignments
+import klaza.klaza_server.models.RoleAssignmentsModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface RoleAssignmentsRepository : JpaRepository<RoleAssignments, Long> {
+interface RoleAssignmentsRepository : JpaRepository<RoleAssignmentsModel, Long> {
 
-    fun findAllByUser_Id(userId: Long): List<RoleAssignments>
+    fun findAllByUser_Id(userId: Long): List<RoleAssignmentsModel>
 
-    fun findAllByRole_Id(roleId: Long): List<RoleAssignments>
+    fun findAllByRole_Id(roleId: Long): List<RoleAssignmentsModel>
 
-    fun findAllByContext_Id(contextId: Long): List<RoleAssignments>
+    fun findAllByContext_Id(contextId: Long): List<RoleAssignmentsModel>
 
 }

@@ -16,31 +16,31 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.ConfigPlugins
+import klaza.klaza_server.models.ConfigPluginsModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface ConfigPluginsRepository : JpaRepository<ConfigPlugins, Long> {
+interface ConfigPluginsRepository : JpaRepository<ConfigPluginsModel, Long> {
 
-    fun findAllByPlugin(plugin: String): List<ConfigPlugins>
+    fun findAllByPlugin(plugin: String): List<ConfigPluginsModel>
 
-    fun findAllByName(name: String): List<ConfigPlugins>
+    fun findAllByName(name: String): List<ConfigPluginsModel>
 
-    fun findByPluginAndName(plugin: String, name: String): List<ConfigPlugins>
+    fun findByPluginAndName(plugin: String, name: String): List<ConfigPluginsModel>
 
     @Query( "SELECT c " +
-            "FROM ConfigPlugins c " +
+            "FROM ConfigPluginsModel c " +
             "WHERE c.plugin = 'local_klaza' AND c.name = ?1")
-    fun findKlazaConfigByName(name: String): ConfigPlugins
+    fun findKlazaConfigByName(name: String): ConfigPluginsModel
 
     @Query( "SELECT c " +
-            "FROM ConfigPlugins c " +
+            "FROM ConfigPluginsModel c " +
             "WHERE c.plugin = 'local_klaza'")
-    fun findAllKlazaConfig(): List<ConfigPlugins>
+    fun findAllKlazaConfig(): List<ConfigPluginsModel>
 
     @Query( "SELECT c " +
-            "FROM ConfigPlugins c " +
+            "FROM ConfigPluginsModel c " +
             "WHERE c.plugin = 'local_klaza' AND c.name = 'server_auth'")
-    fun findKlazaConfigAuth(): ConfigPlugins
+    fun findKlazaConfigAuth(): ConfigPluginsModel
 
 }

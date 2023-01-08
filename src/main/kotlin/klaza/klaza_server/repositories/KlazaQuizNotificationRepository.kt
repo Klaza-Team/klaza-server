@@ -16,13 +16,13 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.KlazaQuizNotification
+import klaza.klaza_server.models.KlazaQuizNotificationModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface KlazaQuizNotificationRepository : JpaRepository<KlazaQuizNotification, Long> {
+interface KlazaQuizNotificationRepository : JpaRepository<KlazaQuizNotificationModel, Long> {
 
-    fun findAllByQuiz_Id(quizId: Long): List<KlazaQuizNotification>
+    fun findAllByQuiz_Id(quizId: Long): List<KlazaQuizNotificationModel>
 
-    fun findByQuiz_IdAndEventname(quizId: Long, eventname: String): KlazaQuizNotification?
+    fun findByQuiz_IdAndEventname(quizId: Long, eventname: String): KlazaQuizNotificationModel?
 
 }

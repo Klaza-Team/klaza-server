@@ -19,10 +19,10 @@ package klaza.klaza_server.services
 
 import klaza.klaza_server.classes.Cron
 import klaza.klaza_server.data.EventData
-import klaza.klaza_server.models.Assign
-import klaza.klaza_server.models.KlazaAssignNotification
-import klaza.klaza_server.models.KlazaQuizNotification
-import klaza.klaza_server.models.Quiz
+import klaza.klaza_server.models.AssignModel
+import klaza.klaza_server.models.KlazaAssignNotificationModel
+import klaza.klaza_server.models.KlazaQuizNotificationModel
+import klaza.klaza_server.models.QuizModel
 import klaza.klaza_server.repositories.KlazaAssignNotificationRepository
 import klaza.klaza_server.repositories.KlazaQuizNotificationRepository
 import org.slf4j.LoggerFactory
@@ -74,15 +74,15 @@ class CronService {
                 "id" to { evt: EventData -> evt.relatedquiz!!.id },
                 "related" to { evt: EventData -> evt.relatedquiz!! },
                 "find" to { id: Long, name: String -> quizNotificationRepository.findByQuiz_IdAndEventname(id, name) },
-                "delete" to { nt: KlazaQuizNotification -> quizNotificationRepository.delete(nt) },
-                "save" to { related: Quiz, name: String -> quizNotificationRepository.save(KlazaQuizNotification(related, name)) }
+                "delete" to { nt: KlazaQuizNotificationModel -> quizNotificationRepository.delete(nt) },
+                "save" to { related: QuizModel, name: String -> quizNotificationRepository.save(KlazaQuizNotificationModel(related, name)) }
             ),
             "assign" to mapOf(
                 "id" to { evt: EventData -> evt.relatedassign!!.id },
                 "related" to { evt: EventData -> evt.relatedassign!! },
                 "find" to { id: Long, name: String -> assignNotificationRepository.findByAssign_IdAndEventname(id, name) },
-                "delete" to { nt: KlazaAssignNotification -> assignNotificationRepository.delete(nt) },
-                "save" to { related: Assign, name: String -> assignNotificationRepository.save(KlazaAssignNotification(related, name)) }
+                "delete" to { nt: KlazaAssignNotificationModel -> assignNotificationRepository.delete(nt) },
+                "save" to { related: AssignModel, name: String -> assignNotificationRepository.save(KlazaAssignNotificationModel(related, name)) }
             )
         )
 
@@ -93,7 +93,7 @@ class CronService {
 
             val id = (value["id"] as (EventData) -> Long)(eventData)
             val related = (value["related"] as (EventData) -> Any)(eventData)
-            val find = if (eventData.isQuiz()) value["find"] as (Long, String) -> KlazaQuizNotification? else value["find"] as (Long, String) -> KlazaAssignNotification?
+            val find = if (eventData.isQuiz()) value["find"] as (Long, String) -> KlazaQuizNotificationModel? else value["find"] as (Long, String) -> KlazaAssignNotificationModel?
             val delete = value["delete"] as (Any) -> Unit
             val save = value["save"] as (Any, String) -> Any
 

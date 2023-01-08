@@ -16,16 +16,16 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.UserInfoData
+import klaza.klaza_server.models.UserInfoDataModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface UserInfoDataRepository : JpaRepository<UserInfoData, Long> {
+interface UserInfoDataRepository : JpaRepository<UserInfoDataModel, Long> {
 
     @Query( "SELECT d \n" +
-            "FROM UserInfoData d\n" +
-            "JOIN UserInfoField f ON f.id = d.field.id\n" +
+            "FROM UserInfoDataModel d\n" +
+            "JOIN UserInfoFieldModel f ON f.id = d.field.id\n" +
             "WHERE d.user.id = ?1 AND f.shortname LIKE 'klaza_%'")
-    fun findAllKlazaUserInfoDataByUserId(userId: Long): List<UserInfoData>
+    fun findAllKlazaUserInfoDataByUserId(userId: Long): List<UserInfoDataModel>
 
 }

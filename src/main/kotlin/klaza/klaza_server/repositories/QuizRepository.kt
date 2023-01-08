@@ -16,13 +16,13 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.Quiz
+import klaza.klaza_server.models.QuizModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface QuizRepository : JpaRepository<Quiz, Long> {
+interface QuizRepository : JpaRepository<QuizModel, Long> {
 
-    fun findByName(name: String): Quiz
+    fun findByName(name: String): QuizModel
 
-    fun findAllByCourse_Id(courseId: Long): List<Quiz>
+    fun findAllByCourse_Id(courseId: Long): List<QuizModel>
 
 }

@@ -21,7 +21,7 @@ import com.pengrad.telegrambot.request.SendMessage
 import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.configurations.TelegramConfiguration
 import klaza.klaza_server.data.EventData
-import klaza.klaza_server.models.KlazaTelegramInstance
+import klaza.klaza_server.models.KlazaTelegramInstanceModel
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -52,7 +52,7 @@ class TelegramComponent {
 
     }
 
-    fun sendServerNotifications(event: EventData, instances: List<KlazaTelegramInstance>) {
+    fun sendServerNotifications(event: EventData, instances: List<KlazaTelegramInstanceModel>) {
 
         for (i in instances) {
 

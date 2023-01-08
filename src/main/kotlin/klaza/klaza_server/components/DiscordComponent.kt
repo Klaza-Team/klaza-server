@@ -25,7 +25,7 @@ import discord4j.discordjson.json.EmbedFieldData
 import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.configurations.DiscordConfiguration
 import klaza.klaza_server.data.EventData
-import klaza.klaza_server.models.KlazaDiscordInstance
+import klaza.klaza_server.models.KlazaDiscordInstanceModel
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -58,7 +58,7 @@ class DiscordComponent {
 
     }
 
-    fun sendServerNotifications(event: EventData, instances: List<KlazaDiscordInstance>) {
+    fun sendServerNotifications(event: EventData, instances: List<KlazaDiscordInstanceModel>) {
 
         for (i in instances) {
 

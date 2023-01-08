@@ -16,17 +16,17 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.KlazaDiscordInstance
+import klaza.klaza_server.models.KlazaDiscordInstanceModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface KlazaDiscordInstanceRepository : JpaRepository<KlazaDiscordInstance, Long> {
+interface KlazaDiscordInstanceRepository : JpaRepository<KlazaDiscordInstanceModel, Long> {
 
-    fun findAllByGuild(guild: String): List<KlazaDiscordInstance>
+    fun findAllByGuild(guild: String): List<KlazaDiscordInstanceModel>
 
-    fun findAllByChannel(channel: String): List<KlazaDiscordInstance>
+    fun findAllByChannel(channel: String): List<KlazaDiscordInstanceModel>
 
-    fun findAllByGuildAndChannel(guild: String, channel: String): List<KlazaDiscordInstance>
+    fun findAllByGuildAndChannel(guild: String, channel: String): List<KlazaDiscordInstanceModel>
 
-    fun findAllByCourse_Id(courseId: Long): List<KlazaDiscordInstance>
+    fun findAllByCourse_Id(courseId: Long): List<KlazaDiscordInstanceModel>
 
 }

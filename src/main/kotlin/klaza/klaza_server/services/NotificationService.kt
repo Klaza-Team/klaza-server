@@ -24,7 +24,7 @@ import klaza.klaza_server.components.TelegramComponent
 import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.dtos.UserNotificationContactDTO
-import klaza.klaza_server.models.User
+import klaza.klaza_server.models.UserModel
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -71,9 +71,9 @@ class NotificationService {
 
     }
 
-    fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<UserNotificationContactDTO>> {
+    fun sortUserInstancesByPriority(courseID: Long, users: List<UserModel>): MutableMap<UserModel, List<UserNotificationContactDTO>> {
 
-        val map = mutableMapOf<User, List<UserNotificationContactDTO>>()
+        val map = mutableMapOf<UserModel, List<UserNotificationContactDTO>>()
 
         for (u in users) {
 
@@ -127,7 +127,7 @@ class NotificationService {
 
     }
 
-    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<User, List<UserNotificationContactDTO>>) {
+    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<UserModel, List<UserNotificationContactDTO>>) {
 
 //        LOGGER.info(instances.toString())
 
@@ -171,7 +171,7 @@ class NotificationService {
         }
     }
 
-    fun sendNotificationToUsers(eventData: EventData, users: List<User>) {
+    fun sendNotificationToUsers(eventData: EventData, users: List<UserModel>) {
 
         for (u in users) {
 

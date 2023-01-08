@@ -16,11 +16,11 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.UserInfoCategory
+import klaza.klaza_server.models.UserInfoCategoryModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserInfoCategoryRepository : JpaRepository<UserInfoCategory, Long> {
+interface UserInfoCategoryRepository : JpaRepository<UserInfoCategoryModel, Long> {
 
-    fun findByName(name: String): UserInfoCategory
+    fun findByName(name: String): UserInfoCategoryModel
 
 }

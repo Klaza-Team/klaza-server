@@ -17,6 +17,7 @@
 package klaza.klaza_server.services
 
 import klaza.klaza_server.dtos.UserNotificationContactDTO
+import klaza.klaza_server.models.UserModel
 import klaza.klaza_server.repositories.UserInfoDataRepository
 import klaza.klaza_server.repositories.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +29,14 @@ class UserService {
 
     @Autowired lateinit var userRepository: UserRepository
     @Autowired lateinit var userInfoDataRepository: UserInfoDataRepository
+
+    fun getUserByID(userId: Long): UserModel {
+        return userRepository.findById(userId).orElseThrow { Exception("User not found") }
+    }
+
+    fun getUsers(): List<UserModel> {
+        return userRepository.findAll()
+    }
 
     fun getUserNotificationContacts(userId: Long): List<UserNotificationContactDTO> {
 
