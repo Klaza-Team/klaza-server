@@ -20,8 +20,11 @@ import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.classes.Requests
 import klaza.klaza_server.configurations.WhatsappConfiguration
 import klaza.klaza_server.data.EventData
+import klaza.klaza_server.models.UserModel
+import klaza.klaza_server.services.NotificationService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -37,6 +40,7 @@ class WhatsAppComponent {
 
     @Autowired
     lateinit var whatsappConfiguration: WhatsappConfiguration
+    @Autowired @Lazy lateinit var notificationService: NotificationService
 
     @PostConstruct
     fun start() {
@@ -46,46 +50,54 @@ class WhatsAppComponent {
 
     }
 
-    fun sendUserNotification(event: EventData, userNumber: String, firstPriority: Boolean): Boolean {
+    fun sendUserNotification(event: EventData, userNumber: String, userModel: UserModel, firstPriority: Boolean): Boolean {
 
-       try {
+        if (notificationService.userHasNotificationEnabled(event, userModel)) {
 
-           val body = """
-            {
-                "messaging_product": "whatsapp",
-                "to": "$userNumber",
-                "recipient_type": "individual",
-                "type": "template",
-                "template": {
-                    "name": "teste",
-                    "language": { "code": "pt_BR" },
-                    "components": [{
-            
-                        "type": "body",
-                        "parameters": [
-                            {
-                                "type": "text",
-                                "text": "$event"
-                            }
-                        ]
-            
-                    }]
+            try {
+
+                val body = """
+                {
+                    "messaging_product": "whatsapp",
+                    "to": "$userNumber",
+                    "recipient_type": "individual",
+                    "type": "template",
+                    "template": {
+                        "name": "teste",
+                        "language": { "code": "pt_BR" },
+                        "components": [{
+                
+                            "type": "body",
+                            "parameters": [
+                                {
+                                    "type": "text",
+                                    "text": "$event"
+                                }
+                            ]
+                
+                        }]
+                    }
                 }
+                """
+
+                Requests(
+                    "https://graph.facebook.com/v14.0/${whatsappConfiguration.numberID}",
+                    whatsappConfiguration.token
+                ).post("/messages", body)
+
+                return true
+
+            } catch (e: Exception) {
+
+                LOGGER.error(Colors.RED + "Error sending user notification to User: $userNumber, Event: ${event.eventname}" + Colors.RESET)
+                LOGGER.error(Colors.RED + e.message + Colors.RESET)
+
+                return false
             }
-            """
-
-           Requests("https://graph.facebook.com/v14.0/${whatsappConfiguration.numberID}", whatsappConfiguration.token).post("/messages", body)
-
-           return true
-
-       }
-       catch (e: Exception) {
-
-           LOGGER.error(Colors.RED + "Error sending user notification to User: $userNumber, Event: ${event.eventname}" + Colors.RESET)
-           LOGGER.error(Colors.RED + e.message + Colors.RESET)
-
-           return false
-       }
+        }
+        else {
+            return true
+        }
 
     }
 

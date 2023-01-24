@@ -16,14 +16,13 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.KlazaDiscordInstance
-import klaza.klaza_server.models.KlazaTelegramInstance
+import klaza.klaza_server.models.KlazaTelegramInstanceModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface KlazaTelegramInstanceRepository : JpaRepository<KlazaTelegramInstance, Long> {
+interface KlazaTelegramInstanceRepository : JpaRepository<KlazaTelegramInstanceModel, Long> {
 
-    fun findAllByChannel(channel: String): List<KlazaTelegramInstance>
+    fun findAllByChannel(channel: String): List<KlazaTelegramInstanceModel>
 
-    fun findAllByCourse_Id(courseId: Long): List<KlazaTelegramInstance>
+    fun findAllByCourse_Id(courseId: Long): List<KlazaTelegramInstanceModel>
 
 }

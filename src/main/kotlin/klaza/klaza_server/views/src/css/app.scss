@@ -1,0 +1,160 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Bold.ttf");
+}
+
+* {
+    font-family: "Montserrat";
+}
+
+// app global css in SCSS form
+.bg-a {
+    background-color: $color-a;
+}
+
+.text-a {
+    color: $color-a;
+}
+
+.bg-b {
+    background-color: $color-b;
+}
+
+.text-b {
+    color: $color-b;
+}
+
+.bg-c {
+    background-color: $color-c;
+}
+
+.text-c {
+    color: $color-c;
+}
+
+.bg-w {
+    background-color: $color-w;
+}
+
+.text-w {
+    color: $color-w;
+}
+
+.bg-bk {
+    background-color: $color-bk;
+}
+
+.text-bk {
+    color: $color-bk;
+}
+
+.h-60vh {
+    height: 60vh;
+}
+
+.h-70vh {
+    height: 70vh;
+}
+
+.w-60vw {
+    width: 60vw;
+}
+
+.w-80vw {
+    width: 80vw;
+}
+
+.w-70vw {
+    width: 70vw;
+}
+
+.w-70 {
+    width: 70%;
+}
+
+.w-80 {
+    width: 80%;
+}
+
+.r-10 {
+    border-radius: 10px;
+}
+
+.r-15 {
+    border-radius: 15px;
+}
+
+.r-20 {
+    border-radius: 20px;
+}
+
+.input .q-field__control:before {
+    border-color: $color-w;
+}
+
+.input .q-field__control {
+
+    .q-field__control-container .q-field__native span {
+        color: $color-w;
+    }
+
+    .q-icon {
+        color: $color-w;
+    }
+}
+
+.input.q-field--focused .q-field__control {
+
+    .q-field__control-container .q-field__native span {
+        color: $color-a;
+    }
+
+    .q-icon {
+        color: $color-a;
+    }
+}
+
+.q-btn__content > span {
+    color: $color-w;
+}
+
+.f-10 {
+    font-size: 10px;
+}
+
+.f-15 {
+    font-size: 15px;
+}
+
+.f-20 {
+    font-size: 20px;
+}
+
+.f-25 {
+    font-size: 25px;
+}
+
+.f-45 {
+    font-size: 45px;
+}
+
+.tooltip {
+    background-color: $color-b;
+    color: $color-w;
+    font-size: 12px;
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gap-15 {
+    gap: 15px;
+}
+
+.title-separator {
+    color: $color-w;
+    font-size: 30px;
+}

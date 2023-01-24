@@ -18,10 +18,10 @@
 package klaza.klaza_server.data
 
 import klaza.klaza_server.dtos.EventDTO
-import klaza.klaza_server.models.Assign
-import klaza.klaza_server.models.Course
-import klaza.klaza_server.models.Quiz
-import klaza.klaza_server.models.User
+import klaza.klaza_server.models.AssignModel
+import klaza.klaza_server.models.CourseModel
+import klaza.klaza_server.models.QuizModel
+import klaza.klaza_server.models.UserModel
 
 class EventData(
     var eventname: String,
@@ -29,14 +29,14 @@ class EventData(
     var crud: String,
     var contextlevel: Long,
     var contextid: Long,
-    var user: User?,
-    var course: Course?,
-    var relateduser: User?,
+    var user: UserModel?,
+    var course: CourseModel?,
+    var relateduser: UserModel?,
     var action: String,
     var target: String,
     var other: EventOtherData,
-    var relatedquiz: Quiz?,
-    var relatedassign: Assign?) {
+    var relatedquiz: QuizModel?,
+    var relatedassign: AssignModel?) {
 
     fun convertToDTO(): EventDTO {
         return EventDTO(

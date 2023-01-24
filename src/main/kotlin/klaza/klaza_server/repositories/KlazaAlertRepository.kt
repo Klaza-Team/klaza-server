@@ -16,11 +16,11 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.KlazaAlert
+import klaza.klaza_server.models.KlazaAlertModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface KlazaAlertRepository : JpaRepository<KlazaAlert, Long> {
+interface KlazaAlertRepository : JpaRepository<KlazaAlertModel, Long> {
 
-    fun findAllByCourse_Id(courseId: Long): List<KlazaAlert>
+    fun findAllByCourse_Id(courseId: Long): List<KlazaAlertModel>
 
 }
