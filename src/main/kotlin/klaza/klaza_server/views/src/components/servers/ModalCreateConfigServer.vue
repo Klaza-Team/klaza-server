@@ -46,7 +46,7 @@
         </div>
 
         <div>
-            <course-configs :course="course" type="new" />
+            <course-configs :course="(course as Course)" :loading="loading" @save="save" type="new" />
         </div>
     </modal-template>
 </template>
@@ -59,7 +59,7 @@ import CourseConfigs from "../geral/CourseConfigs.vue";
 
 import { useUserStore } from "stores/user";
 import { useCoursesStore } from "stores/courses";
-import { CourseDTO, UserDiscordTelegramServerDTO } from "src/@types/dtos";
+import { Course, CourseConfig, UserDiscordTelegramServer } from "src/@types/models";
 
 export default defineComponent({
     name: "ModalCreateConfigServer",
@@ -73,7 +73,7 @@ export default defineComponent({
             default: false,
         },
         course: {
-            type: Object as () => CourseDTO | null,
+            type: Object as () => Course | null,
             default: null,
         },
         type: {
@@ -81,7 +81,7 @@ export default defineComponent({
             default: null,
         },
         server: {
-            type: Object as () => UserDiscordTelegramServerDTO | null,
+            type: Object as () => UserDiscordTelegramServer | null,
             default: null,
         },
     },
@@ -98,7 +98,25 @@ export default defineComponent({
             types: ["Discord", "Telegram"],
             discordServers: useUserStore().getUserDiscordServers,
             telegramServers: useUserStore().getUserTelegramServers,
+
+            loading: false,
         };
+    },
+    methods: {
+        save(configs: CourseConfig) {
+            this.loading = true;
+            useCoursesStore().createCourseServerInstance(this.course?.id as number, this.type as "discord", {
+                channel_id: this.localServer?.channel as string,
+                config: configs,
+                creator_id: useUserStore().user?.id as number,
+                guild_id: this.localServer?.id as string,
+                id: 0,
+            })
+            .finally(() => {
+                this.loading = false;
+                this.show = false;
+            });
+        },
     },
     computed: {
         show: {

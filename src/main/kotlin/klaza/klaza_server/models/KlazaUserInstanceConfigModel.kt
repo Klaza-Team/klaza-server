@@ -17,7 +17,7 @@
 package klaza.klaza_server.models
 
 import klaza.klaza_server.classes.KlazaInstanceConfig
-import klaza.klaza_server.data.CourseUserConfigData
+import klaza.klaza_server.dtos.UserCourseConfigDTO
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
@@ -26,13 +26,45 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_klaza_user_inst_conf")
-class KlazaUserInstanceConfigModel: KlazaInstanceConfig() {
+class KlazaUserInstanceConfigModel constructor(): KlazaInstanceConfig() {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_instance_id", nullable = false)
     var userInstance: KlazaUserInstanceModel? = null
 
-    fun toData(): CourseUserConfigData { return CourseUserConfigData(this) }
+    constructor(id: Long?, userInstance: KlazaUserInstanceModel, useGlobal: Boolean?, notifyCreateContent: Boolean?, notifyEditContent: Boolean?, notifyDeleteContent: Boolean?, notifyDeadline2Days: Boolean?, notifyDeadline1Day: Boolean?, notifyDeadline: Boolean?, notifySendAssignment: Boolean?, notifyReceiveMessage: Boolean?, notifyReceiveComment: Boolean?, notifyDeleteComment: Boolean?): this() {
+        this.id = id
+        this.userInstance = userInstance
+        this.useGlobal = useGlobal
+        this.notifyCreateContent = notifyCreateContent
+        this.notifyEditContent = notifyEditContent
+        this.notifyDeleteContent = notifyDeleteContent
+        this.notifyDeadline2Days = notifyDeadline2Days
+        this.notifyDeadline1Day = notifyDeadline1Day
+        this.notifyDeadline = notifyDeadline
+        this.notifySendAssignment = notifySendAssignment
+        this.notifyReceiveMessage = notifyReceiveMessage
+        this.notifyReceiveComment = notifyReceiveComment
+        this.notifyDeleteComment = notifyDeleteComment
+    }
+
+    constructor(id: Long?, userInstance: KlazaUserInstanceModel) : this() {
+        this.id = id
+        this.userInstance = userInstance
+        this.useGlobal = true
+        this.notifyCreateContent = true
+        this.notifyEditContent = true
+        this.notifyDeleteContent = true
+        this.notifyDeadline2Days = true
+        this.notifyDeadline1Day = true
+        this.notifyDeadline = true
+        this.notifySendAssignment = true
+        this.notifyReceiveMessage = true
+        this.notifyReceiveComment = true
+        this.notifyDeleteComment = true
+    }
+
+    fun toDTO(): UserCourseConfigDTO { return UserCourseConfigDTO(this) }
 
     @Override
     override fun toString(): String {

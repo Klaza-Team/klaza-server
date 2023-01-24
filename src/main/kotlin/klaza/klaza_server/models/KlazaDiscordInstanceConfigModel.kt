@@ -17,17 +17,32 @@
 package klaza.klaza_server.models
 
 import klaza.klaza_server.classes.KlazaInstanceConfig
-import klaza.klaza_server.data.DiscordInstanceConfData
+import klaza.klaza_server.dtos.UserCourseConfigDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.*
 
 @Entity
 @Table(name = "mdl_klaza_disc_inst_conf")
-class KlazaDiscordInstanceConfigModel: KlazaInstanceConfig() {
+class KlazaDiscordInstanceConfigModel constructor(): KlazaInstanceConfig() {
 
     @OneToOne(fetch = FetchType.EAGER)
     var discordInstance: KlazaDiscordInstanceModel? = null
 
-    fun toData(): DiscordInstanceConfData { return DiscordInstanceConfData(this) }
+    constructor(id: Long?, discordInstance: KlazaDiscordInstanceModel, config: UserCourseConfigDTO) : this() {
+        this.id = id
+        this.discordInstance = discordInstance
+        this.useGlobal = config.use_global
+        this.notifyCreateContent = config.notify_create_content
+        this.notifyEditContent = config.notify_edit_content
+        this.notifyDeleteContent = config.notify_delete_content
+        this.notifyDeadline2Days = config.notify_deadline_2_days
+        this.notifyDeadline1Day = config.notify_deadline_1_day
+        this.notifyDeadline = config.notify_deadline
+        this.notifySendAssignment = config.notify_send_assignment
+        this.notifyReceiveMessage = config.notify_receive_message
+        this.notifyReceiveComment = config.notify_receive_comment
+        this.notifyDeleteComment = config.notify_delete_comment
+    }
 
     @Override
     override fun toString(): String {

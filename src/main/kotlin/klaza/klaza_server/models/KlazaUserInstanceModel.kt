@@ -43,11 +43,16 @@ class KlazaUserInstanceModel {
     @JoinColumn(name = "klaza_user_id", nullable = false)
     var user: UserModel? = null
 
-    @Column(name = "type", length = 100, nullable = false)
-    var type: String? = null // DISCORD, TELEGRAM, WHATSAPP
+    constructor() {}
+
+    constructor(id: Long?, course: CourseModel, user: UserModel) {
+        this.id = id
+        this.course = course
+        this.user = user
+    }
 
     override fun toString(): String {
-        return "KlazaUserInstance(id=$id, course=$course, user=$user, type=$type)"
+        return "KlazaUserInstance(id=$id, course=$course, user=$user)"
     }
 
 }

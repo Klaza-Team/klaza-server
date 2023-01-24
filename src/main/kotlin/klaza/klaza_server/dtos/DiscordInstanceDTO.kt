@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - CourseDTO.kt
+// Plugin Klaza para Moodle - Server - DiscordInstanceDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -17,35 +17,43 @@
 package klaza.klaza_server.dtos
 
 import klaza.klaza_server.models.CourseModel
+import klaza.klaza_server.models.KlazaDiscordInstanceModel
 import java.util.Base64
 
 class DiscordInstanceDTO {
 
-    var id: Long;
-    var fullName: String;
-    var shortName: String;
-    var image: String;
+    var id: Long
+    var guild_id: String
+    var channel_id: String
+    var config: UserCourseConfigDTO
+    var creator_id: Long
 
-    constructor(id: Long, fullName: String, shortName: String, image: String?) {
+    constructor() {
+        this.id = 0
+        this.guild_id = ""
+        this.channel_id = ""
+        this.config = UserCourseConfigDTO()
+        this.creator_id = 0
+    }
+
+    constructor(id: Long, guild_id: String, channel_id: String, config: UserCourseConfigDTO, creator_id: Long) {
         this.id = id
-        this.fullName = fullName
-        this.shortName = shortName
-        this.image = image ?: this.getRandomImage()
+        this.guild_id = guild_id
+        this.channel_id = channel_id
+        this.config = config
+        this.creator_id = creator_id
     }
 
-    constructor(courseModel: CourseModel) {
-        this.id = courseModel.id!!
-        this.fullName = courseModel.fullname!!
-        this.shortName = courseModel.shortname!!
-        this.image = this.getRandomImage()
-    }
-
-    private fun getRandomImage(): String {
-        return Base64.getEncoder().encodeToString(DiscordInstanceDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
+    constructor(klazaDiscordInstanceModel: KlazaDiscordInstanceModel, config: UserCourseConfigDTO) {
+        this.id = klazaDiscordInstanceModel.id!!
+        this.guild_id = klazaDiscordInstanceModel.guild!!
+        this.channel_id = klazaDiscordInstanceModel.channel!!
+        this.config = config
+        this.creator_id = klazaDiscordInstanceModel.creator!!.id!!
     }
 
     override fun toString(): String {
-        return "CourseDTO(id=$id, fullName='$fullName', shortName='$shortName', image='$image')"
+        return "DiscordInstanceDTO(id=$id, guild_id='$guild_id', channel_id='$channel_id', config=$config, creator_id=$creator_id)"
     }
 
 }

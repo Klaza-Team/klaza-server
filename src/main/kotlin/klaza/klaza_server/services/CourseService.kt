@@ -16,9 +16,13 @@
 
 package klaza.klaza_server.services
 
-import klaza.klaza_server.dtos.CourseDTO
+import klaza.klaza_server.dtos.DiscordInstanceDTO
+import klaza.klaza_server.dtos.TelegramInstanceDTO
+import klaza.klaza_server.dtos.UserCourseConfigDTO
 import klaza.klaza_server.models.CourseModel
-import klaza.klaza_server.repositories.CourseRepository
+import klaza.klaza_server.models.KlazaDiscordInstanceModel
+import klaza.klaza_server.models.KlazaTelegramInstanceModel
+import klaza.klaza_server.repositories.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -26,13 +30,39 @@ import org.springframework.stereotype.Service
 class CourseService {
 
     @Autowired lateinit var courseRepository: CourseRepository
+    @Autowired lateinit var discordInstanceRepository: KlazaDiscordInstanceRepository
+    @Autowired lateinit var telegramInstanceRepository: KlazaTelegramInstanceRepository
+    @Autowired lateinit var klazaDiscordInstanceConfigRepository: KlazaDiscordInstanceConfigRepository
+    @Autowired lateinit var klazaTelegramInstanceConfigRepository: KlazaTelegramInstanceConfigRepository
 
-    fun getCourseByID(couseId: Long): CourseModel {
-        return courseRepository.findById(couseId).orElseThrow { Exception("Course not found") }
+    fun getCourseById(courseId: Long): CourseModel {
+        return courseRepository.findById(courseId).orElseThrow { Exception("Course not found") }
     }
 
-    fun getCourses(): List<CourseModel> {
-        return courseRepository.findAll()
+    fun getCourses(): List<CourseModel> { return courseRepository.findAll() }
+
+    fun getUserCourses(userId: Long): List<CourseModel> { return courseRepository.findAllByUserId(userId) }
+
+    fun getCourseDiscordInstances(courseId: Long): List<KlazaDiscordInstanceModel> { return discordInstanceRepository.findAllByCourse_Id(courseId) }
+
+    fun getCourseDiscordInstancesDTO(courseId: Long): List<DiscordInstanceDTO> {
+
+        return this.getCourseDiscordInstances(courseId).map { instance ->
+            val configs = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(instance.id!!)
+            instance.toDTO(UserCourseConfigDTO(configs!!))
+        }
+
+    }
+
+    fun getCourseTelegramInstances(courseId: Long): List<KlazaTelegramInstanceModel> { return telegramInstanceRepository.findAllByCourse_Id(courseId) }
+
+    fun getCourseTelegramInstancesDTO(courseId: Long): List<TelegramInstanceDTO> {
+
+        return this.getCourseTelegramInstances(courseId).map { instance ->
+            val configs = klazaTelegramInstanceConfigRepository.findByTelegramInstance_Id(instance.id!!)
+            instance.toDTO(UserCourseConfigDTO(configs!!))
+        }
+
     }
 
 }

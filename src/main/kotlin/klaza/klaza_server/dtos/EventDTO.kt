@@ -38,6 +38,10 @@ class EventDTO(
     var other: EventOtherData) {
 
     fun convertToData(userRepository: UserRepository, courseRepository: CourseRepository, assignRepository: AssignRepository, quizRepository: QuizRepository): EventData {
+
+//        println(userid)
+//        println(userRepository.findById(userid).get())
+
         return EventData(
             eventname = eventname,
             objectid = objectid,

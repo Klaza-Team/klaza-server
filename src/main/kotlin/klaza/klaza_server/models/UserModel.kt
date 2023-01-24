@@ -16,8 +16,10 @@
 
 package klaza.klaza_server.models
 
-import klaza.klaza_server.data.UserData
 import klaza.klaza_server.dtos.UserDTO
+import klaza.klaza_server.dtos.UserGlobalConfigDTO
+import klaza.klaza_server.dtos.UserNotificationAppDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.Id
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -48,7 +50,7 @@ class UserModel {
     @Column(name = "lang", length = 100, nullable = false)
     var lang: String? = null
 
-    fun toData(): UserData { return UserData(this) }
+    fun toDTO(notification_priority: List<UserNotificationAppDTO>, global_config: UserGlobalConfigDTO): UserDTO { return UserDTO(this, notification_priority, global_config) }
 
     // Override
 

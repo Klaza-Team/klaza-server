@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - CourseService.kt
+// Plugin Klaza para Moodle - Server - DiscordInstanceService.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ import klaza.klaza_server.dtos.DiscordInstanceDTO
 import klaza.klaza_server.dtos.TelegramInstanceDTO
 import klaza.klaza_server.dtos.UserCourseConfigDTO
 import klaza.klaza_server.models.CourseModel
+import klaza.klaza_server.models.KlazaDiscordInstanceConfigModel
 import klaza.klaza_server.models.KlazaDiscordInstanceModel
 import klaza.klaza_server.models.KlazaTelegramInstanceModel
 import klaza.klaza_server.repositories.*
@@ -29,40 +30,96 @@ import org.springframework.stereotype.Service
 @Service
 class DiscordInstanceService {
 
-    @Autowired lateinit var courseRepository: CourseRepository
     @Autowired lateinit var discordInstanceRepository: KlazaDiscordInstanceRepository
-    @Autowired lateinit var telegramInstanceRepository: KlazaTelegramInstanceRepository
     @Autowired lateinit var klazaDiscordInstanceConfigRepository: KlazaDiscordInstanceConfigRepository
-    @Autowired lateinit var klazaTelegramInstanceConfigRepository: KlazaTelegramInstanceConfigRepository
+    @Autowired lateinit var courseRepository: CourseRepository
+    @Autowired lateinit var userRepository: UserRepository
 
-    fun getCourseById(courseId: Long): CourseModel {
-        return courseRepository.findById(courseId).orElseThrow { Exception("Course not found") }
+    fun getDiscordInstanceById(discordInstanceId: Long): KlazaDiscordInstanceModel {
+        return discordInstanceRepository.findById(discordInstanceId).orElseThrow { Exception("Discord instance not found") }
     }
 
-    fun getCourses(): List<CourseModel> { return courseRepository.findAll() }
+    fun getDiscordInstances(): List<KlazaDiscordInstanceModel> { return discordInstanceRepository.findAll() }
 
-    fun getUserCourses(userId: Long): List<CourseModel> { return courseRepository.findAllByUserId(userId) }
+    fun getDiscordInstancesDTO(): List<DiscordInstanceDTO> {
 
-    fun getCourseDiscordInstances(courseId: Long): List<KlazaDiscordInstanceModel> { return discordInstanceRepository.findAllByCourse_Id(courseId) }
+            return this.getDiscordInstances().map { instance ->
+                val configs = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(instance.id!!)
+                instance.toDTO(UserCourseConfigDTO(configs!!))
+            }
 
-    fun getCourseDiscordInstancesDTO(courseId: Long): List<DiscordInstanceDTO> {
+        }
 
-        return this.getCourseDiscordInstances(courseId).map { instance ->
-            val configs = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(instance.id!!)
-            instance.toDTO(UserCourseConfigDTO(configs!!))
+    fun createDiscordInstance(discordInstance: DiscordInstanceDTO, courseId: Long, creatorId: Long) {
+
+        val course = courseRepository.findById(courseId).get()
+        val creator = userRepository.findById(creatorId).get()
+
+        val discordInstanceModel = KlazaDiscordInstanceModel(
+            null,
+            discordInstance.guild_id,
+            discordInstance.channel_id,
+            course,
+            creator
+        )
+
+        val discordConfigModel = KlazaDiscordInstanceConfigModel(
+            null,
+            discordInstanceModel,
+            discordInstance.config
+        )
+
+        discordInstanceRepository.save(discordInstanceModel)
+        klazaDiscordInstanceConfigRepository.save(discordConfigModel)
+
+    }
+
+    fun editDiscordInstance(discordInstance: DiscordInstanceDTO) {
+
+        discordInstanceRepository.existsById(discordInstance.id).let {
+            if (it) {
+
+                val discordInstanceModel = discordInstanceRepository.findById(discordInstance.id).get()
+                discordInstanceModel.channel = discordInstance.channel_id
+                discordInstanceModel.guild = discordInstance.guild_id
+
+                val instanceConfig = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(discordInstance.id)
+
+                instanceConfig!!.useGlobal = discordInstance.config.use_global
+                instanceConfig.notifyCreateContent = discordInstance.config.notify_create_content
+                instanceConfig.notifyEditContent = discordInstance.config.notify_edit_content
+                instanceConfig.notifyDeleteContent = discordInstance.config.notify_delete_content
+                instanceConfig.notifyDeadline2Days = discordInstance.config.notify_deadline_2_days
+                instanceConfig.notifyDeadline1Day = discordInstance.config.notify_deadline_1_day
+                instanceConfig.notifyDeadline = discordInstance.config.notify_deadline
+                instanceConfig.notifySendAssignment = discordInstance.config.notify_send_assignment
+                instanceConfig.notifyReceiveMessage = discordInstance.config.notify_receive_message
+                instanceConfig.notifyReceiveComment = discordInstance.config.notify_receive_comment
+                instanceConfig.notifyDeleteComment = discordInstance.config.notify_delete_comment
+
+                discordInstanceRepository.save(discordInstanceModel)
+                klazaDiscordInstanceConfigRepository.save(instanceConfig)
+
+            } else {
+                throw Exception("Discord instance not found")
+            }
         }
 
     }
 
-    fun getCourseTelegramInstances(courseId: Long): List<KlazaTelegramInstanceModel> { return telegramInstanceRepository.findAllByCourse_Id(courseId) }
-
-    fun getCourseTelegramInstancesDTO(courseId: Long): List<TelegramInstanceDTO> {
-
-        return this.getCourseTelegramInstances(courseId).map { instance ->
-            val configs = klazaTelegramInstanceConfigRepository.findByTelegramInstance_Id(instance.id!!)
-            instance.toDTO(UserCourseConfigDTO(configs!!))
+    fun deleteDiscordInstance(discordInstanceId: Long) {
+        discordInstanceRepository.existsById(discordInstanceId).let {
+            if (it) {
+                discordInstanceRepository.deleteById(discordInstanceId)
+            } else {
+                throw Exception("Discord instance not found")
+            }
         }
+    }
 
+    fun getInstanceConfigDTO(discordInstanceId: Long): UserCourseConfigDTO {
+        val instanceConfig = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(discordInstanceId)
+        return UserCourseConfigDTO(instanceConfig!!)
     }
 
 }

@@ -97,14 +97,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { UserNotificationAppDTO } from "src/@types/dtos";
+import { UserNotificationApp } from "src/@types/models.js";
 
 export default defineComponent({
     name: "AccountItem",
     emits: ["update-priority"],
     props: {
         account: {
-            type: Object as () => UserNotificationAppDTO,
+            type: Object as () => UserNotificationApp,
             required: true,
         },
         index: {
@@ -126,8 +126,10 @@ export default defineComponent({
             },
         },
         tooltipText() {
-            return this.account.value != ""
-                ? `Conectado como ${this.account.value}`
+            return this.account.value != "" ? 
+                (this.account.type == "discord") ? `Conectado como ManoGamer007#2761` :
+                (this.account.type == "telegram") ? `Conectado como @manogamer` :
+                `Conectado como +55 51 9280-4789` 
                 : "Clique para conectar";
         },
     },

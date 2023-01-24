@@ -25,10 +25,4 @@ interface KlazaUserInstanceRepository : JpaRepository<KlazaUserInstanceModel, Lo
 
     fun findAllByUser_Id(userId: Long): List<KlazaUserInstanceModel>
 
-    fun findAllByType(type: String): List<KlazaUserInstanceModel>
-
-    fun findOneByUser_IdAndCourse_IdAndType(userId: Long, courseId: Long, type: String): KlazaUserInstanceModel?
-
-    fun findAllByCourse_IdAndType(courseId: Long, type: String): List<KlazaUserInstanceModel>
-
 }

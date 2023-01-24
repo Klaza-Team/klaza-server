@@ -25,6 +25,7 @@
                         icon="fa-solid fa-trash-can"
                         size="md"
                         @click="remove"
+                        :loading="loading"
                         flat
                     />
                 </div>
@@ -36,6 +37,8 @@
                     :course="course"
                     :type="type"
                     :instance="instance"
+                    :loading="loading"
+                    @save="save"
                 />
             </q-card-section>
         </q-card>
@@ -46,26 +49,29 @@
 import { defineComponent } from "vue";
 
 import {
-    CourseDTO,
-    UserCourseDiscordConfigDTO,
-    UserCourseTelegramConfigDTO,
-} from "src/@types/dtos";
+    Course,
+    CourseConfig,
+    UserCourseDiscordConfig,
+    UserCourseTelegramConfig,
+} from "src/@types/models.js";
 import CourseConfigs from "src/components/geral/CourseConfigs.vue";
+import { useCoursesStore } from "src/stores/courses";
+import { useUserStore } from "src/stores/user";
 
 export default defineComponent({
-    name: "CourseItem",
+    name: "InstanceItem",
     components: {
         CourseConfigs,
     },
     props: {
         course: {
-            type: Object as () => CourseDTO,
+            type: Object as () => Course,
             required: true,
         },
         instance: {
             type: Object as () =>
-                | UserCourseDiscordConfigDTO
-                | UserCourseTelegramConfigDTO,
+                | UserCourseDiscordConfig
+                | UserCourseTelegramConfig,
             required: true,
         },
         type: {
@@ -77,9 +83,30 @@ export default defineComponent({
             required: true,
         },
     },
+    data() {
+        return {
+            loading: false,
+        };
+    },
     methods: {
         remove() {
-            //TODO - remover do banco
+            this.loading = true;
+            useCoursesStore().removeCourseInstance(this.course.id, this.instance.id, (this.type === "discord_user" || this.type === "discord_other") ? "discord" : "telegram")
+            .finally(() => {
+                this.loading = false;
+            });
+            
+        },
+        save(configs: CourseConfig) {
+            this.loading = true;
+            useCoursesStore().editCourseServerInstance(this.course.id, (this.type === "discord_user" || this.type === "discord_other") ? "discord" : "telegram", {
+               ...this.instance,
+               config: configs,
+               creator_id: useUserStore().user?.id as number,
+            })
+            .finally(() => {
+                this.loading = false;
+            });
         },
     },
 });

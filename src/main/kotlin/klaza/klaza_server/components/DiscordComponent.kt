@@ -26,8 +26,11 @@ import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.configurations.DiscordConfiguration
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.models.KlazaDiscordInstanceModel
+import klaza.klaza_server.models.UserModel
+import klaza.klaza_server.services.NotificationService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -45,6 +48,7 @@ class DiscordComponent {
     }
 
     @Autowired lateinit var discordConfiguration: DiscordConfiguration
+    @Autowired @Lazy lateinit var notificationService: NotificationService
 
     @PostConstruct
     fun start() {
@@ -62,54 +66,62 @@ class DiscordComponent {
 
         for (i in instances) {
 
-            try {
+            if (notificationService.discordInstanceHasNotificationEnabled(event, i)) {
 
-                val channel = client.getChannelById(Snowflake.of(i.channel!!))
+                try {
 
-                val embed = EmbedData.builder()
-                    .title("Notificação de Teste")
-                    .addField(
-                        EmbedFieldData.builder()
-                            .name("To Testando")
-                            .value(event.toString())
-                            .build())
-                    .build()
+                    val channel = client.getChannelById(Snowflake.of(i.channel!!))
 
-                channel.createMessage(embed).block()
+                    val embed = EmbedData.builder()
+                        .title("Notificação de Teste")
+                        .addField(
+                            EmbedFieldData.builder()
+                                .name("To Testando")
+                                .value(event.toString())
+                                .build())
+                        .build()
 
-            }
-            catch (e: Exception) {
-                LOGGER.error(Colors.RED + "Error sending server notification to Guild: ${i.guild}, Channel: ${i.channel}, Event: ${event.eventname}" + Colors.RESET)
-                LOGGER.error(Colors.RED + e.message + Colors.RESET)
+                    channel.createMessage(embed).block()
+
+                }
+                catch (e: Exception) {
+                    LOGGER.error(Colors.RED + "Error sending server notification to Guild: ${i.guild}, Channel: ${i.channel}, Event: ${event.eventname}" + Colors.RESET)
+                    LOGGER.error(Colors.RED + e.message + Colors.RESET)
+                }
             }
 
         }
 
     }
 
-    fun sendUserNotification(event: EventData, userID: String, firstPriority: Boolean): Boolean {
+    fun sendUserNotification(event: EventData, discordId: String, userModel: UserModel, firstPriority: Boolean): Boolean {
 
-        try {
+        if (notificationService.userHasNotificationEnabled(event, userModel)) {
+            try {
 
-            val user = gateway.getUserById(Snowflake.of(userID)).block()!!
+                val user = gateway.getUserById(Snowflake.of(discordId)).block()!!
 
-            val embed = EmbedCreateSpec.builder()
-                .title("Notificação de Teste")
-                .addField("To Testando", event.toString(), false)
-                .build()
+                val embed = EmbedCreateSpec.builder()
+                    .title("Notificação de Teste")
+                    .addField("To Testando", event.toString(), false)
+                    .build()
 
-            user.privateChannel.block()!!.createMessage(embed)!!.block()
+                user.privateChannel.block()!!.createMessage(embed)!!.block()
 
-            return true
+                return true
 
+            }
+            catch (e: Exception) {
+
+                LOGGER.error(Colors.RED + "Error sending user notification to User: $userModel, Event: ${event.eventname}" + Colors.RESET)
+                LOGGER.error(Colors.RED + e.message + Colors.RESET)
+
+                return false
+
+            }
         }
-        catch (e: Exception) {
-
-            LOGGER.error(Colors.RED + "Error sending user notification to User: $userID, Event: ${event.eventname}" + Colors.RESET)
-            LOGGER.error(Colors.RED + e.message + Colors.RESET)
-
-            return false
-
+        else {
+            return true
         }
 
     }

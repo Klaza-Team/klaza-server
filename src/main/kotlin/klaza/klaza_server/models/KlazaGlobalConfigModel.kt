@@ -16,7 +16,8 @@
 
 package klaza.klaza_server.models
 
-import klaza.klaza_server.data.UserGlobalConfigData
+import klaza.klaza_server.dtos.UserGlobalConfigDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -70,7 +71,22 @@ class KlazaGlobalConfigModel {
     @Column(name = "notify_delete_comment", columnDefinition = "TINYINT(1)", nullable = false)
     var notifyDeleteComment: Boolean? = null
 
-    fun toData(): UserGlobalConfigData { return UserGlobalConfigData(this) }
+    constructor() {}
+
+    constructor(id: Long?, user: UserModel, notifyCreateContent: Boolean, notifyEditContent: Boolean, notifyDeleteContent: Boolean, notifyDeadline2Days: Boolean, notifyDeadline1Day: Boolean, notifyDeadline: Boolean, notifySendAssignment: Boolean, notifyReceiveMessage: Boolean, notifyReceiveComment: Boolean, notifyDeleteComment: Boolean) {
+        this.id = id
+        this.user = user
+        this.notifyCreateContent = notifyCreateContent
+        this.notifyEditContent = notifyEditContent
+        this.notifyDeleteContent = notifyDeleteContent
+        this.notifyDeadline2Days = notifyDeadline2Days
+        this.notifyDeadline1Day = notifyDeadline1Day
+        this.notifyDeadline = notifyDeadline
+        this.notifySendAssignment = notifySendAssignment
+        this.notifyReceiveMessage = notifyReceiveMessage
+        this.notifyReceiveComment = notifyReceiveComment
+        this.notifyDeleteComment = notifyDeleteComment
+    }
 
     @Override
     override fun toString(): String {
@@ -89,5 +105,7 @@ class KlazaGlobalConfigModel {
                 "notifyDeleteComment=$notifyDeleteComment" +
                 ")"
     }
+
+    fun toDTO(): UserGlobalConfigDTO { return UserGlobalConfigDTO(this) }
 
 }

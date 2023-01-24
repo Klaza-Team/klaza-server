@@ -16,7 +16,9 @@
 
 package klaza.klaza_server.models
 
-import klaza.klaza_server.data.TelegramInstanceData
+import klaza.klaza_server.dtos.TelegramInstanceDTO
+import klaza.klaza_server.dtos.UserCourseConfigDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.*
 
 @Entity
@@ -39,7 +41,16 @@ class KlazaTelegramInstanceModel {
     @JoinColumn(name = "creator_id", nullable = false)
     var creator: UserModel? = null
 
-    fun toData(): TelegramInstanceData { return TelegramInstanceData(this) }
+    constructor() {}
+
+    constructor(id: Long?, channel: String?, course: CourseModel?, creator: UserModel?) {
+        this.id = id
+        this.channel = channel
+        this.course = course
+        this.creator = creator
+    }
+
+    fun toDTO(config: UserCourseConfigDTO): TelegramInstanceDTO { return TelegramInstanceDTO(this, config) }
 
     override fun toString(): String {
         return "KlazaTelegramInstance(id=$id, channel=$channel, course=$course, creator=$creator)"

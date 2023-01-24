@@ -16,12 +16,9 @@
 
 package klaza.klaza_server.services
 
-import klaza.klaza_server.dtos.DiscordInstanceDTO
 import klaza.klaza_server.dtos.TelegramInstanceDTO
 import klaza.klaza_server.dtos.UserCourseConfigDTO
-import klaza.klaza_server.models.CourseModel
-import klaza.klaza_server.models.KlazaDiscordInstanceConfigModel
-import klaza.klaza_server.models.KlazaDiscordInstanceModel
+import klaza.klaza_server.models.KlazaTelegramInstanceConfigModel
 import klaza.klaza_server.models.KlazaTelegramInstanceModel
 import klaza.klaza_server.repositories.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,95 +27,93 @@ import org.springframework.stereotype.Service
 @Service
 class TelegramInstanceService {
 
-    @Autowired lateinit var discordInstanceRepository: KlazaDiscordInstanceRepository
-    @Autowired lateinit var klazaDiscordInstanceConfigRepository: KlazaDiscordInstanceConfigRepository
+    @Autowired lateinit var telegramInstanceRepository: KlazaTelegramInstanceRepository
+    @Autowired lateinit var klazaTelegramInstanceConfigRepository: KlazaTelegramInstanceConfigRepository
     @Autowired lateinit var courseRepository: CourseRepository
     @Autowired lateinit var userRepository: UserRepository
 
-    fun getDiscordInstanceById(discordInstanceId: Long): KlazaDiscordInstanceModel {
-        return discordInstanceRepository.findById(discordInstanceId).orElseThrow { Exception("Discord instance not found") }
+    fun getTelegramInstanceById(telegramInstanceId: Long): KlazaTelegramInstanceModel {
+        return telegramInstanceRepository.findById(telegramInstanceId).orElseThrow { Exception("Telegram instance not found") }
     }
 
-    fun getDiscordInstances(): List<KlazaDiscordInstanceModel> { return discordInstanceRepository.findAll() }
+    fun getTelegramInstances(): List<KlazaTelegramInstanceModel> { return telegramInstanceRepository.findAll() }
 
-    fun getDiscordInstancesDTO(): List<DiscordInstanceDTO> {
+    fun getDiscordInstancesDTO(): List<TelegramInstanceDTO> {
 
-            return this.getDiscordInstances().map { instance ->
-                val configs = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(instance.id!!)
-                instance.toDTO(UserCourseConfigDTO(configs!!))
-            }
-
+        return this.getTelegramInstances().map { instance ->
+            val configs = klazaTelegramInstanceConfigRepository.findByTelegramInstance_Id(instance.id!!)
+            instance.toDTO(UserCourseConfigDTO(configs!!))
         }
 
-    fun createDiscordInstance(discordInstance: DiscordInstanceDTO, courseId: Long, creatorId: Long) {
+    }
+
+    fun createTelegramInstance(telegramInstance: TelegramInstanceDTO, courseId: Long, creatorId: Long) {
 
         val course = courseRepository.findById(courseId).get()
         val creator = userRepository.findById(creatorId).get()
 
-        val discordInstanceModel = KlazaDiscordInstanceModel(
+        val telegramInstanceModel = KlazaTelegramInstanceModel(
             null,
-            discordInstance.guild_id,
-            discordInstance.channel_id,
+            telegramInstance.channel_id,
             course,
             creator
         )
 
-        val discordConfigModel = KlazaDiscordInstanceConfigModel(
+        val telegramConfigModel = KlazaTelegramInstanceConfigModel(
             null,
-            discordInstanceModel,
-            discordInstance.config
+            telegramInstanceModel,
+            telegramInstance.config
         )
 
-        discordInstanceRepository.save(discordInstanceModel)
-        klazaDiscordInstanceConfigRepository.save(discordConfigModel)
+        telegramInstanceRepository.save(telegramInstanceModel)
+        klazaTelegramInstanceConfigRepository.save(telegramConfigModel)
 
     }
 
-    fun editDiscordInstance(discordInstance: DiscordInstanceDTO) {
+    fun editTelegramInstance(telegramInstance: TelegramInstanceDTO) {
 
-        discordInstanceRepository.existsById(discordInstance.id).let {
+        telegramInstanceRepository.existsById(telegramInstance.id).let {
             if (it) {
 
-                val discordInstanceModel = discordInstanceRepository.findById(discordInstance.id).get()
-                discordInstanceModel.channel = discordInstance.channel_id
-                discordInstanceModel.guild = discordInstance.guild_id
+                val discordInstanceModel = telegramInstanceRepository.findById(telegramInstance.id).get()
+                discordInstanceModel.channel = telegramInstance.channel_id
 
-                val instanceConfig = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(discordInstance.id)
+                val instanceConfig = klazaTelegramInstanceConfigRepository.findByTelegramInstance_Id(telegramInstance.id)
 
-                instanceConfig!!.useGlobal = discordInstance.config.use_global
-                instanceConfig.notifyCreateContent = discordInstance.config.notify_create_content
-                instanceConfig.notifyEditContent = discordInstance.config.notify_edit_content
-                instanceConfig.notifyDeleteContent = discordInstance.config.notify_delete_content
-                instanceConfig.notifyDeadline2Days = discordInstance.config.notify_deadline_2_days
-                instanceConfig.notifyDeadline1Day = discordInstance.config.notify_deadline_1_day
-                instanceConfig.notifyDeadline = discordInstance.config.notify_deadline
-                instanceConfig.notifySendAssignment = discordInstance.config.notify_send_assignment
-                instanceConfig.notifyReceiveMessage = discordInstance.config.notify_receive_message
-                instanceConfig.notifyReceiveComment = discordInstance.config.notify_receive_comment
-                instanceConfig.notifyDeleteComment = discordInstance.config.notify_delete_comment
+                instanceConfig!!.useGlobal = telegramInstance.config.use_global
+                instanceConfig.notifyCreateContent = telegramInstance.config.notify_create_content
+                instanceConfig.notifyEditContent = telegramInstance.config.notify_edit_content
+                instanceConfig.notifyDeleteContent = telegramInstance.config.notify_delete_content
+                instanceConfig.notifyDeadline2Days = telegramInstance.config.notify_deadline_2_days
+                instanceConfig.notifyDeadline1Day = telegramInstance.config.notify_deadline_1_day
+                instanceConfig.notifyDeadline = telegramInstance.config.notify_deadline
+                instanceConfig.notifySendAssignment = telegramInstance.config.notify_send_assignment
+                instanceConfig.notifyReceiveMessage = telegramInstance.config.notify_receive_message
+                instanceConfig.notifyReceiveComment = telegramInstance.config.notify_receive_comment
+                instanceConfig.notifyDeleteComment = telegramInstance.config.notify_delete_comment
 
-                discordInstanceRepository.save(discordInstanceModel)
-                klazaDiscordInstanceConfigRepository.save(instanceConfig)
+                telegramInstanceRepository.save(discordInstanceModel)
+                klazaTelegramInstanceConfigRepository.save(instanceConfig)
 
             } else {
-                throw Exception("Discord instance not found")
+                throw Exception("Telegram instance not found")
             }
         }
 
     }
 
-    fun deleteDiscordInstance(discordInstanceId: Long) {
-        discordInstanceRepository.existsById(discordInstanceId).let {
+    fun deleteTelegramInstance(telegramInstanceId: Long) {
+        telegramInstanceRepository.existsById(telegramInstanceId).let {
             if (it) {
-                discordInstanceRepository.deleteById(discordInstanceId)
+                telegramInstanceRepository.deleteById(telegramInstanceId)
             } else {
                 throw Exception("Discord instance not found")
             }
         }
     }
 
-    fun getInstanceConfigDTO(discordInstanceId: Long): UserCourseConfigDTO {
-        val instanceConfig = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(discordInstanceId)
+    fun getInstanceConfigDTO(telegramInstanceId: Long): UserCourseConfigDTO {
+        val instanceConfig = klazaTelegramInstanceConfigRepository.findByTelegramInstance_Id(telegramInstanceId)
         return UserCourseConfigDTO(instanceConfig!!)
     }
 

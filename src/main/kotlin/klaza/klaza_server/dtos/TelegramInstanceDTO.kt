@@ -16,36 +16,32 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.models.CourseModel
 import klaza.klaza_server.models.KlazaDiscordInstanceModel
-import java.util.Base64
+import klaza.klaza_server.models.KlazaTelegramInstanceModel
 
 class TelegramInstanceDTO {
 
     var id: Long
-    var guild_id: String
     var channel_id: String
     var config: UserCourseConfigDTO
     var creator_id: Long
 
-    constructor(id: Long, guild_id: String, channel_id: String, config: UserCourseConfigDTO, creator_id: Long) {
+    constructor(id: Long, channel_id: String, config: UserCourseConfigDTO, creator_id: Long) {
         this.id = id
-        this.guild_id = guild_id
         this.channel_id = channel_id
         this.config = config
         this.creator_id = creator_id
     }
 
-    constructor(klazaDiscordInstanceModel: KlazaDiscordInstanceModel, config: UserCourseConfigDTO) {
-        this.id = klazaDiscordInstanceModel.id!!
-        this.guild_id = klazaDiscordInstanceModel.guild!!
-        this.channel_id = klazaDiscordInstanceModel.channel!!
+    constructor(klazaTelegramInstanceModel: KlazaTelegramInstanceModel, config: UserCourseConfigDTO) {
+        this.id = klazaTelegramInstanceModel.id!!
+        this.channel_id = klazaTelegramInstanceModel.channel!!
         this.config = config
-        this.creator_id = klazaDiscordInstanceModel.creator!!.id!!
+        this.creator_id = klazaTelegramInstanceModel.creator!!.id!!
     }
 
     override fun toString(): String {
-        return "DiscordInstanceDTO(id=$id, guild_id='$guild_id', channel_id='$channel_id', config=$config, creator_id=$creator_id)"
+        return "TelegramInstanceDTO(id=$id, channel_id='$channel_id', config=$config, creator_id=$creator_id)"
     }
 
 }

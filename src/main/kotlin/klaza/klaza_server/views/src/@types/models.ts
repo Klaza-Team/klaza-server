@@ -1,3 +1,5 @@
+import { UserDTO } from "./dtos";
+
 export interface Course {
     id: number;
     fullName: string;
@@ -13,6 +15,19 @@ export interface Course {
 
 export interface CourseConfig {
     use_global: boolean;
+    notify_create_content: boolean;
+    notify_edit_content: boolean;
+    notify_delete_content: boolean;
+    notify_deadline_2_days: boolean;
+    notify_deadline_1_day: boolean;
+    notify_deadline: boolean;
+    notify_send_assignment: boolean;
+    notify_receive_message: boolean;
+    notify_receive_comment: boolean;
+    notify_delete_comment: boolean;
+}
+
+export interface GlobalConfig {
     notify_create_content: boolean;
     notify_edit_content: boolean;
     notify_delete_content: boolean;
@@ -41,8 +56,7 @@ export interface User {
     email: string;
     avatar: string
     role: string
-    courses: Course[]
-    globalConfig: CourseConfig
+    globalConfig: GlobalConfig
     notification_priority: UserNotificationApp[]
 }
 
@@ -50,7 +64,7 @@ export interface UserCourseTelegramConfig {
     id: number
     channel_id: string
     config: CourseConfig
-    creator: User
+    creator: UserDTO
 }
 
 export interface UserCourseDiscordConfig {
@@ -58,11 +72,12 @@ export interface UserCourseDiscordConfig {
     guild_id: string;
     channel_id: string;
     config: CourseConfig;
-    creator: User
+    creator: UserDTO
 }
 
 export interface UserDiscordTelegramServer {
     id: string;
+    channel: string;
     name: string;
 }
 

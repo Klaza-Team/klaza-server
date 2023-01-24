@@ -158,7 +158,7 @@
             </fieldset>
         </div>
         <div class="row justify-center">
-            <q-btn color="a" label="Salvar" @click="save" />
+            <q-btn color="a" label="Salvar" :loading="loading" @click="save" />
         </div>
     </div>
 </template>
@@ -166,14 +166,15 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { CourseDTO, UserCourseDiscordConfigDTO, UserCourseTelegramConfigDTO, CourseConfigDTO } from "src/@types/dtos";
+import { Course, UserCourseDiscordConfig, UserCourseTelegramConfig, CourseConfig, GlobalConfig } from "src/@types/models.js";
 import { useUserStore } from "stores/user"
+import { useCoursesStore } from "stores/courses"
 
 export default defineComponent({
     name: "CourseConfigs",
     props: {
         course: {
-            type: Object as () => CourseDTO,
+            type: Object as () => Course,
             required: false,
         },
         type: {
@@ -181,8 +182,12 @@ export default defineComponent({
             required: true,
         },
         instance: {
-            type: Object as () => UserCourseDiscordConfigDTO | UserCourseTelegramConfigDTO,
+            type: Object as () => UserCourseDiscordConfig | UserCourseTelegramConfig,
             required: false,
+        },
+        loading: {
+            type: Boolean,
+            required: true,
         },
     },
     data() {
@@ -202,13 +207,13 @@ export default defineComponent({
                     notify_receive_message: false,
                     notify_receive_comment: false,
                     notify_delete_comment: false,
-                } as CourseConfigDTO 
-                : { ...useUserStore().user.globalConfig }) as CourseConfigDTO,
+                } as CourseConfig
+                : { ...useUserStore().user?.globalConfig }) as CourseConfig,
         };
     },
     methods: {
         save() {
-            //TODO: meter o update no banco
+            this.$emit("save", this.localConfig);
         },
     },
     computed: {
@@ -220,7 +225,7 @@ export default defineComponent({
         localConfig: {
             handler() {
                 if (this.localConfig.use_global) {
-                    this.localConfig = { ...useUserStore().user.globalConfig, use_global: true };
+                    this.localConfig = { ...useUserStore().user?.globalConfig as GlobalConfig, use_global: true };
                 }
             },
             deep: true,

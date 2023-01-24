@@ -17,8 +17,7 @@
 package klaza.klaza_server.models
 
 import klaza.klaza_server.classes.KlazaInstanceConfig
-import klaza.klaza_server.data.DiscordInstanceConfData
-import klaza.klaza_server.data.TelegramInstanceConfData
+import klaza.klaza_server.dtos.UserCourseConfigDTO
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
@@ -27,13 +26,27 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_klaza_tele_inst_conf")
-class KlazaTelegramInstanceConfigModel: KlazaInstanceConfig() {
+class KlazaTelegramInstanceConfigModel constructor(): KlazaInstanceConfig() {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "telegram_instance_id", nullable = false)
     var telegramInstance: KlazaTelegramInstanceModel? = null
 
-    fun toData(): TelegramInstanceConfData { return TelegramInstanceConfData(this) }
+    constructor(id: Long?, telegramInstance: KlazaTelegramInstanceModel, config: UserCourseConfigDTO) : this() {
+        this.id = id
+        this.telegramInstance = telegramInstance
+        this.useGlobal = config.use_global
+        this.notifyCreateContent = config.notify_create_content
+        this.notifyEditContent = config.notify_edit_content
+        this.notifyDeleteContent = config.notify_delete_content
+        this.notifyDeadline2Days = config.notify_deadline_2_days
+        this.notifyDeadline1Day = config.notify_deadline_1_day
+        this.notifyDeadline = config.notify_deadline
+        this.notifySendAssignment = config.notify_send_assignment
+        this.notifyReceiveMessage = config.notify_receive_message
+        this.notifyReceiveComment = config.notify_receive_comment
+        this.notifyDeleteComment = config.notify_delete_comment
+    }
 
     @Override
     override fun toString(): String {

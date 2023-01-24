@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - CourseDTO.kt
+// Plugin Klaza para Moodle - Server - UserNotificationAppDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -17,35 +17,48 @@
 package klaza.klaza_server.dtos
 
 import klaza.klaza_server.models.CourseModel
+import klaza.klaza_server.models.KlazaDiscordAccountModel
+import klaza.klaza_server.models.KlazaTelegramAccountModel
+import klaza.klaza_server.models.KlazaWhatsappAccountModel
 import java.util.Base64
 
 class UserNotificationAppDTO {
 
-    var id: Long;
-    var fullName: String;
-    var shortName: String;
-    var image: String;
+    var id: Long
+    var type: String
+    var priority: Int
+    var value: String
 
-    constructor(id: Long, fullName: String, shortName: String, image: String?) {
+    constructor(id: Long, type: String, priority: Int, value: String) {
         this.id = id
-        this.fullName = fullName
-        this.shortName = shortName
-        this.image = image ?: this.getRandomImage()
+        this.type = type
+        this.priority = priority
+        this.value = value
     }
 
-    constructor(courseModel: CourseModel) {
-        this.id = courseModel.id!!
-        this.fullName = courseModel.fullname!!
-        this.shortName = courseModel.shortname!!
-        this.image = this.getRandomImage()
+    constructor(discordAccountModel: KlazaDiscordAccountModel) {
+        this.id = discordAccountModel.id!!
+        this.type = "discord"
+        this.priority = discordAccountModel.priority!!
+        this.value = discordAccountModel.value!!
     }
 
-    private fun getRandomImage(): String {
-        return Base64.getEncoder().encodeToString(UserNotificationAppDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
+    constructor(telegramAccountModel: KlazaTelegramAccountModel) {
+        this.id = telegramAccountModel.id!!
+        this.type = "telegram"
+        this.priority = telegramAccountModel.priority!!
+        this.value = telegramAccountModel.value!!
+    }
+
+    constructor(whatsappAccountModel: KlazaWhatsappAccountModel) {
+        this.id = whatsappAccountModel.id!!
+        this.type = "whatsapp"
+        this.priority = 1
+        this.value = whatsappAccountModel.value!!
     }
 
     override fun toString(): String {
-        return "CourseDTO(id=$id, fullName='$fullName', shortName='$shortName', image='$image')"
+        return "UserNotificationAppDTO(id=$id, type='$type', priority=$priority, value='$value')"
     }
 
 }

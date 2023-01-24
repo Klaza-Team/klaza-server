@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - EventDTO.kt
+// Plugin Klaza para Moodle - Server - CourseDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,47 +16,42 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.data.EventData
-import klaza.klaza_server.data.EventOtherData
-import klaza.klaza_server.repositories.AssignRepository
-import klaza.klaza_server.repositories.CourseRepository
-import klaza.klaza_server.repositories.QuizRepository
-import klaza.klaza_server.repositories.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
+import klaza.klaza_server.models.CourseModel
+import java.util.Base64
 
-class CourseDTO(
-    var eventname: String,
-    var objectid: String,
-    var crud: String,
-    var contextlevel: Long,
-    var contextid: Long,
-    var userid: Long,
-    var courseid: Long,
-    var relateduserid: Long,
-    var action: String,
-    var target: String,
-    var other: EventOtherData) {
+class CourseDTO {
 
-    fun convertToData(userRepository: UserRepository, courseRepository: CourseRepository, assignRepository: AssignRepository, quizRepository: QuizRepository): EventData {
-        return EventData(
-            eventname = eventname,
-            objectid = objectid,
-            crud = crud,
-            contextlevel = contextlevel,
-            contextid = contextid,
-            user = if (userid != 0L) userRepository.findById(userid).get() else null,
-            course = if (courseid != 0L) courseRepository.findById(courseid).get() else null,
-            relateduser = if (relateduserid != 0L) userRepository.findById(relateduserid).get() else null,
-            action = action,
-            target = target,
-            other = other,
-            relatedassign = if (other.modulename == "assign") assignRepository.findById(other.instanceid!!).get() else null,
-            relatedquiz = if (other.modulename == "quiz") quizRepository.findById(other.instanceid!!).get() else null
-        )
+    var id: Long;
+    var fullName: String
+    var shortName: String
+    var image: String
+    var discordIntances: List<DiscordInstanceDTO>
+    var telegramIntances: List<TelegramInstanceDTO>
+
+    constructor(id: Long, fullName: String, shortName: String, image: String?, discordIntances: List<DiscordInstanceDTO>, telegramIntances: List<TelegramInstanceDTO>) {
+        this.id = id
+        this.fullName = fullName
+        this.shortName = shortName
+        this.image = image ?: this.getRandomImage()
+        this.discordIntances = discordIntances
+        this.telegramIntances = telegramIntances
+    }
+
+    constructor(courseModel: CourseModel, discordIntances: List<DiscordInstanceDTO>, telegramIntances: List<TelegramInstanceDTO>) {
+        this.id = courseModel.id!!
+        this.fullName = courseModel.fullname!!
+        this.shortName = courseModel.shortname!!
+        this.image = this.getRandomImage()
+        this.discordIntances = discordIntances
+        this.telegramIntances = telegramIntances
+    }
+
+    private fun getRandomImage(): String {
+        return Base64.getEncoder().encodeToString(CourseDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
     }
 
     override fun toString(): String {
-        return "EventDTO(eventname=${eventname}, objectid=${objectid}, crud=${crud}, contextlevel=${contextlevel}, contextid=${contextid}, userid=${userid}, courseid=${courseid}, relateduserid=${relateduserid}, action=${action}, target=${target}, other=${other}"
+        return "CourseDTO(id=$id, fullName='$fullName', shortName='$shortName', image='$image')"
     }
 
 }

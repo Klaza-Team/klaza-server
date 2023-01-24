@@ -1,74 +1,77 @@
 export interface CourseDTO {
-    id: number;
-    fullName: string;
-    shortName: string;
-    image: string;
-    actived: boolean;
 
-    user_config: CourseConfigDTO;
+    id: number
+    fullName: string
+    shortName: string
+    image: string
+    discordIntances: DiscordInstanceDTO[]
+    telegramIntances: TelegramInstanceDTO[]
 
-    discordIntances: DiscordInstanceDTO;
-    telegramIntances: TelegramInstanceDTO;
-}
-
-export interface CourseConfigDTO {
-    use_global: boolean;
-    notify_create_content: boolean;
-    notify_edit_content: boolean;
-    notify_delete_content: boolean;
-    notify_deadline_2_days: boolean;
-    notify_deadline_1_day: boolean;
-    notify_deadline: boolean;
-    notify_send_assignment: boolean;
-    notify_receive_message: boolean;
-    notify_receive_comment: boolean;
-    notify_delete_comment: boolean;
 }
 
 export interface DiscordInstanceDTO {
-    user: UserCourseDiscordConfigDTO[]
-    other: UserCourseDiscordConfigDTO[]
+
+    id: number
+    guild_id: string
+    channel_id: string
+    config: UserCourseConfigDTO
+    creator_id: number
+
+}
+
+export interface UserCourseConfigDTO {
+
+    use_global: boolean
+    notify_create_content: boolean
+    notify_edit_content: boolean
+    notify_delete_content: boolean
+    notify_deadline_2_days: boolean
+    notify_deadline_1_day: boolean
+    notify_deadline: boolean
+    notify_send_assignment: boolean
+    notify_receive_message: boolean
+    notify_receive_comment: boolean
+    notify_delete_comment: boolean
+
 }
 
 export interface TelegramInstanceDTO {
-    user: UserCourseTelegramConfigDTO[]
-    other: UserCourseTelegramConfigDTO[]
+
+    id: number
+    channel_id: string
+    config: UserCourseConfigDTO
+    creator_id: number
+
 }
 
 export interface UserDTO {
-    id: number;
-    username: string;
-    email: string;
+    id: number
+    username: string
+    email: string
     avatar: string
     role: string
-    courses: CourseDTO[]
-    globalConfig: CourseConfigDTO
     notification_priority: UserNotificationAppDTO[]
+    global_config: UserGlobalConfigDTO
 }
 
-export interface UserCourseTelegramConfigDTO {
-    id: number
-    channel_id: string
-    config: CourseConfigDTO
-    creator: UserDTO
-}
+export interface UserGlobalConfigDTO {
+    
+    notify_create_content: boolean
+    notify_edit_content: boolean
+    notify_delete_content: boolean
+    notify_deadline_2_days: boolean
+    notify_deadline_1_day: boolean
+    notify_deadline: boolean
+    notify_send_assignment: boolean
+    notify_receive_message: boolean
+    notify_receive_comment: boolean
+    notify_delete_comment: boolean
 
-export interface UserCourseDiscordConfigDTO {
-    id: number;
-    guild_id: string;
-    channel_id: string;
-    config: CourseConfigDTO;
-    creator: UserDTO
-}
-
-export interface UserDiscordTelegramServerDTO {
-    id: string;
-    name: string;
 }
 
 export interface UserNotificationAppDTO {
-    id: number;
-    type: "discord" | "telegram" | "whatsapp";
-    priority: number;
-    value: string;
+    id: number
+    type: string
+    priority: number
+    value: string
 }

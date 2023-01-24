@@ -16,7 +16,10 @@
 
 package klaza.klaza_server.models
 
-import klaza.klaza_server.data.CourseData
+import klaza.klaza_server.dtos.CourseDTO
+import klaza.klaza_server.dtos.DiscordInstanceDTO
+import klaza.klaza_server.dtos.TelegramInstanceDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.Id
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -39,7 +42,7 @@ class CourseModel {
     @Column(name = "shortname", length = 100, nullable = false)
     var shortname: String? = null
 
-    fun toData(): CourseData { return CourseData(this) }
+    fun toDTO(discordIntances: List<DiscordInstanceDTO>, telegramIntances: List<TelegramInstanceDTO>): CourseDTO { return CourseDTO(this, discordIntances, telegramIntances) }
 
     override fun toString(): String {
         return "Course(id=$id, fullname=$fullname, shortname=$shortname)"

@@ -17,14 +17,22 @@
 package klaza.klaza_server.models
 
 import klaza.klaza_server.classes.KlazaAccount
-import klaza.klaza_server.data.UserAccountData
+import klaza.klaza_server.dtos.UserNotificationAppDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.Entity
 import javax.persistence.Table
 
 @Entity
 @Table(name = "mdl_klaza_disc_accounts")
-class KlazaDiscordAccountModel: KlazaAccount() {
-
-    fun toData(): UserAccountData { return UserAccountData("discord", this) }
+class KlazaDiscordAccountModel constructor(): KlazaAccount() {
+    
+    constructor(id: Long?, user: UserModel, value: String, priority: Int) : this() {
+        this.id = id
+        this.user = user
+        this.value = value
+        this.priority = priority
+    }
+    
+    fun toDTO(): UserNotificationAppDTO { return UserNotificationAppDTO(this) }
 
 }

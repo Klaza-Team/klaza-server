@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - CourseDTO.kt
+// Plugin Klaza para Moodle - Server - UserDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,44 +16,46 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.data.EventData
-import klaza.klaza_server.data.EventOtherData
 import klaza.klaza_server.models.CourseModel
-import klaza.klaza_server.repositories.AssignRepository
-import klaza.klaza_server.repositories.CourseRepository
-import klaza.klaza_server.repositories.QuizRepository
-import klaza.klaza_server.repositories.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
-import java.io.File
+import klaza.klaza_server.models.UserModel
 import java.util.Base64
 
 class UserDTO {
 
-    var id: Long;
-    var fullName: String;
-    var shortName: String;
-    var image: String;
+    var id: Long
+    var username: String
+    var email: String
+    var avatar: String
+    var role: String
+    var notification_priority: List<UserNotificationAppDTO>
+    var global_config: UserGlobalConfigDTO
 
-    constructor(id: Long, fullName: String, shortName: String, image: String?) {
+    constructor(id: Long, username: String, email: String, avatar: String, role: String, notification_priority: List<UserNotificationAppDTO>, global_config: UserGlobalConfigDTO) {
         this.id = id
-        this.fullName = fullName
-        this.shortName = shortName
-        this.image = image ?: this.getRandomImage()
+        this.username = username
+        this.email = email
+        this.avatar = avatar
+        this.role = role
+        this.notification_priority = notification_priority
+        this.global_config = global_config
     }
 
-    constructor(courseModel: CourseModel) {
-        this.id = courseModel.id!!
-        this.fullName = courseModel.fullname!!
-        this.shortName = courseModel.shortname!!
-        this.image = this.getRandomImage()
+    constructor(user: UserModel, notification_priority: List<UserNotificationAppDTO>, global_config: UserGlobalConfigDTO) {
+        this.id = user.id!!
+        this.username = user.firstname + " " + user.lastname
+        this.email = user.email!!
+        this.avatar = this.getRandomAvatar()
+        this.role = ""
+        this.notification_priority = notification_priority
+        this.global_config = global_config
     }
 
-    private fun getRandomImage(): String {
-        return Base64.getEncoder().encodeToString(UserDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
+    private fun getRandomAvatar(): String {
+        return "https://robohash.org/${this.email}"
     }
 
     override fun toString(): String {
-        return "CourseDTO(id=$id, fullName='$fullName', shortName='$shortName', image='$image')"
+        return "UserDTO(id=$id, username='$username', email='$email', avatar='$avatar', role='$role', notification_priority=$notification_priority, global_config=$global_config)"
     }
 
 }

@@ -1,6 +1,6 @@
 <template>
     <q-card class="cursor-pointer" @click="setEdit">
-        <q-img :src="course.image" class="fit">
+        <q-img :src="convertedImage" class="fit">
             <div v-show="!isActived" class="fit"></div>
 
             <div v-if="mulitple && type == 'direct'" class="absolute-top check">
@@ -66,13 +66,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { CourseDTO } from "src/@types/dtos";
+import { Course } from "src/@types/models.js";
 
 export default defineComponent({
     name: "CourseCard",
     props: {
         course: {
-            type: Object as () => CourseDTO,
+            type: Object as () => Course,
             required: true,
         },
         selected: {
@@ -120,6 +120,9 @@ export default defineComponent({
                 return this.hasDiscod || this.hasTelegram;
             }
         },
+        convertedImage() {
+            return `data:image/svg+xml;base64,${this.course.image}`
+        }
     },
 });
 </script>

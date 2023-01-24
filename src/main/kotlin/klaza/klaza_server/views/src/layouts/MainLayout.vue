@@ -16,8 +16,8 @@
 				<q-space />
 
 				<q-avatar>
-					<!-- //TODO - colocar a imagem do usuário -->
-					<img src="https://cdn.quasar.dev/img/avatar.png" />
+					
+					<img :src="avatar" />
 
 					<q-tooltip class="tooltip" anchor="top middle" self="bottom middle">
 						Perfil
@@ -78,6 +78,10 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
+import { useUserStore } from 'stores/user';
+import { useCoursesStore } from 'stores/courses';
+import { User } from 'src/@types/models';
+
 export default defineComponent({
 	name: 'MainLayout',
 
@@ -91,5 +95,15 @@ export default defineComponent({
 			}
 		}
 	},
+	async mounted() { 
+        await useUserStore().getUser();
+	    await useCoursesStore().getCourses();
+    },
+	computed: {
+		avatar() {
+			return (useUserStore().user) ? useUserStore().user?.avatar : "";
+		}
+	}
+	
 });
 </script>

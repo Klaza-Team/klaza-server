@@ -16,7 +16,9 @@
 
 package klaza.klaza_server.models
 
-import klaza.klaza_server.data.DiscordInstanceData
+import klaza.klaza_server.dtos.DiscordInstanceDTO
+import klaza.klaza_server.dtos.UserCourseConfigDTO
+import org.springframework.context.ApplicationContext
 import javax.persistence.Id
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -24,7 +26,6 @@ import javax.persistence.GenerationType
 import javax.persistence.Column
 import javax.persistence.JoinColumn
 import javax.persistence.FetchType
-import javax.persistence.OneToMany
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
@@ -51,7 +52,17 @@ class KlazaDiscordInstanceModel {
     @JoinColumn(name = "creator_id")
     var creator: UserModel? = null
 
-    fun toData(): DiscordInstanceData { return DiscordInstanceData(this) }
+    constructor() {}
+
+    constructor(id: Long?, guild: String?, channel: String?, course: CourseModel?, creator: UserModel?) {
+        this.id = id
+        this.guild = guild
+        this.channel = channel
+        this.course = course
+        this.creator = creator
+    }
+
+    fun toDTO(config: UserCourseConfigDTO): DiscordInstanceDTO { return DiscordInstanceDTO(this, config) }
 
     override fun toString(): String {
         return "KlazaDiscordInstance(id=$id, guild=$guild, channel=$channel, course=$course, creator=$creator)"

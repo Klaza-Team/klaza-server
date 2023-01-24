@@ -2,14 +2,11 @@
     <q-page class="column items-center justify-evenly">
         <div class="row">
             <q-avatar>
-                <!-- //TODO - colocar a imagem do usuário -->
-                <img
-                    src="https://media.tenor.com/kB_HPWQFeEkAAAAC/nekopara-cinnamon.gif"
-                />
+                <img :src="getAvatar()" />
             </q-avatar>
             <div class="column justify-center q-ml-lg text-w">
-                <span class="username"> {{ user.username }} </span>
-                <span class="role"> {{ user.role }} </span>
+                <span class="username"> {{ user.username || "" }} </span>
+                <span class="role"> {{ user.role || "" }} </span>
             </div>
         </div>
         <q-card class="bg-b text-w w-80vw r-20 q-pa-lg">
@@ -31,7 +28,7 @@
                     </draggable>
 
                     <div class="q-mt-md row justify-center">
-                        <q-btn color="a" label="Salvar" @click="saveAccounts()" />
+                        <q-btn color="a" label="Salvar" />
                     </div>
 
                 </div>
@@ -39,7 +36,7 @@
                     <span class="title-separator">Configuração global</span>
                     <q-separator color="w" class="q-my-sm" />
 
-                    <course-configs :type="'geral'" />
+                    <course-configs :type="'geral'" :loading="loading" @save="saveConfigs" />
 
                 </div>
             </q-card-section>
@@ -50,16 +47,22 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useUserStore } from "stores/user";
+import { useCoursesStore } from "stores/courses";
 
 import draggable from "vuedraggable";
 import AccountItem from "src/components/perfil/AccountItem.vue";
 import CourseConfigs from "src/components/geral/CourseConfigs.vue";
 
-import { UserNotificationAppDTO } from "src/@types/dtos";
+import { User, UserNotificationApp } from "src/@types/models.js";
+import { UserGlobalConfigDTO } from "src/@types/dtos";
 
 
 export default defineComponent({
     name: "PerfilPage",
+    async mounted() { 
+        await useUserStore().getUser();
+	    await useCoursesStore().getCourses();
+    },
     components: {
         draggable,
         AccountItem,
@@ -68,21 +71,23 @@ export default defineComponent({
     data() {
         return {
             drag: false,
-        };
-    },
-    setup() {
-        return {
-            user: useUserStore().user,
+            user: useUserStore().user as User,
+            loading: false,
         };
     },
     methods: {
         updatePriority(priority: any) {
-            const p = this.user.notification_priority.find((p) => p.type == priority.type) as UserNotificationAppDTO;
+            const p = this.user.notification_priority.find((p) => p.type == priority.type) as UserNotificationApp;
             p.value = priority.value;
             p.priority = (priority.priority == 0) ? priority.index : -1
         },
-        saveAccounts() {
-            // TODO - salvar as contas no banco
+        getAvatar() {
+            return this.user.avatar || "https://cdn.quasar.dev/img/avatar.png";
+        },
+        // saveAccounts() {}
+        saveConfigs(config: UserGlobalConfigDTO) {
+            this.loading = true;
+            useUserStore().editGlobalConfig(config).finally(() => this.loading = false);
         }
     },
 });

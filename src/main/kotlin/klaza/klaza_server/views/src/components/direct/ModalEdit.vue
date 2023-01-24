@@ -16,18 +16,20 @@
             </div>
         </div>
         <q-scroll-area>
-            <course-configs :course="localCourse" type="user" />
+            <course-configs :course="localCourse" type="user" :loading="loading"  @save="save"  />
         </q-scroll-area>
     </modal-template>
 
 </template>
 
 <script lang="ts">
-import { CourseDTO } from "src/@types/dtos";
+import { Course, CourseConfig } from "src/@types/models.js";
 import { defineComponent, PropType } from "vue";
 
 import ModalTemplate from "src/components/geral/ModalTemplate.vue";
 import CourseConfigs from "src/components/geral/CourseConfigs.vue";
+import { useCoursesStore } from "src/stores/courses";
+import { useUserStore } from "src/stores/user";
 
 export default defineComponent({
     name: "ModalEdit",
@@ -41,7 +43,7 @@ export default defineComponent({
             default: false,
         },
         course: {
-            type: Object as PropType<CourseDTO>,
+            type: Object as PropType<Course>,
             default: () => ({}),
             required: true,
         },
@@ -59,12 +61,23 @@ export default defineComponent({
             get() {
                 return this.course;
             },
-            set(value: CourseDTO) {
-                //TODO - da update no store
+            set(value: Course) {
                 this.$emit("update:course", value);
             },
         },
     },
+    data() {
+        return {
+            loading: false,
+        };
+    },
+    methods: {
+        save(config: CourseConfig) {
+            useCoursesStore().updateCourseUserConfig(this.localCourse.id, useUserStore().user?.id as number, config).finally(() => {
+                this.loading = false;
+            });
+        },
+    }
 });
 </script>
 

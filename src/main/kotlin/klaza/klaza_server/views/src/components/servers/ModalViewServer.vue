@@ -185,7 +185,7 @@
 </template>
 
 <script lang="ts">
-import { CourseDTO } from "src/@types/dtos";
+import { Course } from "src/@types/models.js";
 import { defineComponent } from "vue";
 
 import ModalTemplate from "src/components/geral/ModalTemplate.vue";
@@ -205,7 +205,7 @@ export default defineComponent({
             default: false,
         },
         course: {
-            type: Object as () => CourseDTO,
+            type: Object as () => Course,
             required: true,
         },
     },
@@ -228,7 +228,6 @@ export default defineComponent({
     methods: {
         addInstance(type: "discord" | "telegram") {
             this.create = true;
-            //TODO: implementar
         },
     },
 });
