@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - UserDTO.kt
+// Plugin Klaza para Moodle - Server - CourseDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,41 +16,44 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.data.UserData
+import klaza.klaza_server.data.EventData
+import klaza.klaza_server.data.EventOtherData
+import klaza.klaza_server.models.CourseModel
+import klaza.klaza_server.repositories.AssignRepository
+import klaza.klaza_server.repositories.CourseRepository
+import klaza.klaza_server.repositories.QuizRepository
+import klaza.klaza_server.repositories.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
+import java.io.File
+import java.util.Base64
 
-class UserDTO(userData: UserData) {
+class UserDTO {
 
-    private var id: Long
-    private var username: String
-    private var email: String
-    private var avatar: String
-    private var role: String
-    private var courses: List<CourseDTO>
-    private var globalConfig: UserConfigDTO
-    private var notification_priority: List<UserNotificationAppDTO>
+    var id: Long;
+    var fullName: String;
+    var shortName: String;
+    var image: String;
 
-    init {
-        this.id = userData.getId()
-        this.username = userData.getUsername()
-        this.email = userData.getEmail()
-        this.avatar = userData.getAvatar()
-        this.role = userData.getRole()
-        this.courses = userData.getCourses().map { it.toDTO(this.id) }
-        this.globalConfig = userData.getGlobalConfig().toDTO()
-        this.notification_priority = userData.getUserAccounts().map { it.toDTO() }
+    constructor(id: Long, fullName: String, shortName: String, image: String?) {
+        this.id = id
+        this.fullName = fullName
+        this.shortName = shortName
+        this.image = image ?: this.getRandomImage()
+    }
+
+    constructor(courseModel: CourseModel) {
+        this.id = courseModel.id!!
+        this.fullName = courseModel.fullname!!
+        this.shortName = courseModel.shortname!!
+        this.image = this.getRandomImage()
+    }
+
+    private fun getRandomImage(): String {
+        return Base64.getEncoder().encodeToString(UserDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
     }
 
     override fun toString(): String {
-        return "UserDTO(" +
-                "id=$id, " +
-                "username='$username', " +
-                "email='$email', " +
-                "avatar='$avatar', " +
-                "role='$role', " +
-                "courses=$courses, " +
-                "globalConfig=$globalConfig, " +
-                "notification_priority=$notification_priority" +
-                ")"
+        return "CourseDTO(id=$id, fullName='$fullName', shortName='$shortName', image='$image')"
     }
 
 }

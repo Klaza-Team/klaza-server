@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - CourseDTO.kt
+// Plugin Klaza para Moodle - Server - EventDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,50 +16,47 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.data.CourseData
-import klaza.klaza_server.data.CourseUserConfigData
-import klaza.klaza_server.data.DiscordInstanceData
+import klaza.klaza_server.data.EventData
+import klaza.klaza_server.data.EventOtherData
+import klaza.klaza_server.repositories.AssignRepository
+import klaza.klaza_server.repositories.CourseRepository
+import klaza.klaza_server.repositories.QuizRepository
+import klaza.klaza_server.repositories.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 
-class CourseDTO() {
+class CourseDTO(
+    var eventname: String,
+    var objectid: String,
+    var crud: String,
+    var contextlevel: Long,
+    var contextid: Long,
+    var userid: Long,
+    var courseid: Long,
+    var relateduserid: Long,
+    var action: String,
+    var target: String,
+    var other: EventOtherData) {
 
-    private var id: Long = 0
-    private var fullname: String = ""
-    private var shortname: String = ""
-    private var image: String = ""
-    private var actived: Boolean = false
-
-    private var user_config: CourseUserConfigDTO? = null
-
-    private var discordIntances: DiscordInstanceDTO? = null
-    private var telegramIntances: TelegramInstanceDTO? = null
-
-    constructor(userID: Long, courseData: CourseData) : this() {
-
-        val userConfig = courseData.getUserConfigsByUserID(userID)
-
-        this.id = courseData.getID()
-        this.fullname = courseData.getFullname()
-        this.shortname = courseData.getShortname()
-        this.image = courseData.getImage()
-        this.actived = userConfig != null
-        this.user_config = if (this.actived) userConfig!!.toDTO() else null
-
-        this.discordIntances = DiscordInstanceDTO(userID, courseData)
-        this.telegramIntances = TelegramInstanceDTO(userID, courseData)
-
+    fun convertToData(userRepository: UserRepository, courseRepository: CourseRepository, assignRepository: AssignRepository, quizRepository: QuizRepository): EventData {
+        return EventData(
+            eventname = eventname,
+            objectid = objectid,
+            crud = crud,
+            contextlevel = contextlevel,
+            contextid = contextid,
+            user = if (userid != 0L) userRepository.findById(userid).get() else null,
+            course = if (courseid != 0L) courseRepository.findById(courseid).get() else null,
+            relateduser = if (relateduserid != 0L) userRepository.findById(relateduserid).get() else null,
+            action = action,
+            target = target,
+            other = other,
+            relatedassign = if (other.modulename == "assign") assignRepository.findById(other.instanceid!!).get() else null,
+            relatedquiz = if (other.modulename == "quiz") quizRepository.findById(other.instanceid!!).get() else null
+        )
     }
 
     override fun toString(): String {
-        return "CourseDTO(" +
-                "id=$id, " +
-                "fullname='$fullname', " +
-                "shortname='$shortname', " +
-                "image='$image', " +
-                "actived=$actived, " +
-                "user_config=$user_config, " +
-                "discordIntances=$discordIntances, " +
-                "telegramIntances=$telegramIntances" +
-                ")"
+        return "EventDTO(eventname=${eventname}, objectid=${objectid}, crud=${crud}, contextlevel=${contextlevel}, contextid=${contextid}, userid=${userid}, courseid=${courseid}, relateduserid=${relateduserid}, action=${action}, target=${target}, other=${other}"
     }
 
 }

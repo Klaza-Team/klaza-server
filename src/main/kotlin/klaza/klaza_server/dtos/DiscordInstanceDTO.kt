@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - DiscordInstanceDTO.kt
+// Plugin Klaza para Moodle - Server - CourseDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,24 +16,36 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.data.CourseData
-import klaza.klaza_server.data.DiscordInstanceData
+import klaza.klaza_server.models.CourseModel
+import java.util.Base64
 
-class DiscordInstanceDTO(userID: Long, courseData: CourseData) {
+class DiscordInstanceDTO {
 
-    private var user: List<UserCourseDiscordConfigDTO>
-    private var other: List<UserCourseDiscordConfigDTO>
+    var id: Long;
+    var fullName: String;
+    var shortName: String;
+    var image: String;
 
-    init {
-        user = courseData.getDiscordInstancesByUserID(userID).map { it.getConfigs().toDTO() }
-        other = courseData.getDiscordInstancesByNotUserID(userID).map { it.getConfigs().toDTO() }
+    constructor(id: Long, fullName: String, shortName: String, image: String?) {
+        this.id = id
+        this.fullName = fullName
+        this.shortName = shortName
+        this.image = image ?: this.getRandomImage()
+    }
+
+    constructor(courseModel: CourseModel) {
+        this.id = courseModel.id!!
+        this.fullName = courseModel.fullname!!
+        this.shortName = courseModel.shortname!!
+        this.image = this.getRandomImage()
+    }
+
+    private fun getRandomImage(): String {
+        return Base64.getEncoder().encodeToString(DiscordInstanceDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
     }
 
     override fun toString(): String {
-        return "DiscordInstanceDTO(" +
-                "user=$user, " +
-                "other=$other" +
-                ")"
+        return "CourseDTO(id=$id, fullName='$fullName', shortName='$shortName', image='$image')"
     }
 
 }

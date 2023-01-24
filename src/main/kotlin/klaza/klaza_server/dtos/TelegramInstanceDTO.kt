@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - TelegramInstanceDTO.kt
+// Plugin Klaza para Moodle - Server - DiscordInstanceDTO.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,23 +16,36 @@
 
 package klaza.klaza_server.dtos
 
-import klaza.klaza_server.data.CourseData
+import klaza.klaza_server.models.CourseModel
+import klaza.klaza_server.models.KlazaDiscordInstanceModel
+import java.util.Base64
 
-class TelegramInstanceDTO(userID: Long, courseData: CourseData) {
+class TelegramInstanceDTO {
 
-    private var user: List<UserCourseTelegramConfigDTO>
-    private var other: List<UserCourseTelegramConfigDTO>
+    var id: Long
+    var guild_id: String
+    var channel_id: String
+    var config: UserCourseConfigDTO
+    var creator_id: Long
 
-    init {
-        user = courseData.getTelegramInstancesByUserID(userID).map { it.getConfigs().toDTO() }
-        other = courseData.getTelegramInstancesByNotUserID(userID).map { it.getConfigs().toDTO() }
+    constructor(id: Long, guild_id: String, channel_id: String, config: UserCourseConfigDTO, creator_id: Long) {
+        this.id = id
+        this.guild_id = guild_id
+        this.channel_id = channel_id
+        this.config = config
+        this.creator_id = creator_id
+    }
+
+    constructor(klazaDiscordInstanceModel: KlazaDiscordInstanceModel, config: UserCourseConfigDTO) {
+        this.id = klazaDiscordInstanceModel.id!!
+        this.guild_id = klazaDiscordInstanceModel.guild!!
+        this.channel_id = klazaDiscordInstanceModel.channel!!
+        this.config = config
+        this.creator_id = klazaDiscordInstanceModel.creator!!.id!!
     }
 
     override fun toString(): String {
-        return "TelegramInstanceDTO(" +
-                "user=$user, " +
-                "other=$other" +
-                ")"
+        return "DiscordInstanceDTO(id=$id, guild_id='$guild_id', channel_id='$channel_id', config=$config, creator_id=$creator_id)"
     }
 
 }

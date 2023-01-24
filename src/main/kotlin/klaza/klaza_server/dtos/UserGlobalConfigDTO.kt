@@ -19,7 +19,7 @@ package klaza.klaza_server.dtos
 import klaza.klaza_server.models.CourseModel
 import java.util.Base64
 
-class UserNotificationAppDTO {
+class UserGlobalConfigDTO {
 
     var id: Long;
     var fullName: String;
@@ -41,7 +41,7 @@ class UserNotificationAppDTO {
     }
 
     private fun getRandomImage(): String {
-        return Base64.getEncoder().encodeToString(UserNotificationAppDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
+        return Base64.getEncoder().encodeToString(UserGlobalConfigDTO::class.java.getResource("/images/fundo_curso${(1..4).random()}.svg")?.readBytes())
     }
 
     override fun toString(): String {
