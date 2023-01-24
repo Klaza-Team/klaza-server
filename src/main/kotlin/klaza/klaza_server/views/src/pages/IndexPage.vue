@@ -71,13 +71,18 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useCoursesStore } from "stores/courses";
+import { useUserStore } from "stores/user";
 
 import CourseCard from "src/components/geral/CourseCard.vue";
 import ModalEdit from "src/components/direct/ModalEdit.vue";
-import { CourseDTO } from "src/@types/dtos";
+import { Course } from "src/@types/models.js";
 
 export default defineComponent({
     name: "IndexPage",
+    async mounted() {
+        await useUserStore().getUser();
+	    await useCoursesStore().getCourses();
+    },
     components: {
         CourseCard,
         ModalEdit,
@@ -88,7 +93,7 @@ export default defineComponent({
             selected: [] as number[],
 
             showEdit: false,
-            editCourse: {} as CourseDTO,
+            editCourse: {} as Course,
         };
     },
     computed: {
@@ -109,7 +114,7 @@ export default defineComponent({
         removeSelected(id: number) {
             this.selected.splice(this.selected.indexOf(id), 1);
         },
-        setEdit(course: CourseDTO) {
+        setEdit(course: Course) {
             this.editCourse = course;
             this.showEdit = true;
         },

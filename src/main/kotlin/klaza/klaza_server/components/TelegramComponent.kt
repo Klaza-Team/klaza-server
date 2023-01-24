@@ -21,9 +21,12 @@ import com.pengrad.telegrambot.request.SendMessage
 import klaza.klaza_server.classes.Colors
 import klaza.klaza_server.configurations.TelegramConfiguration
 import klaza.klaza_server.data.EventData
-import klaza.klaza_server.models.KlazaTelegramInstance
+import klaza.klaza_server.models.KlazaTelegramInstanceModel
+import klaza.klaza_server.models.UserModel
+import klaza.klaza_server.services.NotificationService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -40,6 +43,7 @@ class TelegramComponent {
     }
 
     @Autowired lateinit var telegramConfiguration: TelegramConfiguration
+    @Autowired @Lazy lateinit var notificationService: NotificationService
 
     @PostConstruct
     fun start() {
@@ -52,16 +56,20 @@ class TelegramComponent {
 
     }
 
-    fun sendServerNotifications(event: EventData, instances: List<KlazaTelegramInstance>) {
+    fun sendServerNotifications(event: EventData, instances: List<KlazaTelegramInstanceModel>) {
 
         for (i in instances) {
 
-            val resp = bot.execute(SendMessage(i.channel, event.toString()))
+            if (notificationService.telegramInstanceHasNotificationEnabled(event, i)) {
 
-            if (!resp.isOk) {
+                val resp = bot.execute(SendMessage(i.channel, event.toString()))
 
-                LOGGER.error(Colors.RED + "Error sending server notification to Channel: ${i.channel}, Event: ${event.eventname}" + Colors.RESET)
-                LOGGER.error(Colors.RED + resp.message() + Colors.RESET)
+                if (!resp.isOk) {
+
+                    LOGGER.error(Colors.RED + "Error sending server notification to Channel: ${i.channel}, Event: ${event.eventname}" + Colors.RESET)
+                    LOGGER.error(Colors.RED + resp.message() + Colors.RESET)
+
+                }
 
             }
 
@@ -69,21 +77,25 @@ class TelegramComponent {
 
     }
 
-    fun sendUserNotification(event: EventData, userChatID: String, firstPriority: Boolean): Boolean {
+    fun sendUserNotification(event: EventData, userChatID: String, userModel: UserModel, firstPriority: Boolean): Boolean {
 
-        val resp = bot.execute(SendMessage(userChatID, event.toString()))
+        if (notificationService.userHasNotificationEnabled(event, userModel)) {
 
-        if (resp.isOk) {
-            return true
+            val resp = bot.execute(SendMessage(userChatID, event.toString()))
+
+            if (resp.isOk) {
+                return true
+            } else {
+
+                LOGGER.error(Colors.RED + "Error sending user notification to User: $userChatID, Event: ${event.eventname}" + Colors.RESET)
+                LOGGER.error(Colors.RED + resp.message() + Colors.RESET)
+
+                return false
+
+            }
+
         }
-        else {
-
-            LOGGER.error(Colors.RED + "Error sending user notification to User: $userChatID, Event: ${event.eventname}" + Colors.RESET)
-            LOGGER.error(Colors.RED + resp.message() + Colors.RESET)
-
-            return false
-
-        }
+        else { return true }
 
     }
 

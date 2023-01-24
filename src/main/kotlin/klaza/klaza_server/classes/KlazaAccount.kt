@@ -16,7 +16,7 @@
 
 package klaza.klaza_server.classes
 
-import klaza.klaza_server.models.User
+import klaza.klaza_server.models.UserModel
 import org.hibernate.annotations.Type
 import javax.persistence.Id
 import javax.persistence.MappedSuperclass
@@ -38,7 +38,7 @@ open class KlazaAccount {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
-    var user: User? = null
+    var user: UserModel? = null
 
     @Column(name="value", length = 100, nullable = false)
     var value: String? = null

@@ -81,19 +81,23 @@ export default defineComponent({
 	methods: {
 		onSubmit() {
 			
-			const auth = this.loginStore.authenticate(this.username, this.password)
-			
-			if (auth) {
-				this.$router.push({ name: 'Dashboard' })
-			} 
-			else {
-				this.$q.notify({
-					message: 'Usuário ou senha inválidos',
-					color: 'negative',
-					position: 'top',
-					icon: 'warning'
-				})
-			}
+			this.loginStore.authenticate(this.username, this.password)
+			.then(auth => {
+				if (auth) {
+					this.$router.push({ name: 'Dashboard' })
+				} 
+				else {
+					this.$q.notify({
+						message: 'Usuário ou senha inválidos',
+						color: 'negative',
+						position: 'top',
+						icon: 'warning'
+					})
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 		}
 	}
  

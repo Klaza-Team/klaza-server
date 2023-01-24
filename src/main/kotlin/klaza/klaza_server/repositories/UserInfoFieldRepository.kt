@@ -16,11 +16,11 @@
 
 package klaza.klaza_server.repositories;
 
-import klaza.klaza_server.models.UserInfoField
+import klaza.klaza_server.models.UserInfoFieldModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserInfoFieldRepository : JpaRepository<UserInfoField, Long> {
+interface UserInfoFieldRepository : JpaRepository<UserInfoFieldModel, Long> {
 
-    fun findOneByShortname(shortname: String): UserInfoField
+    fun findOneByShortname(shortname: String): UserInfoFieldModel
 
 }

@@ -1,298 +1,24 @@
 import { defineStore } from "pinia";
 import {
-    CourseConfigDTO,
-    CourseDTO,
-    UserCourseDiscordConfigDTO,
-    UserCourseTelegramConfigDTO,
-    UserDTO,
-} from "src/@types/dtos";
+    CourseConfig,
+    Course,
+    UserCourseDiscordConfig,
+    UserCourseTelegramConfig,
+    User,
+    DiscordInstance,
+    TelegramInstance,
+} from "src/@types/models";
+import { api } from "boot/axios";
+import { useUserStore } from "./user";
+import { AxiosResponse } from "axios"
+import { CourseDTO, DiscordInstanceDTO, TelegramInstanceDTO, UserCourseConfigDTO, UserDTO } from "src/@types/dtos";
+import { useLoginStore } from "./login";
 
-const usersExemple: UserDTO[] = [
-    {
-        id: 1,
-        username: "user 1",
-        avatar: "https://i.imgur.com/4Z5j5Zm.png",
-        courses: [],
-        email: "",
-        role: "",
-        globalConfig: {
-            use_global: true,
-            notify_create_content: true,
-            notify_edit_content: true,
-            notify_delete_content: true,
-            notify_deadline_2_days: true,
-            notify_deadline_1_day: true,
-            notify_deadline: true,
-            notify_send_assignment: true,
-            notify_receive_message: true,
-            notify_receive_comment: true,
-            notify_delete_comment: true,
-        },
-        notification_priority: [
-            { id: 1, priority: 2, type: "discord", value: "123456789" },
-            { id: 2, priority: 1, type: "telegram", value: "123456789" },
-            { id: 3, priority: 0, type: "whatsapp", value: "123456789" },
-        ],
-    },
-    {
-        id: 2,
-        username: "user 2",
-        avatar: "https://i.imgur.com/4Z5j5Zm.png",
-        courses: [],
-        email: "",
-        role: "",
-        globalConfig: {
-            use_global: false,
-            notify_create_content: false,
-            notify_edit_content: false,
-            notify_delete_content: false,
-            notify_deadline_2_days: false,
-            notify_deadline_1_day: false,
-            notify_deadline: false,
-            notify_send_assignment: false,
-            notify_receive_message: false,
-            notify_receive_comment: false,
-            notify_delete_comment: false,
-        },
-        notification_priority: [
-            { id: 1, priority: 2, type: "discord", value: "123456789" },
-            { id: 2, priority: 1, type: "telegram", value: "123456789" },
-            { id: 3, priority: 0, type: "whatsapp", value: "123456789" },
-        ],
-    },
-];
-
-const userConfigExemple: CourseConfigDTO[] = [
-    {
-        use_global: false,
-        notify_create_content: false,
-        notify_edit_content: false,
-        notify_delete_content: false,
-        notify_deadline_2_days: false,
-        notify_deadline_1_day: false,
-        notify_deadline: false,
-        notify_send_assignment: false,
-        notify_receive_message: false,
-        notify_receive_comment: false,
-        notify_delete_comment: false,
-    },
-    {
-        use_global: true,
-        notify_create_content: false,
-        notify_edit_content: false,
-        notify_delete_content: false,
-        notify_deadline_2_days: false,
-        notify_deadline_1_day: false,
-        notify_deadline: false,
-        notify_send_assignment: false,
-        notify_receive_message: false,
-        notify_receive_comment: false,
-        notify_delete_comment: false,
-    },
-    {
-        use_global: false,
-        notify_create_content: true,
-        notify_edit_content: false,
-        notify_delete_content: true,
-        notify_deadline_2_days: false,
-        notify_deadline_1_day: false,
-        notify_deadline: true,
-        notify_send_assignment: false,
-        notify_receive_message: true,
-        notify_receive_comment: true,
-        notify_delete_comment: true,
-    },
-];
-
-const discordIntancesExemple: UserCourseDiscordConfigDTO[] = [
-    {
-        id: 1,
-        channel_id: "discord_123",
-        guild_id: "discord_123",
-        config: userConfigExemple[0],
-        creator: usersExemple[0],
-    },
-    {
-        id: 2,
-        channel_id: "discord_a586s4da98sd7a6s12d36540",
-        guild_id: "discord_a6s5d4a968sd49",
-        config: userConfigExemple[2],
-        creator: usersExemple[1],
-    },
-    {
-        id: 3,
-        channel_id: "discord_65as4d6a312sd06a84d1032asd495",
-        guild_id: "discord_58as7d6a21da698sd41a32sd1918",
-        config: userConfigExemple[1],
-        creator: usersExemple[1],
-    },
-];
-
-const telegramIntancesExemple: UserCourseTelegramConfigDTO[] = [
-    {
-        id: 1,
-        channel_id: "telegram_z0xc.2as64d2a1sd98a841d30axc65as541da32sd4",
-        config: userConfigExemple[0],
-        creator: usersExemple[0],
-    },
-    {
-        id: 2,
-        channel_id: "telegram_0xc0.1c65x5c49s4d10asd6354as6d51",
-        config: userConfigExemple[2],
-        creator: usersExemple[1],
-    },
-    {
-        id: 3,
-        channel_id: "telegram_2sa0d3a2sd65a45sd986a512sd234",
-        config: userConfigExemple[1],
-        creator: usersExemple[0],
-    },
-];
-
-const courses_exemple: CourseDTO[] = [
-    {
-        id: 3,
-        fullName: "Introdução a inteligência artificial",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: true,
-        user_config: userConfigExemple[0],
-        discordIntances: {
-            user: [discordIntancesExemple[0], discordIntancesExemple[2]],
-            other: [discordIntancesExemple[1], discordIntancesExemple[2]],
-        },
-        telegramIntances: {
-            user: [telegramIntancesExemple[0], telegramIntancesExemple[2]],
-            other: [telegramIntancesExemple[1], telegramIntancesExemple[2]],
-        },
-    },
-    {
-        id: 6,
-        fullName:
-            "Curso Técnico em Informática e Curso Técnico em desenvolvimento de sistemas",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: false,
-        user_config: userConfigExemple[1],
-        discordIntances: {
-            user: [],
-            other: [],
-        },
-        telegramIntances: {
-            user: [],
-            other: [],
-        },
-    },
-    {
-        id: 1,
-        fullName: "Seminario para TCC",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: true,
-        user_config: userConfigExemple[2],
-        discordIntances: {
-            user: [],
-            other: [],
-        },
-        telegramIntances: {
-            user: [],
-            other: [],
-        },
-    },
-    {
-        id: 4,
-        fullName: "Engenharia de Software",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: false,
-        user_config: userConfigExemple[0],
-        discordIntances: {
-            user: [discordIntancesExemple[0], discordIntancesExemple[2]],
-            other: [discordIntancesExemple[1], discordIntancesExemple[2]],
-        },
-        telegramIntances: {
-            user: [],
-            other: [],
-        },
-    },
-    {
-        id: 2,
-        fullName: "Empreendedorismo",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: true,
-        user_config: userConfigExemple[2],
-        discordIntances: {
-            user: [],
-            other: [],
-        },
-        telegramIntances: {
-            user: [],
-            other: [],
-        },
-    },
-    {
-        id: 5,
-        fullName: "Introdução a burrice artificial",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: false,
-        user_config: userConfigExemple[1],
-        discordIntances: {
-            user: [],
-            other: [],
-        },
-        telegramIntances: {
-            user: [],
-            other: [],
-        },
-    },
-    {
-        id: 8,
-        fullName: "Introdução a Introdução de inteligência artificial",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: false,
-        user_config: userConfigExemple[0],
-        discordIntances: {
-            user: [],
-            other: [
-                discordIntancesExemple[0],
-                discordIntancesExemple[1],
-                discordIntancesExemple[2],
-            ],
-        },
-        telegramIntances: {
-            user: [
-                telegramIntancesExemple[0],
-                telegramIntancesExemple[1],
-                telegramIntancesExemple[2],
-            ],
-            other: [],
-        },
-    },
-    {
-        id: 7,
-        fullName: "Projeto de Sistemas",
-        shortName: "",
-        image: "https://i.imgur.com/4Z5j5Zm.png",
-        actived: false,
-        user_config: userConfigExemple[2],
-        discordIntances: {
-            user: [],
-            other: [],
-        },
-        telegramIntances: {
-            user: [telegramIntancesExemple[0]],
-            other: [telegramIntancesExemple[1], telegramIntancesExemple[2]],
-        },
-    },
-];
 
 // TODO: Pegar infos do server
 export const useCoursesStore = defineStore("courses", {
     state: () => ({
-        courses: courses_exemple,
+        courses: [] as Course[],
     }),
 
     getters: {
@@ -362,5 +88,204 @@ export const useCoursesStore = defineStore("courses", {
         },
     },
 
-    actions: {},
+    actions: {
+
+        async getCourses(): Promise<Course[]> {
+            
+            return new Promise((resolve, reject) => {
+
+                const user: User = useUserStore().user as User;
+                const userDTO: UserDTO = {
+                    id: user.id,
+                    avatar: user.avatar,
+                    email: user.email,
+                    username: user.username,
+                    global_config: user.globalConfig,
+                    notification_priority: user.notification_priority,
+                    role: user.role,
+                }
+            
+                api.get(`/users/${user.id}/courses`)
+                .then(async (res: AxiosResponse<CourseDTO[]>) => {
+
+                    const courses = res.data
+                    const returnCourses: Course[] = [];
+                    
+                    const usersDTO: { [id: string]: UserDTO } = {}
+
+                    for (const course of courses) {
+                        
+                        for (const discordInstance of course.discordIntances) {
+                            if (!usersDTO[discordInstance.creator_id]) {
+                                useUserStore().getUserByID(discordInstance.creator_id)
+                                .then(user => { usersDTO[discordInstance.creator_id] = user })
+                                .catch((e) => { console.error(e) })
+                            }
+                        }
+
+                        for (const telegramInstance of course.telegramIntances) {
+                            if (!usersDTO[telegramInstance.creator_id]) {
+                                useUserStore().getUserByID(telegramInstance.creator_id)
+                                .then(user => { usersDTO[telegramInstance.creator_id] = user })
+                                .catch((e) => { console.error(e) })
+                            }
+                        }
+
+                        const DiscordInstances: DiscordInstance = {
+                            user: course.discordIntances.filter(instance => instance.creator_id === user.id).map(instance => ({ ...instance, creator: userDTO })),
+                            other: course.discordIntances.filter(instance => instance.creator_id !== user.id).map(instance => ({ ...instance, creator: usersDTO[instance.creator_id] })),
+                        }
+
+                        const TelegramInstances: TelegramInstance = {
+                            user: course.telegramIntances.filter(instance => instance.creator_id === user.id).map(instance => ({ ...instance, creator: userDTO })),
+                            other: course.telegramIntances.filter(instance => instance.creator_id !== user.id).map(instance => ({ ...instance, creator: usersDTO[instance.creator_id] })),
+                        }
+
+                        await this.getCourseUserConfig(course.id, user.id).then(config => {
+                            returnCourses.push({
+                                ...course,
+                                actived: true,
+                                user_config: config,
+                                discordIntances: DiscordInstances,
+                                telegramIntances: TelegramInstances,
+                            });
+                        })
+                        .catch(() => {
+                            returnCourses.push({
+                                ...course,
+                                actived: false,
+                                user_config: {
+                                    use_global: true,
+                                    notify_create_content: true,
+                                    notify_deadline: true,
+                                    notify_deadline_1_day: true,
+                                    notify_deadline_2_days: true,
+                                    notify_delete_comment: true,
+                                    notify_delete_content: true,
+                                    notify_edit_content: true,
+                                    notify_receive_comment: true,
+                                    notify_receive_message: true,
+                                    notify_send_assignment: true,
+                                },
+                                discordIntances: DiscordInstances,
+                                telegramIntances: TelegramInstances,
+                            });
+                        })
+
+                    }
+
+                    this.courses = returnCourses;
+                    resolve(returnCourses);
+
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                })
+
+            })
+            
+        },
+
+        async getCourseUserConfig(courseId: number, userId: number): Promise<UserCourseConfigDTO> {
+
+            return new Promise((resolve, reject) => {
+                    
+                api.get(`/users/${userId}/course_configs/${courseId}`)
+                .then((res: AxiosResponse<UserCourseConfigDTO>) => {
+                    resolve(res.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                })
+    
+            })
+
+        },
+
+        async updateCourseUserConfig(courseId: number, userId: number, config: UserCourseConfigDTO): Promise<boolean> {
+                
+            return new Promise((resolve, reject) => {
+                    
+                api.put(`/users/${userId}/course_configs/${courseId}`, config)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                })
+    
+            })
+    
+        },
+
+        async removeCourseInstance(courseId: number, instanceId: number, type: 'discord' | 'telegram'): Promise<boolean> {
+            return new Promise((resolve, reject) => {
+                
+                const url = (type == "discord") ? `discordInstance/${instanceId}` : `telegramInstance/${instanceId}`;
+                const course = this.courses.find(c => c.id === courseId) as Course;
+
+                api.delete(url)
+                .then(() => {
+                    resolve(true);
+                    if (type == "discord") {
+                        course.discordIntances.user = course?.discordIntances.user.filter(i => i.id !== instanceId);
+                    }
+                    else {
+                        course.telegramIntances.user = course?.telegramIntances.user.filter(i => i.id !== instanceId);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                })
+    
+            })
+        },
+
+        async createCourseServerInstance(courseId: number, type: 'discord' | 'telegram', dto: DiscordInstanceDTO | TelegramInstanceDTO): Promise<boolean> {
+            return new Promise((resolve, reject) => {
+                    
+                const url = (type == "discord") ? `/discordInstance/create/${courseId}/${useUserStore().user?.id}` : `/telegramInstance/create/${courseId}/${useUserStore().user?.id}`;
+                const course = this.courses.find(c => c.id === courseId) as Course;
+
+                api.post(url, dto)
+                .then(() => {
+                    resolve(true);
+                    if (type == "discord") {
+                        course.discordIntances.user.push({ ...dto as DiscordInstanceDTO, creator: { ...useUserStore().user, global_config: useUserStore().user?.globalConfig } } as UserCourseDiscordConfig);
+                    }
+                    else {
+                        course.telegramIntances.user.push({ ...dto as TelegramInstanceDTO, creator: { ...useUserStore().user, global_config: useUserStore().user?.globalConfig } } as UserCourseTelegramConfig);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                })
+    
+            })
+        },
+
+        async editCourseServerInstance(courseId: number, type: 'discord' | 'telegram', dto: DiscordInstanceDTO | TelegramInstanceDTO): Promise<boolean> {
+            return new Promise((resolve, reject) => {
+                    
+                const url = (type == "discord") ? `/discordInstance` : `/telegramInstance`;
+
+                api.put(url, dto)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                })
+    
+            })
+        }
+
+    },
+
 });

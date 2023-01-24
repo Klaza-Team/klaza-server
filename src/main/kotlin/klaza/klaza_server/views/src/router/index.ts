@@ -6,6 +6,7 @@ import {
   createWebHistory,
 } from 'vue-router';
 import routes from './routes';
+import { useLoginStore } from 'src/stores/login';
 
 /*
  * If not building with SSR mode, you can
@@ -32,6 +33,24 @@ export default route(function (/* { store, ssrContext } */) {
       process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
     ),
   });
+
+  Router.beforeEach((to, from, next) => {
+    console.log(to, from);
+    console.log("Auth", useLoginStore().isAutheticated);
+
+    if (to.path === '/klaza/login') {
+      next();
+      return;
+    }
+
+    if (useLoginStore().isAutheticated) {
+      next();
+    }
+    else {
+      next('/klaza/login');
+    }
+
+  })
 
   return Router;
 });

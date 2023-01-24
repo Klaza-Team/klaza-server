@@ -24,7 +24,9 @@ import klaza.klaza_server.components.TelegramComponent
 import klaza.klaza_server.components.WhatsAppComponent
 import klaza.klaza_server.data.EventData
 import klaza.klaza_server.dtos.UserNotificationContactDTO
-import klaza.klaza_server.models.User
+import klaza.klaza_server.models.KlazaDiscordInstanceModel
+import klaza.klaza_server.models.KlazaTelegramInstanceModel
+import klaza.klaza_server.models.UserModel
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,13 +43,18 @@ class NotificationService {
     @Autowired lateinit var courseRepository: CourseRepository
     @Autowired lateinit var klazaDiscordInstanceRepository: KlazaDiscordInstanceRepository
     @Autowired lateinit var klazaTelegramInstanceRepository: KlazaTelegramInstanceRepository
-    @Autowired lateinit var klazaUserInstanceRepository: KlazaUserInstanceRepository
     @Autowired lateinit var userInfoDataRepository: UserInfoDataRepository
     @Autowired lateinit var discordComponent: DiscordComponent
     @Autowired lateinit var whatsAppComponent: WhatsAppComponent
     @Autowired lateinit var telegramComponent: TelegramComponent
     @Autowired lateinit var emailComponent: EmailComponent
     @Autowired lateinit var userService: UserService
+    @Autowired lateinit var klazaDiscordAccountRepository: KlazaDiscordAccountModelRepository
+    @Autowired lateinit var klazaTelegramAccountRepository: KlazaTelegramAccountModelRepository
+    @Autowired lateinit var klazaWhatsAppAccountRepository: KlazaWhatsappAccountModelRepository
+    @Autowired lateinit var klazaGlobalConfigRepository: KlazaGlobalConfigRepository
+    @Autowired lateinit var klazaDiscordInstanceConfigRepository: KlazaDiscordInstanceConfigRepository
+    @Autowired lateinit var klazaTelegramInstanceConfigRepository: KlazaTelegramInstanceConfigRepository
 
     fun sendNotification(eventData: EventData) {
 
@@ -71,20 +78,27 @@ class NotificationService {
 
     }
 
-    fun sortUserInstancesByPriority(courseID: Long, users: List<User>): MutableMap<User, List<UserNotificationContactDTO>> {
+    fun sortUserInstancesByPriority(courseID: Long, users: List<UserModel>): MutableMap<UserModel, List<UserNotificationContactDTO>> {
 
-        val map = mutableMapOf<User, List<UserNotificationContactDTO>>()
+        val map = mutableMapOf<UserModel, List<UserNotificationContactDTO>>()
 
         for (u in users) {
 
             val emailContact = UserNotificationContactDTO("EMAIL", u.email!!, 0)
 
-            val userDiscordInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "DISCORD")
-            val userTelegramInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "TELEGRAM")
-            val userWhatsappInstance = klazaUserInstanceRepository.findOneByUser_IdAndCourse_IdAndType(u.id!!, courseID, "WHATSAPP")
+            val userDiscordInstance = klazaDiscordAccountRepository.findByUserId(u.id!!)
+            val userTelegramInstance = klazaTelegramAccountRepository.findByUserId(u.id!!)
+            val userWhatsappInstance = klazaWhatsAppAccountRepository.findByUserId(u.id!!)
 
-            val loopInstance = listOf(userDiscordInstance, userTelegramInstance, userWhatsappInstance)
+            val loopInstance = listOf(
+                if (userDiscordInstance != null) UserNotificationContactDTO("DISCORD", userDiscordInstance.value!!, userDiscordInstance.priority!!) else null,
+                if (userTelegramInstance != null) UserNotificationContactDTO("TELEGRAM", userTelegramInstance.value!!, userTelegramInstance.priority!!) else null,
+                if (userWhatsappInstance != null) UserNotificationContactDTO("WHATSAPP", userWhatsappInstance.value!!, userWhatsappInstance.priority!!) else null
+            )
             val userContacts = userService.getOnlyAllowedUserNotificationContacts(u.id!!)
+
+//            println(loopInstance)
+//            println(userContacts)
 
             for (instance in loopInstance) {
 
@@ -127,7 +141,7 @@ class NotificationService {
 
     }
 
-    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<User, List<UserNotificationContactDTO>>) {
+    fun sendNotificationToUsersInstances(eventData: EventData, instances: MutableMap<UserModel, List<UserNotificationContactDTO>>) {
 
 //        LOGGER.info(instances.toString())
 
@@ -141,21 +155,21 @@ class NotificationService {
 
                 when (instance.type) {
                     "DISCORD" -> {
-                        if (discordComponent.sendUserNotification(eventData, instance.value, i == 0)) {
+                        if (discordComponent.sendUserNotification(eventData, instance.value, u, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "TELEGRAM" -> {
-                        if (telegramComponent.sendUserNotification(eventData, instance.value, i == 0)) {
+                        if (telegramComponent.sendUserNotification(eventData, instance.value, u, i == 0)) {
                             break
                         } else {
                             continue
                         }
                     }
                     "WHATSAPP" -> {
-                        if (whatsAppComponent.sendUserNotification(eventData, instance.value, i == 0)) {
+                        if (whatsAppComponent.sendUserNotification(eventData, instance.value, u, i == 0)) {
                             break
                         } else {
                             continue
@@ -171,7 +185,7 @@ class NotificationService {
         }
     }
 
-    fun sendNotificationToUsers(eventData: EventData, users: List<User>) {
+    fun sendNotificationToUsers(eventData: EventData, users: List<UserModel>) {
 
         for (u in users) {
 
@@ -195,6 +209,8 @@ class NotificationService {
         val users = userRepository.findAllByCourseID(eventData.course!!.id!!)
 
         val userInstances = sortUserInstancesByPriority(eventData.course!!.id!!, users)
+
+//        println(userInstances)
 
         // DISCORD
         discordComponent.sendServerNotifications(eventData, discordInstances)
@@ -236,6 +252,81 @@ class NotificationService {
         LOGGER.info(Colors.GREEN + "sendCommentNotification -> $eventData" + Colors.RESET)
 
         sendNotificationToUsers(eventData, userRepository.findAllTeachersByCourseID(eventData.course!!.id!!))
+
+    }
+
+    fun userHasNotificationEnabled(eventData: EventData, user: UserModel): Boolean {
+
+        val userConfig = klazaGlobalConfigRepository.findByUserId(user.id!!)
+
+        if (userConfig != null) {
+
+            if (eventData.eventname == "\\core\\event\\course_module_created") { return userConfig.notifyCreateContent ?: true }
+            if (eventData.eventname == "\\core\\event\\course_module_updated") { return userConfig.notifyEditContent ?: true }
+            if (eventData.eventname == "\\core\\event\\course_module_deleted") { return userConfig.notifyDeleteContent ?: true }
+
+            if (eventData.eventname == "\\core\\event\\message_sent") { return userConfig.notifyReceiveMessage ?: true }
+
+            if (eventData.eventname == "\\assignsubmission_file\\event\\submission_updated") { return userConfig.notifySendAssignment ?: true }
+            if (eventData.eventname == "\\mod_quiz\\event\\attempt_submitted") { return userConfig.notifySendAssignment ?: true }
+
+            if (eventData.eventname == "\\assignsubmission_comments\\event\\comment_created") { return userConfig.notifyReceiveComment ?: true }
+            if (eventData.eventname == "\\assignsubmission_comments\\event\\comment_deleted") { return userConfig.notifyDeleteComment ?: true }
+
+            return true
+
+        }
+        else {
+            return true
+        }
+
+    }
+
+    fun discordInstanceHasNotificationEnabled(eventData: EventData, discordInstance: KlazaDiscordInstanceModel): Boolean {
+
+        val config = klazaDiscordInstanceConfigRepository.findByDiscordInstance_Id(discordInstance.id!!)
+
+        if (config != null) {
+
+            if (eventData.eventname == "\\core\\event\\course_module_created") { return config.notifyCreateContent ?: true }
+            if (eventData.eventname == "\\core\\event\\course_module_updated") { return config.notifyEditContent ?: true }
+            if (eventData.eventname == "\\core\\event\\course_module_deleted") { return config.notifyDeleteContent ?: true }
+
+            if (eventData.eventname == "\\core\\event\\message_sent") { return config.notifyReceiveMessage ?: true }
+
+            if (eventData.eventname == "\\assignsubmission_file\\event\\submission_updated") { return config.notifySendAssignment ?: true }
+            if (eventData.eventname == "\\mod_quiz\\event\\attempt_submitted") { return config.notifySendAssignment ?: true }
+
+            if (eventData.eventname == "\\assignsubmission_comments\\event\\comment_created") { return config.notifyReceiveComment ?: true }
+            if (eventData.eventname == "\\assignsubmission_comments\\event\\comment_deleted") { return config.notifyDeleteComment ?: true }
+
+        }
+
+        return true
+
+    }
+
+    fun telegramInstanceHasNotificationEnabled(eventData: EventData, telegramInstance: KlazaTelegramInstanceModel): Boolean {
+
+        val config = klazaTelegramInstanceConfigRepository.findByTelegramInstance_Id(telegramInstance.id!!)
+
+        if (config != null) {
+
+            if (eventData.eventname == "\\core\\event\\course_module_created") { return config.notifyCreateContent ?: true }
+            if (eventData.eventname == "\\core\\event\\course_module_updated") { return config.notifyEditContent ?: true }
+            if (eventData.eventname == "\\core\\event\\course_module_deleted") { return config.notifyDeleteContent ?: true }
+
+            if (eventData.eventname == "\\core\\event\\message_sent") { return config.notifyReceiveMessage ?: true }
+
+            if (eventData.eventname == "\\assignsubmission_file\\event\\submission_updated") { return config.notifySendAssignment ?: true }
+            if (eventData.eventname == "\\mod_quiz\\event\\attempt_submitted") { return config.notifySendAssignment ?: true }
+
+            if (eventData.eventname == "\\assignsubmission_comments\\event\\comment_created") { return config.notifyReceiveComment ?: true }
+            if (eventData.eventname == "\\assignsubmission_comments\\event\\comment_deleted") { return config.notifyDeleteComment ?: true }
+
+        }
+
+        return true
 
     }
 
