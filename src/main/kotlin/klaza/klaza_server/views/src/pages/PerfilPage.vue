@@ -22,7 +22,7 @@
                     >
                         <template #item="{ element, index }">
                             <q-list>
-                                <account-item :account="element" :index="index" @update-priority="updatePriority"/>
+                                <account-item :account="element" :index="index" @update-priority="updatePriority" @login-whatsapp="loginWhatsapp"/>
                             </q-list>
                         </template>
                     </draggable>
@@ -41,6 +41,7 @@
                 </div>
             </q-card-section>
         </q-card>
+
     </q-page>
 </template>
 
@@ -55,6 +56,7 @@ import CourseConfigs from "src/components/geral/CourseConfigs.vue";
 
 import { User, UserNotificationApp } from "src/@types/models.js";
 import { UserGlobalConfigDTO } from "src/@types/dtos";
+import { useQuasar } from "quasar";
 
 
 export default defineComponent({
@@ -68,11 +70,19 @@ export default defineComponent({
         AccountItem,
         CourseConfigs
     },
+    setup() {
+        const $q = useQuasar();
+        return { $q };
+    },
     data() {
         return {
             drag: false,
             user: useUserStore().user as User,
             loading: false,
+
+            showLoginWhatsapp: false,
+            whatsappNumber: "",
+
         };
     },
     methods: {
@@ -88,6 +98,24 @@ export default defineComponent({
         saveConfigs(config: UserGlobalConfigDTO) {
             this.loading = true;
             useUserStore().editGlobalConfig(config).finally(() => this.loading = false);
+        },
+        loginWhatsapp() {
+            this.$q.dialog({
+                title: 'Login Whatsapp',
+                message: 'Digite o número do whatsapp',
+                prompt: {
+                    model: '',
+                    type: 'number',
+                    maxlength: 11,
+                    mask: '###########',
+                    lazyRules: true,
+                    rules: [
+                        (val: string) => val.length == 11 || 'O número deve ter 11 dígitos'
+                    ]
+                },
+                cancel: true,
+                persistent: true
+            })
         }
     },
 });

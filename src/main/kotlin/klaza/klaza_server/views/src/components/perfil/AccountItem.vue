@@ -82,6 +82,7 @@
                     <q-toggle 
                         color="w"
                         v-model="enabled"
+                        :disable="account.value == ''"
                     />
                 </div>
             </q-btn>
@@ -98,10 +99,11 @@
 import { defineComponent } from "vue";
 
 import { UserNotificationApp } from "src/@types/models.js";
+import { useUserStore } from "src/stores/user";
 
 export default defineComponent({
     name: "AccountItem",
-    emits: ["update-priority"],
+    emits: ["update-priority", "login-whatsapp"],
     props: {
         account: {
             type: Object as () => UserNotificationApp,
@@ -150,15 +152,36 @@ export default defineComponent({
         loginDiscord() {
             window.open(
                 "https://discord.com/api/oauth2/authorize?client_id=1016881283986632764&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fklaza%2Fperfil&response_type=code&scope=identify",
-                "_self"
+                "Discord Login",
+                "location=no,height=700,width=690,popup=yes,resizable=no"
             )
-            // TODO - Implementar login com Discord
+            
+            useUserStore().loginDiscord();
+
+            this.$forceUpdate();
+
         },
         loginTelegram() {
-            // TODO - Implementar login com Telegram
+           
+            window.open(
+                "https://oauth.telegram.org/auth?bot_id=531675494&origin=https%3A%2F%2Ftelegram.org&embed=1&request_access=write&return_to=https%3A%2F%2Ftelegram.org%2Fblog%2Flogin",
+                "Telegram Login",
+                "location=no,height=700,width=690,popup=yes,resizable=no"
+            )
+
+            useUserStore().loginTelegram();
+
+            this.$forceUpdate();
+            
         },
         loginWhatsapp() {
-            //TODO - Implementar login com Whatsapp
+            
+            this.$emit("login-whatsapp");
+
+            useUserStore().loginWhatsapp();
+
+            this.$forceUpdate();
+
         },
     }
 });

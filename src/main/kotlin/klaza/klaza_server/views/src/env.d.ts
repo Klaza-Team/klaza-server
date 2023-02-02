@@ -7,5 +7,11 @@ declare namespace NodeJS {
     VUE_ROUTER_BASE: string | undefined;
     SERVER_URL: string;
     SERVER_AUTH: string;
+    DEMO_DISCORD_ACCOUNT: string;
+    DEMO_DISCORD_PRIORITY: string;
+    DEMO_WHATSAPP_ACCOUNT: string;
+    DEMO_WHATSAPP_PRIORITY: string;
+    DEMO_TELEGRAM_ACCOUNT: string;
+    DEMO_TELEGRAM_PRIORITY: string;
   }
 }

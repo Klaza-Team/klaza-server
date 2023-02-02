@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { UserDiscordTelegramServer, User } from "src/@types/models";
 import { api } from "boot/axios";
 import { useLoginStore } from "./login";
-import { UserDTO, UserGlobalConfigDTO } from "src/@types/dtos";
+import { UserDTO, UserGlobalConfigDTO, UserNotificationAppDTO } from "src/@types/dtos";
 import { AxiosResponse } from "axios"
 
 const user_exemple: User = {
@@ -100,6 +100,33 @@ export const useUserStore = defineStore("user", {
                     
                     const returnUser: User = { ...res.data, globalConfig: res.data.global_config  } as User
                     
+                    if (!returnUser.notification_priority.find((el) => el.type === "discord")) {
+                        returnUser.notification_priority.push({
+                            id: 0,
+                            priority: -1,
+                            type: "discord",
+                            value: "",
+                        })
+                    }
+
+                    if (!returnUser.notification_priority.find((el) => el.type === "telegram")) {
+                        returnUser.notification_priority.push({
+                            id: 0,
+                            priority: -1,
+                            type: "telegram",
+                            value: "",
+                        })
+                    }
+
+                    if (!returnUser.notification_priority.find((el) => el.type === "whatsapp")) {
+                        returnUser.notification_priority.push({
+                            id: 0,
+                            priority: -1,
+                            type: "whatsapp",
+                            value: "",
+                        })
+                    }
+
                     this.user = returnUser
                     resolve(returnUser)
 
@@ -126,6 +153,93 @@ export const useUserStore = defineStore("user", {
             return new Promise((resolve, reject) => {
                 api.put(`/users/${useLoginStore().id}/global_config`, config)
                 .then(() => {
+                    resolve(true)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    reject(err)
+                })
+            })
+        },
+        async loginDiscord(): Promise<boolean> {
+            return new Promise((resolve, reject) => {
+
+                const demo: UserNotificationAppDTO = {
+                    id: 0,
+                    priority: parseInt(process.env.DEMO_DISCORD_PRIORITY),
+                    type: "discord",
+                    value: process.env.DEMO_DISCORD_ACCOUNT,
+                }
+
+                api.put(`/users/${useLoginStore().id}/discordAccount`, demo)
+                .then(() => {
+
+                    const discord = this.user?.notification_priority.findIndex((el) => el.type === "discord") as number
+                    
+                    if (discord !== -1) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-ignore
+                        useUserStore().user?.notification_priority.splice(discord, 1, demo)
+                    }
+
+                    resolve(true)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    reject(err)
+                })
+            })
+        },
+        async loginTelegram(): Promise<boolean> {
+            return new Promise((resolve, reject) => {
+
+                const demo: UserNotificationAppDTO = {
+                    id: 0,
+                    priority: parseInt(process.env.DEMO_TELEGRAM_PRIORITY),
+                    type: "telegram",
+                    value: process.env.DEMO_TELEGRAM_ACCOUNT,
+                }
+
+                api.put(`/users/${useLoginStore().id}/telegramAccount`, demo)
+                .then(() => {
+
+                    const telegram = this.user?.notification_priority.findIndex((el) => el.type === "telegram") as number
+                    
+                    if (telegram !== -1) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-ignore
+                        useUserStore().user?.notification_priority.splice(telegram, 1, demo)
+                    }
+
+                    resolve(true)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    reject(err)
+                })
+            })
+        },
+        async loginWhatsapp(): Promise<boolean> {
+            return new Promise((resolve, reject) => {
+
+                const demo: UserNotificationAppDTO = {
+                    id: 0,
+                    priority: parseInt(process.env.DEMO_WHATSAPP_PRIORITY),
+                    type: "whatsapp",
+                    value: process.env.DEMO_WHATSAPP_ACCOUNT,
+                }
+
+                api.put(`/users/${useLoginStore().id}/whatsappAccount`, demo)
+                .then(() => {
+
+                    const whatsapp = this.user?.notification_priority.findIndex((el) => el.type === "whatsapp") as number
+                    
+                    if (whatsapp !== -1) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-ignore
+                        useUserStore().user?.notification_priority.splice(whatsapp, 1, demo)
+                    }
+
                     resolve(true)
                 })
                 .catch((err) => {
