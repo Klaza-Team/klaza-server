@@ -63,6 +63,8 @@ class EmailComponent {
         props["mail.smtp.starttls.enable"] = emailConfiguration.starttls;
         props["mail.smtp.auth"] = emailConfiguration.auth;
         props["mail.smtp.port"] = emailConfiguration.port;
+        props["mail.smtp.ssl.trust"] = emailConfiguration.host;
+        props["mail.smtp.ssl.protocols"] = "TLSv1.2";
 
         session = Session.getDefaultInstance(props, object : Authenticator() {
             override fun getPasswordAuthentication(): PasswordAuthentication {
@@ -80,25 +82,41 @@ class EmailComponent {
 
         try {
 
+           this.sendEmail(userEmail, "Klaza - ${event.eventname}", event.toString())
+
+        }
+        catch (e: Exception) {
+
+            LOGGER.error(Colors.RED + "Error sending user notification to User: $userEmail, Event: ${event.eventname}" + Colors.RESET)
+            LOGGER.error(Colors.RED + e.message + Colors.RESET)
+
+        }
+
+    }
+
+    fun sendEmail(email: String, subject: String, text: String) {
+
+        try {
+
             val message: Message = MimeMessage(session)
 
             message.setFrom(InternetAddress(emailConfiguration.useremail, "Klaza"))
 
             message.setRecipients(
                 Message.RecipientType.TO,
-                InternetAddress.parse(userEmail)
+                InternetAddress.parse(email)
             )
 
-            message.subject = event.eventname
+            message.subject = subject
 
-            message.setText(event.toString())
+            message.setText(text)
 
             Transport.send(message)
 
         }
         catch (e: Exception) {
 
-            LOGGER.error(Colors.RED + "Error sending user notification to User: $userEmail, Event: ${event.eventname}" + Colors.RESET)
+            LOGGER.error(Colors.RED + "Error sending email to User: $email" + Colors.RESET)
             LOGGER.error(Colors.RED + e.message + Colors.RESET)
 
         }

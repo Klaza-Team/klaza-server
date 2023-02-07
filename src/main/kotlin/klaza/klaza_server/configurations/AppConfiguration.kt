@@ -1,4 +1,4 @@
-// Plugin Klaza para Moodle - Server - KlazaServerApplication.kt
+// Plugin Klaza para Moodle - Server - WhatsappConfiguration.kt
 // Copyright (C) 2022 Klaza Team
 
 // This program is free software: you can redistribute it and/or modify
@@ -14,17 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package klaza.klaza_server
+package klaza.klaza_server.configurations
 
-import klaza.klaza_server.configurations.*
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.boot.runApplication
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-@SpringBootApplication
-@EnableConfigurationProperties(DiscordConfiguration::class, TelegramConfiguration::class, WhatsappConfiguration::class, EmailConfiguration::class, AppConfiguration::class)
-class KlazaServerApplication
+@ConfigurationProperties("klaza.app")
+open class AppConfiguration {
 
-fun main(args: Array<String>) {
-	runApplication<KlazaServerApplication>(*args)
+    var moodleBaseUrl: String = ""
+
 }

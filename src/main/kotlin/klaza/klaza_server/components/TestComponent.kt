@@ -16,6 +16,11 @@
 
 package klaza.klaza_server.components
 
+import discord4j.core.spec.EmbedCreateSpec
+import discord4j.core.spec.MessageCreateSpec
+import discord4j.rest.util.Color
+import klaza.klaza_server.classes.KlazyImages
+import klaza.klaza_server.configurations.AppConfiguration
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,16 +40,50 @@ class TestComponent {
     @Autowired lateinit var klazaAlertRepository: KlazaAlertRepository
     @Autowired lateinit var configPluginsRepository: ConfigPluginsRepository
 
+    @Autowired lateinit var emailComponent: EmailComponent
+    @Autowired lateinit var discordComponent: DiscordComponent
+    @Autowired lateinit var telegramComponent: TelegramComponent
+    @Autowired lateinit var whatsAppComponent: WhatsAppComponent
+
+    @Autowired lateinit var appConfiguration: AppConfiguration
+
     @PostConstruct
     fun start() {
+        LOGGER.info("TestComponent...")
 
-//        LOGGER.info(Colors.GREEN_BOLD + userRepository.findAllByCourseID(3).toString() + Colors.RESET)
-//        LOGGER.info(Colors.GREEN_BOLD + courseRepository.findAllByUserId(2) + Colors.RESET)
+        println(appConfiguration.moodleBaseUrl)
 
-//        LOGGER.info(Colors.GREEN_BOLD + klazaAlertRepository.findAllByCourse_Id(3) + Colors.RESET)
+//        this.testDiscordNotification()
 
-//        LOGGER.info(Colors.GREEN_BOLD + configPluginsRepository.findKlazaConfigByName("version") + Colors.RESET)
-//        LOGGER.info(Colors.GREEN_BOLD + configPluginsRepository.findAllKlazaConfig() + Colors.RESET)
+    }
+
+    fun testDiscordNotification() {
+
+        val embed = EmbedCreateSpec.builder()
+
+            .title("Klaza - Edição de conteúdo")
+            .description("Opa, a Klazy-chan detectou uma edição no Moodle!\n" + "Acesse o Moodle para ver o que foi alterado clicando [aqui](http://localhost/www/moodle-400-klaza/moodle/mod/page/view.php?id=27).\n   ")
+            .url("http://localhost/www/moodle-400-klaza/moodle/mod/page/view.php?id=27")
+            .color(Color.of(0x457D58))
+            .image("attachment://klazy.png")
+            .thumbnail("attachment://klaza.png")
+
+            .addField("\uD83C\uDF93 Nome do curso", "Teste", false)
+            .addField("\uD83D\uDC68\u200D\uD83C\uDFEB Professor", "Admin User", false)
+            .addField("\uD83D\uDCD6 Conteúdo", "Página Teste", false)
+
+            .footer("Klaza • KlazaTeam © Todos os direitos reservados.", "")
+            .timestamp(java.time.Instant.now())
+
+            .build()
+
+        val message = MessageCreateSpec.builder()
+            .addFile("klazy.png", KlazyImages.getEscrevendo().inputStream())
+            .addFile("klaza.png", TestComponent::class.java.getResource("/images/logo.png")?.readBytes()?.inputStream()!!)
+            .addEmbed(embed)
+            .build()
+
+        discordComponent.sendDiscordMessage("1016881985161019475", message)
 
 
     }
