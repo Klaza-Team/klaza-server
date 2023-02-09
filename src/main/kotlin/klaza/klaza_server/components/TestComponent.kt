@@ -54,6 +54,7 @@ class TestComponent {
         println(appConfiguration.moodleBaseUrl)
 
 //        this.testDiscordNotification()
+//        this.testTelegramNotification()
 
     }
 
@@ -85,6 +86,14 @@ class TestComponent {
 
         discordComponent.sendDiscordMessage("1016881985161019475", message)
 
+
+    }
+
+    fun testTelegramNotification() {
+
+//        println(KlazyImages.getAcenandoURL())
+
+        telegramComponent.sendMessage("5255557468", "<b>Teste</b>\n<a href='https://cdn.discordapp.com/attachments/1016881985161019475/1072637624134664314/klazy.png'>&#8205;</a>")
 
     }
 
