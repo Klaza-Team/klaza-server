@@ -55,6 +55,8 @@ class TestComponent {
 
 //        this.testDiscordNotification()
 //        this.testTelegramNotification()
+//        this.testWhatsAppNotification()
+        this.testEmailNotification()
 
     }
 
@@ -94,6 +96,12 @@ class TestComponent {
 //        println(KlazyImages.getAcenandoURL())
 
         telegramComponent.sendMessage("5255557468", "<b>Teste</b>\n<a href='https://cdn.discordapp.com/attachments/1016881985161019475/1072637624134664314/klazy.png'>&#8205;</a>")
+
+    }
+
+    fun testEmailNotification() {
+
+        emailComponent.sendEmail("emanuel.souza.scherer@gmail.com", "Teste", "Teste")
 
     }
 
