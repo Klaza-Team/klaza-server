@@ -23,5 +23,6 @@ open class WhatsappConfiguration {
 
     var token: String = ""
     var numberID: String = ""
+    var testNumber: String = ""
 
 }

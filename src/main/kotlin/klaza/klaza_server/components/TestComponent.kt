@@ -20,7 +20,7 @@ import discord4j.core.spec.EmbedCreateSpec
 import discord4j.core.spec.MessageCreateSpec
 import discord4j.rest.util.Color
 import klaza.klaza_server.classes.KlazyImages
-import klaza.klaza_server.configurations.AppConfiguration
+import klaza.klaza_server.configurations.*
 import klaza.klaza_server.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,6 +46,10 @@ class TestComponent {
     @Autowired lateinit var whatsAppComponent: WhatsAppComponent
 
     @Autowired lateinit var appConfiguration: AppConfiguration
+    @Autowired lateinit var discordConfiguration: DiscordConfiguration
+    @Autowired lateinit var telegramConfiguration: TelegramConfiguration
+    @Autowired lateinit var whatsappConfiguration: WhatsappConfiguration
+    @Autowired lateinit var emailConfiguration: EmailConfiguration
 
     @PostConstruct
     fun start() {
@@ -56,7 +60,7 @@ class TestComponent {
 //        this.testDiscordNotification()
 //        this.testTelegramNotification()
 //        this.testWhatsAppNotification()
-        this.testEmailNotification()
+//        this.testEmailNotification()
 
     }
 
@@ -86,7 +90,7 @@ class TestComponent {
             .addEmbed(embed)
             .build()
 
-        discordComponent.sendDiscordMessage("1016881985161019475", message)
+        discordComponent.sendDiscordMessage(discordConfiguration.testChannel, message)
 
 
     }
@@ -95,13 +99,19 @@ class TestComponent {
 
 //        println(KlazyImages.getAcenandoURL())
 
-        telegramComponent.sendMessage("5255557468", "<b>Teste</b>\n<a href='https://cdn.discordapp.com/attachments/1016881985161019475/1072637624134664314/klazy.png'>&#8205;</a>")
+        telegramComponent.sendMessage(telegramConfiguration.testID, "<b>Teste</b>\n<a href='https://cdn.discordapp.com/attachments/1016881985161019475/1072637624134664314/klazy.png'>&#8205;</a>")
+
+    }
+
+    fun testWhatsAppNotification() {
+
+        whatsAppComponent.sendMessage(whatsappConfiguration.testNumber, "Teste")
 
     }
 
     fun testEmailNotification() {
 
-        emailComponent.sendEmail("emanuel.souza.scherer@gmail.com", "Teste", "Teste")
+        emailComponent.sendEmail(emailConfiguration.testEmail, "Teste", "Teste")
 
     }
 

@@ -22,5 +22,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 open class TelegramConfiguration {
 
     var token: String = ""
+    var testID: String = ""
 
 }

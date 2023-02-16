@@ -22,5 +22,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 open class DiscordConfiguration {
 
     var token: String = ""
+    var testChannel: String = ""
 
 }

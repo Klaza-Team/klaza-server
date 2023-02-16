@@ -29,5 +29,6 @@ open class EmailConfiguration {
 
     var useremail: String = ""
     var password: String = ""
+    var testEmail: String = ""
 
 }
